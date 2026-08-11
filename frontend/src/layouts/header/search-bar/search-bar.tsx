@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import {
   Popover,
   PopoverContent,
-  PopoverDescription,
   PopoverHeader,
   PopoverTitle,
 } from "@/components/ui/popover";
@@ -23,7 +22,7 @@ export default function SearchBar() {
     <>
       <Input
         ref={inputRef}
-        className="w-[700px] h-[44px] px-5 mx-10 border-primary rounded-full focus-visible:ring-ring"
+        className="w-175 h-11 px-5 mx-10 border-primary rounded-full focus-visible:ring-ring"
         placeholder="Search"
         onFocus={() => setOpen(true)}
         onBlur={() => setOpen(false)}
@@ -31,7 +30,7 @@ export default function SearchBar() {
 
       <Popover open={open}>
         <PopoverContent
-          className="w-[700px] p-5 ring-1"
+          className="w-175 p-5 ring-1"
           align="center"
           sideOffset={36}
           initialFocus={false}

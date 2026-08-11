@@ -1,0 +1,1 @@
+- [] Add the complete text in a pop over for elipised strings.
