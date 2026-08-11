@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import Header from './header';
-import { mockUser } from '@/testing/mocks';
+import { mockUser } from '@/testing/mocks/mocks';
 
 
 

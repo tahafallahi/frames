@@ -27,17 +27,17 @@ export default function UserControls({ user }: { user: User }) {
           <Popover>
             <PopoverTrigger
               render={
-                <h2>
-                  <Bell />
-                </h2>
+                <Button variant={"ghost"} size={"icon-lg"} aria-label="Notifications">
+                  <Bell className="size-6"/>   
+                </Button>
               }
             ></PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
               <PopoverHeader>
                 <PopoverTitle>
-                  <p>You have x notifications</p>
+                  You have x notifications
                 </PopoverTitle>
-                <PopoverDescription>
+              </PopoverHeader>
                   <div className="flex justify-end">
                     <Button
                       variant={"ghost"}
@@ -47,45 +47,39 @@ export default function UserControls({ user }: { user: User }) {
                     </Button>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {user.notifications.map((n) => (
-                      <SlimCard className="border-l-3">
+                    {user.notifications.map((n, i) => (
+                      <SlimCard key={i} className="border-l-3">
                         <p>{n}</p>
                       </SlimCard>
                     ))}
                   </div>
-                </PopoverDescription>
-              </PopoverHeader>
             </PopoverContent>
           </Popover>
 
           <Popover>
             <PopoverTrigger
               render={
-                <div>
+                <Button variant={"ghost"} className="p-0" aria-label="Profile">
                   <img
-                    className="rounded-full w-9"
+                    className="rounded-full w-8"
                     src="https://placehold.co/50x50/lightblue/black/?text=profile"
                     alt=""
                   />
-                </div>
+                </ Button>
               }
             >
               Open Popover
             </PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
               <PopoverHeader>
-                <PopoverTitle>
                   <ProfileCard user={user} variant={"normal"} />
-                </PopoverTitle>
-                <PopoverDescription>
+              </PopoverHeader>
                   <div className="flex flex-col gap-2">
                     <Button className="font-bold">Profile</Button>
                     <Button className="font-bold bg-destructive hover:bg-destructive/80">
                       Log out
                     </Button>
                   </div>
-                </PopoverDescription>
-              </PopoverHeader>
             </PopoverContent>
           </Popover>
         </div>

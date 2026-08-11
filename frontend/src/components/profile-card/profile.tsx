@@ -18,7 +18,7 @@ export default function Profile({
           />
         </div>
         <div className="flex flex-col">
-          <p className="text-2xl" wrap-anywhere>{user.username}</p>
+          <p className="text-2xl wrap-anywhere">{user.username}</p>
           <p className="text-xs text-muted-foreground">
             Likes recieved: {user.likes < 1000? user.likes: user.likes/1000 + "k"}
           </p>
