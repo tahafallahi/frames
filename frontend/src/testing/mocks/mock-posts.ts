@@ -44,7 +44,7 @@ const mockPosts: Post[] = [
   },
   {
     title: "I genuinely don't understand the hype.",
-    text: "Everyone kept telling me this was one of the best movies of the year, so I finally gave it a chance. The acting was decent, but everything else felt incredibly predictable. I kept waiting for something interesting to happen, but the movie never really got there.",
+    text: "Everyone kept telling me this was one of the best movies of the year, so I finally gave it a chance. The acting was decent, but everything else felt incredibly predictable. I kept waiting for something interesting to happen, but the movie never really got there. And you know what??? I'm just adding this extra stuff to know if the eplissis works or not!",
     username: "Sarah",
     likes: 12400,
     commentsCount: 182,

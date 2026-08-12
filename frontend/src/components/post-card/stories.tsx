@@ -12,6 +12,12 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {args: {
-  post: mockPosts[1]
+export const Compact: Story = {args: {
+  post: mockPosts[1],
+  variant: "compact"
+}};
+
+export const Full: Story = {args: {
+  post: mockPosts[1],
+  variant: "full"
 }};
