@@ -1,5 +1,5 @@
 import UserControls from "./user-controls";
-import type { User } from "@/types/user";
+import type { User } from "@/types/types";
 import SearchBar from "./search-bar/search-bar";
 import { Link } from "react-router";
 

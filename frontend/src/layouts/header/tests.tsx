@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router";
 
 import Header from "./header";
 import userEvent from "@testing-library/user-event";
-import { mockUser } from "@/testing/mocks/mocks";
+import { mockUser } from "@/testing/mocks/users";
 
 describe("Header", () => {
   let user: ReturnType<typeof userEvent.setup>;

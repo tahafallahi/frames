@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import Filter from './filter';
-import { mockFilters } from '@/testing/mocks/mocks';
+import { mockFilters } from '@/testing/mocks/users';
 
 
 

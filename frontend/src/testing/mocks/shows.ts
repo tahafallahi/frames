@@ -1,4 +1,4 @@
-import type { Show } from "@/types/user";
+import type { Show } from "@/types/types";
 
 const mockShows: Show[] = [
   {

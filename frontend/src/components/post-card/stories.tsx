@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import PostCard from './post-card';
-import mockPosts from '@/testing/mocks/mock-posts';
+import mockPosts from '@/testing/mocks/posts';
 
 
 

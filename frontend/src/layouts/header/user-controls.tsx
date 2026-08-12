@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import { Bell } from "lucide-react";
 
-import type { User } from "@/types/user";
+import type { User } from "@/types/types";
 
 import {
   Popover,

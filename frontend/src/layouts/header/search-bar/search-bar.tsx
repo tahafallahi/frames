@@ -7,7 +7,7 @@ import {
   PopoverTitle,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-import { mockSearchResult } from "@/testing/mocks/mocks";
+import { mockSearchResult } from "@/testing/mocks/searchResults";
 import SlimCard from "@/components/slim-card/slim-card";
 import Profile from "@/components/profile-card/profile";
 import { MessageCircle, ThumbsUp } from "lucide-react";
@@ -60,7 +60,7 @@ export default function SearchBar() {
                 <h3 className="text-base text-foreground">Users</h3>
                 <div className="flex flex-col gap-2">
                   {result.users.map((u, i) => (
-                    <SlimCard  key={i}>
+                    <SlimCard key={i}>
                       <Profile user={u} variant={"compact"} />
                     </SlimCard>
                   ))}
@@ -72,7 +72,7 @@ export default function SearchBar() {
               <h3 className="text-base text-foreground">Posts</h3>
               <div className="flex flex-col gap-2">
                 {result.posts.map((p, i) => (
-                  <SlimCard  key={i} className="flex" >
+                  <SlimCard key={i} className="flex">
                     <div className="flex-1">
                       <p className="text-foreground text-xl ">{p.title}</p>
                       <p>

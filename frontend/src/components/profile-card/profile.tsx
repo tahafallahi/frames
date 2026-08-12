@@ -1,4 +1,4 @@
-import type { User } from "@/types/user";
+import type { User } from "@/types/types";
 
 export default function Profile({
   user,

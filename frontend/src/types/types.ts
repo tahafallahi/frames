@@ -31,3 +31,10 @@ export interface Filter {
   title: string,
   items: {name: string, selected: boolean}[]
 }
+
+export interface Comment {
+  text: string,
+  user: User,
+  replies: Comment[],
+  likes: number
+}

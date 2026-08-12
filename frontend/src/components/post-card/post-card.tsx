@@ -1,4 +1,4 @@
-import type { Post } from "@/types/user";
+import type { Post } from "@/types/types";
 import { thousandToK } from "@/utils/general";
 import { MessageCircle, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Badge } from "../ui/badge";

@@ -1,4 +1,4 @@
-import type { Post, Show } from "@/types/user";
+import type { Post, Show } from "@/types/types";
 
 const mockShow: Show = {
   name: "Odyssey",
@@ -41,6 +41,7 @@ const mockPosts: Post[] = [
     likes: 36000,
     commentsCount: 300,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I genuinely don't understand the hype.",
@@ -49,7 +50,7 @@ const mockPosts: Post[] = [
     likes: 12400,
     commentsCount: 182,
     show: mockShow1,
-    tags: ["discussion"]
+    tags: ["discussion"],
   },
   {
     title: "The ending completely ruined it for me.",
@@ -58,6 +59,7 @@ const mockPosts: Post[] = [
     likes: 8700,
     commentsCount: 94,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "Why does nobody talk about this movie?",
@@ -66,6 +68,7 @@ const mockPosts: Post[] = [
     likes: 22100,
     commentsCount: 417,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "A surprisingly emotional experience.",
@@ -74,6 +77,7 @@ const mockPosts: Post[] = [
     likes: 15300,
     commentsCount: 236,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "Beautiful to look at, painfully boring to watch.",
@@ -82,6 +86,7 @@ const mockPosts: Post[] = [
     likes: 19800,
     commentsCount: 291,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "This deserved a much better script.",
@@ -90,6 +95,7 @@ const mockPosts: Post[] = [
     likes: 9600,
     commentsCount: 127,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "Actually one of my favorites now.",
@@ -98,6 +104,7 @@ const mockPosts: Post[] = [
     likes: 28700,
     commentsCount: 521,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The soundtrack carried the entire movie.",
@@ -106,6 +113,7 @@ const mockPosts: Post[] = [
     likes: 7400,
     commentsCount: 88,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I wanted to love this so badly.",
@@ -114,6 +122,7 @@ const mockPosts: Post[] = [
     likes: 11300,
     commentsCount: 163,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This movie is absolute chaos.",
@@ -122,6 +131,7 @@ const mockPosts: Post[] = [
     likes: 18200,
     commentsCount: 304,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The villain stole every scene.",
@@ -130,6 +140,7 @@ const mockPosts: Post[] = [
     likes: 13600,
     commentsCount: 219,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "A perfect example of style over substance.",
@@ -138,6 +149,7 @@ const mockPosts: Post[] = [
     likes: 6200,
     commentsCount: 71,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I can't believe how much I enjoyed this.",
@@ -146,6 +158,7 @@ const mockPosts: Post[] = [
     likes: 31400,
     commentsCount: 638,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The first half was fantastic.",
@@ -154,6 +167,7 @@ const mockPosts: Post[] = [
     likes: 9100,
     commentsCount: 145,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "Definitely not for everyone.",
@@ -162,6 +176,7 @@ const mockPosts: Post[] = [
     likes: 16700,
     commentsCount: 284,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The acting is honestly ridiculous.",
@@ -170,6 +185,7 @@ const mockPosts: Post[] = [
     likes: 24500,
     commentsCount: 355,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "Could have been 40 minutes shorter.",
@@ -178,6 +194,7 @@ const mockPosts: Post[] = [
     likes: 8300,
     commentsCount: 116,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The chemistry between these characters is incredible.",
@@ -186,6 +203,7 @@ const mockPosts: Post[] = [
     likes: 20300,
     commentsCount: 328,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I have so many questions.",
@@ -194,6 +212,7 @@ const mockPosts: Post[] = [
     likes: 11200,
     commentsCount: 190,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This was exactly what I needed.",
@@ -202,6 +221,7 @@ const mockPosts: Post[] = [
     likes: 27800,
     commentsCount: 472,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The middle completely lost me.",
@@ -210,6 +230,7 @@ const mockPosts: Post[] = [
     likes: 7600,
     commentsCount: 102,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "One of the best performances I've seen.",
@@ -218,6 +239,7 @@ const mockPosts: Post[] = [
     likes: 18900,
     commentsCount: 267,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I regret watching this at 2 AM.",
@@ -226,6 +248,7 @@ const mockPosts: Post[] = [
     likes: 34100,
     commentsCount: 702,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The book was better.",
@@ -234,6 +257,7 @@ const mockPosts: Post[] = [
     likes: 10200,
     commentsCount: 214,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The final shot is incredible.",
@@ -242,6 +266,7 @@ const mockPosts: Post[] = [
     likes: 21600,
     commentsCount: 331,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "Not scary at all.",
@@ -250,6 +275,7 @@ const mockPosts: Post[] = [
     likes: 6800,
     commentsCount: 149,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The comedy actually works.",
@@ -258,6 +284,7 @@ const mockPosts: Post[] = [
     likes: 17400,
     commentsCount: 252,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I don't understand the ending.",
@@ -266,6 +293,7 @@ const mockPosts: Post[] = [
     likes: 9200,
     commentsCount: 183,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This movie has no business being this good.",
@@ -274,6 +302,7 @@ const mockPosts: Post[] = [
     likes: 26300,
     commentsCount: 419,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The dialogue feels so unnatural.",
@@ -282,6 +311,7 @@ const mockPosts: Post[] = [
     likes: 5800,
     commentsCount: 97,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I need a sequel immediately.",
@@ -290,6 +320,7 @@ const mockPosts: Post[] = [
     likes: 29600,
     commentsCount: 543,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "A very forgettable movie.",
@@ -298,6 +329,7 @@ const mockPosts: Post[] = [
     likes: 4300,
     commentsCount: 62,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The world-building is fantastic.",
@@ -306,6 +338,7 @@ const mockPosts: Post[] = [
     likes: 23100,
     commentsCount: 387,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "Why was this three hours long?",
@@ -314,6 +347,7 @@ const mockPosts: Post[] = [
     likes: 7900,
     commentsCount: 133,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I cried more than I expected.",
@@ -322,6 +356,7 @@ const mockPosts: Post[] = [
     likes: 25700,
     commentsCount: 468,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The trailer was misleading.",
@@ -330,6 +365,7 @@ const mockPosts: Post[] = [
     likes: 8400,
     commentsCount: 121,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This deserves more attention.",
@@ -338,6 +374,7 @@ const mockPosts: Post[] = [
     likes: 14600,
     commentsCount: 207,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The villain makes absolutely no sense.",
@@ -346,6 +383,7 @@ const mockPosts: Post[] = [
     likes: 6900,
     commentsCount: 114,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "A surprisingly wholesome movie.",
@@ -354,6 +392,7 @@ const mockPosts: Post[] = [
     likes: 21900,
     commentsCount: 341,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The visuals are absolutely insane.",
@@ -362,6 +401,7 @@ const mockPosts: Post[] = [
     likes: 17300,
     commentsCount: 286,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I couldn't finish it.",
@@ -370,6 +410,7 @@ const mockPosts: Post[] = [
     likes: 5100,
     commentsCount: 83,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The characters feel like real people.",
@@ -378,6 +419,7 @@ const mockPosts: Post[] = [
     likes: 19400,
     commentsCount: 274,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The pacing is all over the place.",
@@ -386,6 +428,7 @@ const mockPosts: Post[] = [
     likes: 7200,
     commentsCount: 106,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I loved every second of this.",
@@ -394,6 +437,7 @@ const mockPosts: Post[] = [
     likes: 32700,
     commentsCount: 591,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The sequel is better.",
@@ -402,6 +446,7 @@ const mockPosts: Post[] = [
     likes: 10800,
     commentsCount: 174,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This was way too predictable.",
@@ -410,6 +455,7 @@ const mockPosts: Post[] = [
     likes: 6300,
     commentsCount: 91,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The practical effects deserve an award.",
@@ -418,6 +464,7 @@ const mockPosts: Post[] = [
     likes: 16100,
     commentsCount: 229,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "A perfect rainy-day movie.",
@@ -426,6 +473,7 @@ const mockPosts: Post[] = [
     likes: 18700,
     commentsCount: 301,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The main character annoyed me.",
@@ -434,6 +482,7 @@ const mockPosts: Post[] = [
     likes: 9700,
     commentsCount: 211,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The score is unforgettable.",
@@ -442,6 +491,7 @@ const mockPosts: Post[] = [
     likes: 13200,
     commentsCount: 198,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I genuinely hated this.",
@@ -450,6 +500,7 @@ const mockPosts: Post[] = [
     likes: 4800,
     commentsCount: 155,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The chemistry saves the movie.",
@@ -458,6 +509,7 @@ const mockPosts: Post[] = [
     likes: 15400,
     commentsCount: 247,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I need to watch this again.",
@@ -466,6 +518,7 @@ const mockPosts: Post[] = [
     likes: 23800,
     commentsCount: 364,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "An absolute mess, but a fun one.",
@@ -474,6 +527,7 @@ const mockPosts: Post[] = [
     likes: 20100,
     commentsCount: 427,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The opening scene is perfect.",
@@ -482,6 +536,7 @@ const mockPosts: Post[] = [
     likes: 8900,
     commentsCount: 119,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This movie understands loneliness.",
@@ -490,6 +545,7 @@ const mockPosts: Post[] = [
     likes: 17600,
     commentsCount: 292,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I don't think the remake was necessary.",
@@ -498,6 +554,7 @@ const mockPosts: Post[] = [
     likes: 8100,
     commentsCount: 137,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The dialogue is actually hilarious.",
@@ -506,6 +563,7 @@ const mockPosts: Post[] = [
     likes: 14300,
     commentsCount: 266,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The ending was worth the wait.",
@@ -514,6 +572,7 @@ const mockPosts: Post[] = [
     likes: 22500,
     commentsCount: 349,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "Way too much exposition.",
@@ -522,6 +581,7 @@ const mockPosts: Post[] = [
     likes: 6700,
     commentsCount: 104,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This is what a good mystery looks like.",
@@ -530,6 +590,7 @@ const mockPosts: Post[] = [
     likes: 27100,
     commentsCount: 483,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The second act is incredible.",
@@ -538,6 +599,7 @@ const mockPosts: Post[] = [
     likes: 11900,
     commentsCount: 176,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "Not bad, just incredibly average.",
@@ -546,6 +608,7 @@ const mockPosts: Post[] = [
     likes: 5600,
     commentsCount: 75,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The ending broke me.",
@@ -554,6 +617,7 @@ const mockPosts: Post[] = [
     likes: 24900,
     commentsCount: 432,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The cinematography is the real star.",
@@ -562,6 +626,7 @@ const mockPosts: Post[] = [
     likes: 15600,
     commentsCount: 238,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I expected nothing and got exactly that.",
@@ -570,6 +635,7 @@ const mockPosts: Post[] = [
     likes: 4300,
     commentsCount: 69,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The characters are the whole point.",
@@ -578,6 +644,7 @@ const mockPosts: Post[] = [
     likes: 18200,
     commentsCount: 315,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The action scenes are ridiculous.",
@@ -586,6 +653,7 @@ const mockPosts: Post[] = [
     likes: 20900,
     commentsCount: 401,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "This movie made me uncomfortable.",
@@ -594,6 +662,7 @@ const mockPosts: Post[] = [
     likes: 12700,
     commentsCount: 203,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The casting was perfect.",
@@ -602,6 +671,7 @@ const mockPosts: Post[] = [
     likes: 16500,
     commentsCount: 245,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I should have watched this years ago.",
@@ -610,6 +680,7 @@ const mockPosts: Post[] = [
     likes: 21700,
     commentsCount: 367,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The plot makes zero sense.",
@@ -618,6 +689,7 @@ const mockPosts: Post[] = [
     likes: 6100,
     commentsCount: 122,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The romance feels surprisingly natural.",
@@ -626,6 +698,7 @@ const mockPosts: Post[] = [
     likes: 19300,
     commentsCount: 298,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "A fantastic character study.",
@@ -634,6 +707,7 @@ const mockPosts: Post[] = [
     likes: 14200,
     commentsCount: 201,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The special effects haven't aged well.",
@@ -642,6 +716,7 @@ const mockPosts: Post[] = [
     likes: 7500,
     commentsCount: 113,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This is much darker than I expected.",
@@ -650,6 +725,7 @@ const mockPosts: Post[] = [
     likes: 11600,
     commentsCount: 181,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I laughed way too much.",
@@ -658,6 +734,7 @@ const mockPosts: Post[] = [
     likes: 23400,
     commentsCount: 388,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The pacing is actually perfect.",
@@ -666,6 +743,7 @@ const mockPosts: Post[] = [
     likes: 15800,
     commentsCount: 276,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The main twist was obvious.",
@@ -674,6 +752,7 @@ const mockPosts: Post[] = [
     likes: 7200,
     commentsCount: 131,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The supporting cast deserves more credit.",
@@ -682,6 +761,7 @@ const mockPosts: Post[] = [
     likes: 10100,
     commentsCount: 169,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I completely misunderstood this movie.",
@@ -690,6 +770,7 @@ const mockPosts: Post[] = [
     likes: 26700,
     commentsCount: 512,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This is aggressively mediocre.",
@@ -698,6 +779,7 @@ const mockPosts: Post[] = [
     likes: 5300,
     commentsCount: 86,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The final act is incredible.",
@@ -706,6 +788,7 @@ const mockPosts: Post[] = [
     likes: 20800,
     commentsCount: 344,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "This movie needs a director's cut.",
@@ -714,6 +797,7 @@ const mockPosts: Post[] = [
     likes: 9400,
     commentsCount: 156,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I would watch this forever.",
@@ -722,6 +806,7 @@ const mockPosts: Post[] = [
     likes: 28900,
     commentsCount: 477,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The movie takes itself too seriously.",
@@ -730,6 +815,7 @@ const mockPosts: Post[] = [
     likes: 6900,
     commentsCount: 118,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The atmosphere is incredible.",
@@ -738,6 +824,7 @@ const mockPosts: Post[] = [
     likes: 17300,
     commentsCount: 263,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I wish the ending was different.",
@@ -746,6 +833,7 @@ const mockPosts: Post[] = [
     likes: 8700,
     commentsCount: 141,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The dialogue is the best part.",
@@ -754,6 +842,7 @@ const mockPosts: Post[] = [
     likes: 12800,
     commentsCount: 197,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I don't know how to rate this.",
@@ -762,6 +851,7 @@ const mockPosts: Post[] = [
     likes: 11000,
     commentsCount: 234,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This deserves a higher rating.",
@@ -770,6 +860,7 @@ const mockPosts: Post[] = [
     likes: 19700,
     commentsCount: 321,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The music is doing all the work.",
@@ -778,6 +869,7 @@ const mockPosts: Post[] = [
     likes: 5900,
     commentsCount: 103,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "A genuinely underrated performance.",
@@ -786,6 +878,7 @@ const mockPosts: Post[] = [
     likes: 13900,
     commentsCount: 188,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The ending made everything better.",
@@ -794,6 +887,7 @@ const mockPosts: Post[] = [
     likes: 18400,
     commentsCount: 302,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I kept checking how much time was left.",
@@ -802,6 +896,7 @@ const mockPosts: Post[] = [
     likes: 6800,
     commentsCount: 126,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The character development is excellent.",
@@ -810,6 +905,7 @@ const mockPosts: Post[] = [
     likes: 22400,
     commentsCount: 354,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "This movie is pure comfort food.",
@@ -818,6 +914,7 @@ const mockPosts: Post[] = [
     likes: 26100,
     commentsCount: 439,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The action is completely over the top.",
@@ -826,6 +923,7 @@ const mockPosts: Post[] = [
     likes: 15300,
     commentsCount: 291,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The movie thinks it's smarter than it is.",
@@ -834,6 +932,7 @@ const mockPosts: Post[] = [
     likes: 8300,
     commentsCount: 177,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I can't stop thinking about this.",
@@ -842,6 +941,7 @@ const mockPosts: Post[] = [
     likes: 24600,
     commentsCount: 398,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The most frustrating movie I've seen.",
@@ -850,6 +950,7 @@ const mockPosts: Post[] = [
     likes: 9100,
     commentsCount: 154,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The ending was perfect.",
@@ -858,6 +959,7 @@ const mockPosts: Post[] = [
     likes: 31900,
     commentsCount: 526,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "A very strange movie.",
@@ -866,6 +968,7 @@ const mockPosts: Post[] = [
     likes: 14700,
     commentsCount: 273,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The remake actually works.",
@@ -874,6 +977,7 @@ const mockPosts: Post[] = [
     likes: 17200,
     commentsCount: 289,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I wish there was more of this character.",
@@ -882,6 +986,7 @@ const mockPosts: Post[] = [
     likes: 13300,
     commentsCount: 215,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The story is simple but effective.",
@@ -890,6 +995,7 @@ const mockPosts: Post[] = [
     likes: 19900,
     commentsCount: 318,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I was bored from beginning to end.",
@@ -898,6 +1004,7 @@ const mockPosts: Post[] = [
     likes: 4700,
     commentsCount: 84,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The tension is unbelievable.",
@@ -906,6 +1013,7 @@ const mockPosts: Post[] = [
     likes: 21300,
     commentsCount: 337,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The soundtrack is stuck in my head.",
@@ -914,6 +1022,7 @@ const mockPosts: Post[] = [
     likes: 11800,
     commentsCount: 164,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "A great movie with one huge problem.",
@@ -922,6 +1031,7 @@ const mockPosts: Post[] = [
     likes: 10200,
     commentsCount: 143,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I actually recommend this one.",
@@ -930,6 +1040,7 @@ const mockPosts: Post[] = [
     likes: 27600,
     commentsCount: 462,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The movie is better than the reviews suggest.",
@@ -938,6 +1049,7 @@ const mockPosts: Post[] = [
     likes: 16200,
     commentsCount: 248,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The third act feels rushed.",
@@ -946,6 +1058,7 @@ const mockPosts: Post[] = [
     likes: 7600,
     commentsCount: 129,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "This is going straight into my favorites.",
@@ -954,6 +1067,7 @@ const mockPosts: Post[] = [
     likes: 34800,
     commentsCount: 617,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I need someone to explain this to me.",
@@ -962,6 +1076,7 @@ const mockPosts: Post[] = [
     likes: 8700,
     commentsCount: 226,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The villain was the best character.",
@@ -970,6 +1085,7 @@ const mockPosts: Post[] = [
     likes: 15100,
     commentsCount: 284,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "A solid movie, nothing more.",
@@ -978,6 +1094,7 @@ const mockPosts: Post[] = [
     likes: 6400,
     commentsCount: 92,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The final scene destroyed me.",
@@ -986,6 +1103,7 @@ const mockPosts: Post[] = [
     likes: 23100,
     commentsCount: 406,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The pacing was surprisingly good.",
@@ -994,6 +1112,7 @@ const mockPosts: Post[] = [
     likes: 18400,
     commentsCount: 275,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I don't think I'll ever watch this again.",
@@ -1002,6 +1121,7 @@ const mockPosts: Post[] = [
     likes: 12700,
     commentsCount: 219,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The world feels incredibly alive.",
@@ -1010,6 +1130,7 @@ const mockPosts: Post[] = [
     likes: 20500,
     commentsCount: 331,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The jokes never stopped.",
@@ -1018,6 +1139,7 @@ const mockPosts: Post[] = [
     likes: 19600,
     commentsCount: 347,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The premise was better than the execution.",
@@ -1026,6 +1148,7 @@ const mockPosts: Post[] = [
     likes: 8100,
     commentsCount: 136,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "An excellent slow-burn.",
@@ -1034,6 +1157,7 @@ const mockPosts: Post[] = [
     likes: 22100,
     commentsCount: 368,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The CGI was distracting.",
@@ -1042,6 +1166,7 @@ const mockPosts: Post[] = [
     likes: 5300,
     commentsCount: 78,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "This movie surprised me.",
@@ -1050,6 +1175,7 @@ const mockPosts: Post[] = [
     likes: 14800,
     commentsCount: 241,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The relationship feels incredibly real.",
@@ -1058,6 +1184,7 @@ const mockPosts: Post[] = [
     likes: 23800,
     commentsCount: 381,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This needed a better editor.",
@@ -1066,6 +1193,7 @@ const mockPosts: Post[] = [
     likes: 5900,
     commentsCount: 101,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I loved the atmosphere.",
@@ -1074,6 +1202,7 @@ const mockPosts: Post[] = [
     likes: 17100,
     commentsCount: 257,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The ending is going to divide people.",
@@ -1082,6 +1211,7 @@ const mockPosts: Post[] = [
     likes: 12900,
     commentsCount: 298,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "One of the funniest movies I've seen.",
@@ -1090,6 +1220,7 @@ const mockPosts: Post[] = [
     likes: 28700,
     commentsCount: 451,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The protagonist carried this movie.",
@@ -1098,6 +1229,7 @@ const mockPosts: Post[] = [
     likes: 11500,
     commentsCount: 187,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The ending was completely unnecessary.",
@@ -1106,6 +1238,7 @@ const mockPosts: Post[] = [
     likes: 6800,
     commentsCount: 144,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This deserves a rewatch.",
@@ -1114,6 +1247,7 @@ const mockPosts: Post[] = [
     likes: 20200,
     commentsCount: 317,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "I don't understand why this is so popular.",
@@ -1122,6 +1256,7 @@ const mockPosts: Post[] = [
     likes: 4900,
     commentsCount: 121,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The character arcs are fantastic.",
@@ -1130,6 +1265,7 @@ const mockPosts: Post[] = [
     likes: 21400,
     commentsCount: 352,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "A genuinely beautiful movie.",
@@ -1138,6 +1274,7 @@ const mockPosts: Post[] = [
     likes: 19300,
     commentsCount: 286,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The story completely fell apart.",
@@ -1146,6 +1283,7 @@ const mockPosts: Post[] = [
     likes: 7400,
     commentsCount: 133,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "I would recommend this to anyone.",
@@ -1154,6 +1292,7 @@ const mockPosts: Post[] = [
     likes: 25900,
     commentsCount: 427,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "The first scene had me hooked.",
@@ -1162,6 +1301,7 @@ const mockPosts: Post[] = [
     likes: 13700,
     commentsCount: 192,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The movie is way too long.",
@@ -1170,6 +1310,7 @@ const mockPosts: Post[] = [
     likes: 6200,
     commentsCount: 109,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The soundtrack deserves its own review.",
@@ -1178,6 +1319,7 @@ const mockPosts: Post[] = [
     likes: 15900,
     commentsCount: 243,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This was unexpectedly wholesome.",
@@ -1186,6 +1328,7 @@ const mockPosts: Post[] = [
     likes: 24700,
     commentsCount: 392,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The final reveal was incredible.",
@@ -1194,6 +1337,7 @@ const mockPosts: Post[] = [
     likes: 28200,
     commentsCount: 469,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "Not the masterpiece everyone says it is.",
@@ -1202,6 +1346,7 @@ const mockPosts: Post[] = [
     likes: 8700,
     commentsCount: 208,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "I need more movies like this.",
@@ -1210,6 +1355,7 @@ const mockPosts: Post[] = [
     likes: 20100,
     commentsCount: 319,
     show: mockShow2,
+    tags: ["discussion"],
   },
   {
     title: "The performances are incredible.",
@@ -1218,6 +1364,7 @@ const mockPosts: Post[] = [
     likes: 22500,
     commentsCount: 371,
     show: mockShow,
+    tags: ["discussion"],
   },
   {
     title: "The ending left me speechless.",
@@ -1226,6 +1373,7 @@ const mockPosts: Post[] = [
     likes: 29600,
     commentsCount: 514,
     show: mockShow1,
+    tags: ["discussion"],
   },
   {
     title: "This movie is pure chaos.",
@@ -1234,6 +1382,7 @@ const mockPosts: Post[] = [
     likes: 18300,
     commentsCount: 327,
     show: mockShow2,
+    tags: ["discussion"],
   },
 ];
 

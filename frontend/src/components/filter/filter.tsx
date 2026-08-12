@@ -1,4 +1,4 @@
-import type { Filter } from "@/types/user";
+import type { Filter } from "@/types/types";
 import { Badge } from "../ui/badge";
 
 export default function Filter({ filters }: { filters: Filter[] }) {
