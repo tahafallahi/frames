@@ -1,6 +1,6 @@
 import type { Comment } from "@/types/types";
 import { thousandToK } from "@/utils/general";
-import { MessageCircle, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
+import { MessageCircle, Reply, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
 
 export default function Comment({ comment }: { comment: Comment }) {
   return (
@@ -28,8 +28,8 @@ export default function Comment({ comment }: { comment: Comment }) {
             <p>{thousandToK(comment.replies.length)}</p>
           </div>
           <div className="flex gap-2 ">
-            <Share2Icon className="w-5" />
-            <p>share</p>
+            <Reply className="w-5" />
+            <p>reply</p>
           </div>
         </div>
       </div>
