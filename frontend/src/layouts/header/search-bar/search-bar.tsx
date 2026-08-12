@@ -9,7 +9,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { mockSearchResult } from "@/testing/mocks/searchResults";
 import SlimCard from "@/components/slim-card/slim-card";
-import Profile from "@/components/profile-card/profile";
+import Profile from "@/components/profile-card/profile-card";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 
 export default function SearchBar() {

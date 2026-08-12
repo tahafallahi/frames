@@ -6,13 +6,12 @@ import type { User } from "@/types/types";
 import {
   Popover,
   PopoverContent,
-  PopoverDescription,
   PopoverHeader,
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "@/components/profile-card/profile";
+import ProfileCard from "@/components/profile-card/profile-card";
 import SlimCard from "@/components/slim-card/slim-card";
 
 export default function UserControls({ user }: { user: User }) {
