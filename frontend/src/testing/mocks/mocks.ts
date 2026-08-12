@@ -1,4 +1,4 @@
-import type { Post, Show, User } from "@/types/user";
+import type { Filter, Post, Show, User } from "@/types/user";
 import mockPosts from "./mock-posts";
 
 const mockUser: User = {
@@ -83,11 +83,39 @@ const mockShow2: Show = {
   img: "https://placehold.co/640x480/yellow/black/?text=madison",
 };
 
+const mockFilters: Filter[] = [
+  {
+    title: "Content",
+    items: [
+      { name: "Movie", selected: false },
+      { name: "TV Show", selected: false },
+      { name: "Documantry", selected: false },
+    ],
+  },
+  {
+    title: "Post Type",
+    items: [
+      { name: "News", selected: true },
+      { name: "Discussion", selected: false },
+      { name: "Spoiler", selected: false },
+      { name: "Review", selected: false },
+    ],
+  },
+];
 
 const mockSearchResult = {
   users: [mockUser1, mockUser2, mockUser3],
   shows: [mockShow, mockShow1, mockShow2, mockShow1, mockShow, mockShow2],
-  posts: mockPosts.slice(0, 4)
+  posts: mockPosts.slice(0, 4),
 };
 
-export { mockUser, mockUser1, mockUser2, mockSearchResult, mockShow, mockShow1, mockShow2 };
+export {
+  mockUser,
+  mockUser1,
+  mockUser2,
+  mockSearchResult,
+  mockShow,
+  mockShow1,
+  mockShow2,
+  mockFilters,
+};

@@ -24,4 +24,10 @@ export interface Post {
   likes: number,
   commentsCount: number,
   show: Show,
+  tags: string[]
+}
+
+export interface Filter {
+  title: string,
+  items: {name: string, selected: boolean}[]
 }

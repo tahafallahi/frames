@@ -49,6 +49,7 @@ const mockPosts: Post[] = [
     likes: 12400,
     commentsCount: 182,
     show: mockShow1,
+    tags: ["discussion"]
   },
   {
     title: "The ending completely ruined it for me.",

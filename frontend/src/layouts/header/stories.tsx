@@ -1,8 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import Header from './header';
-import { mockUser } from '@/testing/mocks/mocks';
-
-
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import Header from "./header";
+import { mockUser } from "@/testing/mocks/mocks";
 
 const meta = {
   component: Header,
@@ -12,6 +10,4 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {args: {
-  user: mockUser
-}};
+export const Default: Story = { args: { user: mockUser } };
