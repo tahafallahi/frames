@@ -5,7 +5,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
- 
 :root {
   /* --background: oklch(96.115% 0.00011 271.152);
   --background-l1: oklch(92.843% 0.00762 187.672);

@@ -5,7 +5,7 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
   const tabs = ["All", "Following", "My Posts"];
 
   return (
-    <div className="w-75 h-full p-10 border-r text-2xl flex flex-col gap-10">
+    <div className="sticky top-18 h-[calc(100dvh-72px)] w-75 p-10 border-r text-2xl flex flex-col gap-10">
       <div className="flex flex-col gap-1">
         {tabs.map((t, i) =>
           t === selectedFeed ? (
