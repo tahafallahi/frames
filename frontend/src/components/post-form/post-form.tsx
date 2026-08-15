@@ -13,7 +13,7 @@ export default function PostForm() {
       </div>
       <div className="text-muted-foreground flex flex-col gap-1">
         <label htmlFor="title">Body</label>
-        <textarea id="title" type="text" className="pl-3 p-1 border-primary rounded-lg border"/>
+        <textarea id="title" className="pl-3 p-1 border-primary rounded-lg border"/>
       </div>
       <div className="flex justify-end gap-4">
         <Button className="w-20 font-bold" variant={"destructive"}>Discard</Button>
