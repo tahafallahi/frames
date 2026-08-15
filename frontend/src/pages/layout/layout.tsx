@@ -7,7 +7,7 @@ export default function Layout() {
   return (
     <>
       <Header user={mockUsers[0]} />
-      <div className="grid grid-cols-3 items-start">
+      <div className="grid grid-cols-[300px_1fr] items-start">
         <SideBar selectedFeed="All" />
         <Outlet />
       </div>

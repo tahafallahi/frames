@@ -71,7 +71,7 @@ export default function UserControls({ user }: { user: User }) {
             </PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
               <PopoverHeader>
-                  <ProfileCard user={user} variant={"normal"} />
+                  <ProfileCard user={user} variant={"full"} />
               </PopoverHeader>
                   <div className="flex flex-col gap-2">
                     <Button className="font-bold">Profile</Button>
