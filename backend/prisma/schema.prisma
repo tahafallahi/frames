@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
@@ -12,9 +7,135 @@ datasource db {
   provider = "postgresql"
 }
 
+enum MediaType {
+  MOVIE
+  TV_SHOW
+}
+
 model User {
+  id String @id @default(uuid())
+  username String @unique @db.VarChar(32)
+  hashedPassword String @db.VarChar(60)
+  profilePath String?
+  bio String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[]
+  comments Comment[]
+  following Follows[] @relation("Follower")
+  followers Follows[] @relation("Followee")
+  favorites Show[]
+  likes Like[]
+}
+
+model Follows {
+  followerId String
+  follower User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+
+  followeeId String
+  followee User @relation("Followee",fields: [followeeId], references: [id], onDelete: Cascade)
+
+  @@id([followerId, followeeId])
+  @@index([followeeId])
+}
+
+model Show {
+  id Int @id
+  title String 
+  overview String
+  releaseYear Int
+  mediaType MediaType
+  posterPath String
+
+  posts Post[]
+  trendings Trending[]
+  genres Genre[]
+  users User[]
+
+}
+
+model Genre {
+  id Int @id
+  name String @unique
+  shows Show[]
+}
+
+model Post {
+  id String @id @default(uuid())
+  title String @db.VarChar(300)
+  content String? @db.VarChar(10000)
+  picturePath String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  authorId String?
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  showId Int
+  show Show @relation(fields: [showId], references: [id], onDelete: Restrict)
+
+  tags Tag[]
+  comments Comment[]
+  likes Like[]
+
+  @@index([authorId])
+  @@index([showId])
+}
+
+model Tag {
   id Int @id @default(autoincrement())
-  username String @unique
-  email String @unique
-  profilePath String 
+  name String @unique
+  posts Post[]
+}
+
+
+model Comment {
+  id String @id @default(uuid())
+  content String @db.VarChar(5000)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  postId String
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  authorId String?
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  comments Comment[] @relation("CommentReplies")
+  parentId String?
+  parent Comment? @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  likes Like[]
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
+}
+
+model Trending {
+  id String @id @default(uuid())
+  popularity Int
+
+  showId Int
+  show Show @relation(fields: [showId], references: [id]) 
+
+  @@index([showId])
+}
+
+model Like {
+  id String @id @default(uuid())
+
+  userId String?
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  postId String?
+  post Post? @relation(fields: [postId], references: [id])
+
+  commentId String?
+  comment Comment? @relation(fields: [commentId], references: [id])
+
+  @@unique([userId, postId])
+  @@unique([userId, commentId])
+  @@index([postId])
+  @@index([commentId])
 }
