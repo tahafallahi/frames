@@ -8,6 +8,7 @@ export interface ApiSearchResponse {
 export interface ApiSearchUser {
   id: string;
   username: string;
+  profilePath: string;
 }
 
 export interface ApiSearchPost {
@@ -27,6 +28,7 @@ export interface ApiSearchMovie {
 
 export interface ApiSearchTvShow {
   id: number;
+  title: string;
   poster_path: string;
   release_date: string;
 }

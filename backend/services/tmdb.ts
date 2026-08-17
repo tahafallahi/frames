@@ -21,7 +21,7 @@ export async function searchTV(query: string, limit: number) {
   const tvs = tvData.data.results.slice(0, limit).map((r: any) => {
     return {
       id: r.id,
-      title: r.title,
+      title: r.name,
       poster_path: r.poster_path,
       release_date: r.first_air_date,
     };

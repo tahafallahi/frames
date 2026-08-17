@@ -18,30 +18,32 @@ export async function getSearchResult(req: Request, res: Response) {
     return;
   }
 
-  const [usersResult, postsResult, moviesResult, tvsResult] =
-    await Promise.allSettled([
+  const [users, posts, movies, tvs] =
+    await Promise.all([
       searchUser(query, limit),
       searchPost(query, limit),
       searchMovie(query, limit),
       searchTV(query, limit),
     ]);
 
-  res.json({
-    users:
-      usersResult.status === "fulfilled"
-        ? usersResult.value
-        : { error: true, data: [] },
-    posts:
-      postsResult.status === "fulfilled"
-        ? postsResult.value
-        : { error: true, data: [] },
-    movies:
-      moviesResult.status === "fulfilled"
-        ? moviesResult.value
-        : { error: true, data: [] },
-    tvs:
-      tvsResult.status === "fulfilled"
-        ? tvsResult.value
-        : { error: true, data: [] },
-  });
+    res.json({users, posts, movies, tvs})
+
+//   res.json({
+//     users:
+//       usersResult.status === "fulfilled"
+//         ? usersResult.value
+//         : { error: true, data: [] },
+//     posts:
+//       postsResult.status === "fulfilled"
+//         ? postsResult.value
+//         : { error: true, data: [] },
+//     movies:
+//       moviesResult.status === "fulfilled"
+//         ? moviesResult.value
+//         : { error: true, data: [] },
+//     tvs:
+//       tvsResult.status === "fulfilled"
+//         ? tvsResult.value
+//         : { error: true, data: [] },
+//   });
 }

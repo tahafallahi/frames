@@ -4,8 +4,8 @@ import type { Post } from "generated/prisma/client";
 
 export async function searchUser(query: string, limit: number) {
   const users = await prisma.$queryRaw`
-    SELECT id, username FROM (
-      SELECT id, username, similarity(username, ${query}) AS similarity
+    SELECT id, username, "profilePath" FROM (
+      SELECT id, username, "profilePath", similarity(username, ${query}) AS similarity
       FROM "User"
       WHERE username % ${query} OR username ILIKE ${"%" + query + "%"}
       ORDER BY similarity DESC

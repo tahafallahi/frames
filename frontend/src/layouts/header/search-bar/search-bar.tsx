@@ -1,4 +1,10 @@
-import { useRef, useState, type ChangeEvent, type Dispatch, type SetStateAction } from "react";
+import {
+  useRef,
+  useState,
+  type ChangeEvent,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 import {
   Popover,
@@ -9,14 +15,21 @@ import {
 import { Input } from "@/components/ui/input";
 import SlimCard from "@/components/slim-card/slim-card";
 import Profile from "@/components/profile-card/profile-card";
-import { MessageCircle, ThumbsUp } from "lucide-react";
+import { ThumbsUp } from "lucide-react";
 import { api } from "@/lib/api";
 import type { ApiSearchResponse } from "@/types/search";
 
-function getSearchResult(query: string, limit: number, setResult: Dispatch<SetStateAction<ApiSearchResponse>>) {
-  const result = api.get<ApiSearchResponse>(`/search?query=${query}&limit=${limit}`);
+function getSearchResult(
+  query: string,
+  limit: number,
+  setResult: Dispatch<SetStateAction<ApiSearchResponse>>,
+) {
+  console.log("fired");
+  const result = api.get<ApiSearchResponse>(`/search?query=${query}`);
   result
-    .then((response) => {setResult(response.data)})
+    .then((response) => {
+      setResult(response.data);
+    })
     .catch((error) => console.log(error));
 }
 
@@ -39,7 +52,7 @@ export default function SearchBar() {
     if (timeoutId.current) clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(
       getSearchResult,
-      2000,
+      600,
       query,
       limit,
       setResult,
@@ -61,7 +74,7 @@ export default function SearchBar() {
 
       <Popover open={open}>
         <PopoverContent
-          className="w-175 p-5 ring-1"
+          className="w-275 p-5 ring-1"
           align="center"
           sideOffset={36}
           initialFocus={false}
@@ -81,21 +94,46 @@ export default function SearchBar() {
                 <div className="grid grid-cols-3 gap-2 py-3">
                   {response?.movies.map((s, i) => (
                     <div key={i} className="bg-background">
-                      <img src={s.poster_path} alt={`Poster for the Show ${s.title}`} />
-                      <p className="text-base text-center py-1">{s.title}</p>
+                      <img
+                        src={
+                          s.poster_path
+                            ? "https://image.tmdb.org/t/p/w200/" + s.poster_path
+                            : import.meta.env.VITE_MOVIE_PLACEHOLDER
+                        }
+                        alt={s.title}
+                      />
+                      <p className="text-sm text-center py-4">{s.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-base text-foreground">TV Shows</h3>
+                <div className="grid grid-cols-3 gap-2 py-3">
+                  {response?.tvs.map((s, i) => (
+                    <div key={i} className="bg-background">
+                      <img
+                        src={
+                          s.poster_path
+                            ? "https://image.tmdb.org/t/p/w200/" + s.poster_path
+                            : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
+                        }
+                        alt={s.title}
+                      />
+                      <p className="text-sm text-center py-4">{s.title}</p>
                     </div>
                   ))}
                 </div>
               </div>
               <div className="w-60 flex flex-col gap-3">
                 <h3 className="text-base text-foreground">Users</h3>
-                {/* <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2">
                   {response?.users.map((u, i) => (
                     <SlimCard key={i}>
                       <Profile user={u} variant={"compact"} />
                     </SlimCard>
                   ))}
-                </div> */}
+                </div>
               </div>
             </div>
             <hr className="my-3 border-border" />
@@ -107,7 +145,8 @@ export default function SearchBar() {
                     <div className="flex-1">
                       <p className="text-foreground text-xl ">{p.title}</p>
                       <p>
-                        {p.showMediaType}: {p.showTitle}
+                        {p.showMediaType === "MOVIE" ? "Movie" : "TV Show"}:{" "}
+                        {p.showTitle}
                       </p>
                     </div>
                     <div className="w-20">
