@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 
-import axios from "axios";
 import { searchPost, searchUser } from "services/db-search";
 import { searchMovie, searchTV } from "services/tmdb";
 
@@ -15,7 +14,7 @@ export async function getSearchResult(req: Request, res: Response) {
   }
 
   if (typeof limit !== "number") {
-    res.status(400).json({ error: "limit parameter must be a nuber" });
+    res.status(400).json({ error: "limit parameter must be a number" });
     return;
   }
 

@@ -13,6 +13,7 @@ import Profile from "@/components/profile-card/profile-card";
 import { MessageCircle, ThumbsUp } from "lucide-react";
 
 export default function SearchBar() {
+  const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const inputRef = useRef(null);
 
@@ -24,7 +25,17 @@ export default function SearchBar() {
         ref={inputRef}
         className="w-175 h-11 px-5 mx-10 border-primary rounded-full focus-visible:ring-ring"
         placeholder="Search"
-        onFocus={() => setOpen(true)}
+        onInput={(e) => {
+          if (e.currentTarget.value) {
+            setOpen(true);
+          } else {
+            setOpen(false);
+          }
+          setQuery(e.currentTarget.value);
+        }}
+        onFocus={() => {
+          if (query) setOpen(true);
+        }}
         onBlur={() => setOpen(false)}
       ></Input>
 
@@ -39,7 +50,7 @@ export default function SearchBar() {
         >
           <PopoverHeader>
             <PopoverTitle className="text-sm text-muted-foreground">
-              Search results for: xcsd
+              Search results for: {query}
             </PopoverTitle>
             <hr className="my-1 border-border" />
           </PopoverHeader>
