@@ -86,7 +86,7 @@ async function seedTrending(shows: { id: number }[]) {
 async function seedUsers(shows: { id: number }[]) {
   const hashedPassword = await bcrypt.hash("password123", 10);
   const usernames = faker.helpers.uniqueArray(
-    () => faker.internet.username(),
+    () => faker.internet.username().toLowerCase(),
     NUM_USERS,
   );
 

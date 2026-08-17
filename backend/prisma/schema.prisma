@@ -52,7 +52,6 @@ model Show {
   trendings Trending[]
   genres Genre[]
   users User[]
-
 }
 
 model Genre {

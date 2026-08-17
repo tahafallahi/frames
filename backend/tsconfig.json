@@ -5,6 +5,8 @@
     // "rootDir": "./src",
     // "outDir": "./dist",
 
+    "baseUrl": ".",
+    
     "module": "esnext",
     "target": "ES2023",
     "types": ["node"],
