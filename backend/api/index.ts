@@ -1,11 +1,13 @@
 
 import express from "express";
+import cors from "cors"
 import { Router } from "express";
 
 import searchRouter from "../routes/search";
 
 
 const app = express();
+app.use(cors())
 const router = Router();
 
 router.use("/search", searchRouter);

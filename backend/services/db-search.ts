@@ -32,7 +32,7 @@ export async function searchPost(query: string, limit: number) {
 
   const serlizedPosts = posts.map((p) => ({
     ...p,
-    likes: p.likes.toString(),
+    likes: Number(p.likes.toString()),
   }));
 
   return serlizedPosts;
