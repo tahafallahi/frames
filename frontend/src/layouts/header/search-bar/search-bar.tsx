@@ -35,15 +35,17 @@ export default function SearchBar() {
   });
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.value) {
-      setOpen(true);
-      document.addEventListener("click", ()=> setOpen(false))
-    } else {
+    if (!e.target.value) {
       setOpen(false);
     }
 
     if (timeoutId.current) clearTimeout(timeoutId.current);
-    timeoutId.current = setTimeout(() => setInput(e.target.value), DEBOUNCE_DELAY);
+    timeoutId.current = setTimeout(() => {
+
+      setInput(e.target.value);
+      if (e.target.value) setOpen(true);
+      document.addEventListener("click", () => setOpen(false));
+    }, DEBOUNCE_DELAY);
   }
 
   return (
@@ -56,9 +58,9 @@ export default function SearchBar() {
         onChange={handleInput}
         onClick={(e) => e.stopPropagation()}
         onFocus={() => input && setOpen(true)}
-        ></Input>
+      ></Input>
 
-      <Popover open={open} >
+      <Popover open={open}>
         <PopoverContent
           className="w-275 p-5 ring-1"
           align="center"
@@ -96,8 +98,9 @@ export default function SearchBar() {
                           alt={s.title}
                         />
                         <div className="py-4">
-
-                        <p className="text-sm text-center  line-clamp-2  ">{s.title}</p>
+                          <p className="text-sm text-center  line-clamp-2  ">
+                            {s.title}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -124,8 +127,9 @@ export default function SearchBar() {
                           alt={s.title}
                         />
                         <div className="py-4">
-
-                        <p className="text-sm text-center  line-clamp-2  ">{s.title}</p>
+                          <p className="text-sm text-center  line-clamp-2  ">
+                            {s.title}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -183,10 +187,11 @@ export default function SearchBar() {
   );
 }
 
-
 async function getSearchResult(query: string, limit: number) {
   console.log("fired");
-  const result = await api.get<ApiSearchResponse>(`/search?query=${query}&limit=${limit}`);
+  const result = await api.get<ApiSearchResponse>(
+    `/search?query=${query}&limit=${limit}`,
+  );
 
   return result.data;
 }
