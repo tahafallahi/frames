@@ -4,6 +4,7 @@ import cors from "cors"
 import { Router } from "express";
 
 import searchRouter from "../routes/search";
+import postsRouter from "../routes/posts";
 
 
 const app = express();
@@ -11,6 +12,7 @@ app.use(cors())
 const router = Router();
 
 router.use("/search", searchRouter);
+router.use("/posts", postsRouter);
 
 app.use("/api", router);
 

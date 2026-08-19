@@ -7,10 +7,9 @@ export async function getSearchResult(req: Request, res: Response) {
   const { query, limit = 3 } = req.query;
 
   if (typeof query !== "string") {
-    res.status(400).json({
-      error: "query parameter must exist and be a single string value",
+    return res.status(400).json({
+      error: "query parameter must exist and be of type string value",
     });
-    return;
   }
 
   const [users, posts, movies, tvs] = await Promise.all([
