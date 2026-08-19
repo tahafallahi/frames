@@ -14,7 +14,7 @@ export default function QueryWrapper({
   emptyStateMessage = null,
   children,
 }: props) {
-  if (queryData.isError) return <p>{`Something went wrong: ${queryData.error}`}</p>;
+  if (queryData.isError) return <p>{`Something went wrong, please try again later.`}</p>;
   if (queryData.isLoading) return <p>Loading...</p>;
   if (queryData.data) {
     if (queryData.data.length > 0) return children;
