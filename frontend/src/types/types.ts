@@ -17,15 +17,6 @@ export interface Show {
   img: string;
 }
 
-export interface Post {
-  title: string;
-  username: string;
-  text: string;
-  likes: number;
-  commentsCount: number;
-  show: Show;
-  tags: string[];
-}
 
 export interface Filter {
   title: string;

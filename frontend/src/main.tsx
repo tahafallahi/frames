@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./index.css";
 import Layout from "./pages/layout/layout";
+import Feed from "./pages/feed/feed";
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <p className="h-1000">Hello</p>,
+        element: <Feed />,
       },
     ],
   },

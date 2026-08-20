@@ -7,12 +7,6 @@ export async function getPosts(req: Request, res: Response) {
   const { sort, page } = req.query;
   let postsOrderBy: PostOrderByWithRelationInput = {};
 
-  if (typeof sort !== "string") {
-    return res.status(400).json({
-      error: "sort parameter is not optional",
-    });
-  }
-
   if (sort !== "likes" && sort !== "comments" && sort !== "time") {
     return res.status(400).json({
       error: "sort parameter must be either likes, comments or time",
