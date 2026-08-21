@@ -20,8 +20,11 @@ export interface Show {
 
 export interface Filter {
   title: string;
-  items: { name: string; selected: boolean }[];
+  items: string[];
 }
+
+export type SelectedFilters = Record<string, string[]>
+
 
 export interface Comment {
   text: string;

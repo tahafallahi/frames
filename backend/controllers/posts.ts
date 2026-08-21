@@ -2,9 +2,12 @@ import type { Request, Response } from "express";
 import { prisma } from "lib/prisma";
 import configs from "../configs";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import { MediaType } from "generated/prisma/enums";
 
 export async function getPosts(req: Request, res: Response) {
-  const { sort, page } = req.query;
+  const { sort, page, mediaFilter, tagFilter } = req.query;
+  let tagFilterArray: string[];
+  let mediaFilterArray: MediaType[];
   let postsOrderBy: PostOrderByWithRelationInput = {};
 
   if (sort !== "likes" && sort !== "comments" && sort !== "time") {
@@ -24,7 +27,38 @@ export async function getPosts(req: Request, res: Response) {
   } else if (sort === "comments") {
     postsOrderBy = { comments: { _count: "desc" } };
   } else if (sort === "time") {
-    postsOrderBy = { createdAt:  "desc" };
+    postsOrderBy = { createdAt: "desc" };
+  }
+
+  if (typeof tagFilter !== "string") {
+    return res.status(400).json({
+      error: "tagFilter should be a string",
+    });
+  }
+
+  if (tagFilter) {
+    tagFilterArray = tagFilter.split(",");
+  } else {
+    tagFilterArray = (await prisma.tag.findMany()).map((t) => t.name);
+  }
+
+  if (typeof mediaFilter !== "string") {
+    return res.status(400).json({
+      error: "mediaFilter should be a string",
+    });
+  }
+
+  if (mediaFilter) {
+    mediaFilterArray = mediaFilter.split(",").map((f) => {
+      if (f == "movie") {
+        return MediaType.MOVIE;
+      } else {
+        return MediaType.TV_SHOW;
+      }
+    });
+    console.log(mediaFilterArray);
+  } else {
+    mediaFilterArray = [MediaType.MOVIE, MediaType.TV_SHOW];
   }
 
   const posts = (
@@ -39,7 +73,13 @@ export async function getPosts(req: Request, res: Response) {
         show: { select: { title: true, releaseYear: true, mediaType: true } },
         _count: { select: { likes: true, comments: true } },
       },
-      skip: Number(page) * configs.PAGE_LENGTH,
+      where: {
+        AND: {
+          tags: { some: { name: { in: tagFilterArray } } },
+          show: { mediaType: { in: mediaFilterArray } },
+        },
+      },
+      skip: (Number(page) - 1) * configs.PAGE_LENGTH,
       take: configs.PAGE_LENGTH,
       orderBy: postsOrderBy,
     })

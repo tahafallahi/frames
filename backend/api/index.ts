@@ -5,6 +5,7 @@ import { Router } from "express";
 
 import searchRouter from "../routes/search";
 import postsRouter from "../routes/posts";
+import tagsRouter from "../routes/tags"
 
 
 const app = express();
@@ -13,6 +14,8 @@ const router = Router();
 
 router.use("/search", searchRouter);
 router.use("/posts", postsRouter);
+router.use("/tags", tagsRouter);
+
 
 app.use("/api", router);
 

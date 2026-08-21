@@ -8,7 +8,6 @@ import {
   PopoverContent,
   PopoverHeader,
 } from "@/components/ui/popover";
-import SlimCard from "../slim-card/slim-card";
 import { toCapital } from "@/utils/general";
 import { Button } from "../ui/button";
 
