@@ -32,6 +32,9 @@ export default function SearchBar() {
     queryKey: ["searchResult", input],
     queryFn: () => getSearchResult(input, LIMIT),
     staleTime: STALE_TIME,
+    enabled() {
+      return input.length > 0
+    },
   });
 
   function handleInput(e: React.ChangeEvent<HTMLInputElement>) {

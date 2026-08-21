@@ -13,7 +13,7 @@ export default function Feed() {
   const [selectedFilters, setSelectedFilters] =
     useState<SelectedFilters>({Content: [], Tags: []});
   const [sort, setSort] = useState<"TOP" | "HOT" | "NEW">("TOP");
-  const qSort = sort === "TOP" ? "likes" : sort === "HOT" ? "comments" : "time";
+  const qSort = {TOP: "likes", HOT: "comments", NEW: "time"}[sort]
 
   const postsResponse = useQuery({
     queryKey: ["posts", qSort, selectedFilters],
