@@ -12,15 +12,24 @@ enum MediaType {
   TV_SHOW
 }
 
+model FederatedUser {
+  subject String @id
+  user_id String @unique
+  user User @relation(references: [id], fields: [user_id])
+  provider String
+}
+
 model User {
   id String @id @default(uuid())
   username String @unique @db.VarChar(32)
-  hashedPassword String @db.VarChar(60)
+  email String? @unique
+  hashedPassword String? @db.VarChar(60)
   profilePath String?
   bio String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  federatedUsers FederatedUser?
   posts Post[]
   comments Comment[]
   following Follows[] @relation("Follower")

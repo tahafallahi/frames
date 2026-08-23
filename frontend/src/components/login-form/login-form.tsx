@@ -29,7 +29,7 @@ export default function LoginForm() {
             Or Log In With Google
           </Button>
         </div>
-        <a className="text-sm text-center underline underline-offset-4">
+        <a href="/signup" className="text-sm text-center underline underline-offset-4">
           If you don’t have an account, click here to sign up.
         </a>
       </div>

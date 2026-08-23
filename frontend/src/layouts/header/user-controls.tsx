@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
 import SlimCard from "@/components/slim-card/slim-card";
 
-export default function UserControls({ user }: { user: User }) {
+export default function UserControls({ user }: { user?: User }) {
   return (
     <>
       {user ? (

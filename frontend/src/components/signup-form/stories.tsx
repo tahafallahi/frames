@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import LoginForm from "./register-form";
+import SignupForm from "./register-form";
 
 const meta = {
-  component: LoginForm,
-} satisfies Meta<typeof LoginForm>;
+  component: SignupForm,
+} satisfies Meta<typeof SignupForm>;
 
 export default meta;
 

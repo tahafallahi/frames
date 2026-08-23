@@ -7,8 +7,24 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
 import Layout from "./pages/layout/layout";
 import Feed from "./pages/feed/feed";
+import AuthLayout from "./pages/auth-layout/auth-layout";
+import Login from "./pages/login/login";
+import Signup from "./pages/signup/signup";
 
 const router = createBrowserRouter([
+  {
+    Component: AuthLayout,
+    children: [
+      {
+        path: "/signup",
+        element: <Signup />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
+  },
   {
     Component: Layout,
     children: [

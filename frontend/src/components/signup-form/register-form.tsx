@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 
-export default function RegisterForm() {
+export default function SignupForm() {
   return (
     <form className="w-125 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10">
       <div className="flex flex-col gap-4">
@@ -47,7 +47,7 @@ export default function RegisterForm() {
             Or Sign Up With Google
           </Button>
         </div>
-        <a className="text-sm text-center underline underline-offset-4">
+        <a href="/login" className="text-sm text-center underline underline-offset-4">
           If you already an account, click here to log in.
         </a>
       </div>
