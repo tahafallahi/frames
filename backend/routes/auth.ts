@@ -1,3 +1,4 @@
+import { signupUser } from "controllers/auth";
 import { Router } from "express";
 import passport from "passport";
 
@@ -14,6 +15,9 @@ router.get(
     res.redirect("/api/posts");
   },
 );
+
+router.get("/login", passport.authenticate("local"))
+router.get("/signup", signupUser)
 
 
 export default router;

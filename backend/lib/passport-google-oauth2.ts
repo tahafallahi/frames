@@ -31,7 +31,7 @@ const verify: VerifyFunction = async (tokens, done) => {
     });
 
     if (user) {
-      return done(null, { sub: user.subject });
+      return done(null, { id: user.user_id});
     } else {
       let username = "";
 
@@ -65,7 +65,7 @@ const verify: VerifyFunction = async (tokens, done) => {
         username,
       );
 
-      return done(null, { sub: newFederatedUser.subject });
+      return done(null, { id: newFederatedUser.user_id });
     }
   } catch (error) {
     return done(error);
@@ -73,7 +73,3 @@ const verify: VerifyFunction = async (tokens, done) => {
 };
 
 passport.use("openid", new Strategy({ config, scope, callbackURL }, verify));
-
-passport.serializeUser((user, done) => {
-  done(null, user.sub);
-});

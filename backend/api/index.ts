@@ -10,7 +10,7 @@ import authRouter from "../routes/auth";
 
 import passport from "passport";
 
-import "../lib/passport";
+import "../lib/passport-google-oauth2";
 
 if (!process.env.COOKIE_SECRET)
   throw new Error(
@@ -22,6 +22,7 @@ const app = express();
 const router = Router();
 
 app.use(cors());
+app.use(express.urlencoded())
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
