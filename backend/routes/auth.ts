@@ -1,5 +1,5 @@
 import { signupUser } from "controllers/auth";
-import { Router } from "express";
+import { Router, type Request, type Response } from "express";
 import passport from "passport";
 
 const router = Router();
@@ -16,8 +16,11 @@ router.get(
   },
 );
 
-router.post("/login", passport.authenticate("local"))
-router.post("/signup", ...signupUser, passport.authenticate("local"))
-
+router.post(
+  "/login",
+  passport.authenticate("local"),
+  (req: Request, res: Response) => res.end(),
+);
+router.post("/signup", ...signupUser, passport.authenticate("local"));
 
 export default router;
