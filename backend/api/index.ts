@@ -11,30 +11,32 @@ import authRouter from "../routes/auth";
 import passport from "passport";
 
 import "../lib/passport-google-oauth2";
+import "../lib/passport-local";
 
 if (!process.env.COOKIE_SECRET)
-  throw new Error(
-    "COOKIE_SECRET is not provided in enviroment variables",
-  );
-
+  throw new Error("COOKIE_SECRET is not provided in enviroment variables");
 
 const app = express();
 const router = Router();
 
-app.use(cors());
-app.use(express.urlencoded())
+//TODO: There's a lot about session save database and cors to be done here.
+
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(express.json());
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
+      secure: false,
+      sameSite: "lax",
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     },
   }),
 );
-passport.use(passport.authenticate("session"));
+app.use(passport.session());
 
 router.use("/search", searchRouter);
 router.use("/posts", postsRouter);

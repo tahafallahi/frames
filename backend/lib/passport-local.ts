@@ -30,7 +30,7 @@ const verify: VerifyFunction = async (username, password, done) => {
 passport.use(new Strategy(verify));
 
 
-passport.serializeUser((user,done) => {
+passport.serializeUser((user, done) => {
   return done(null, user.id)
 })
 

@@ -16,8 +16,8 @@ router.get(
   },
 );
 
-router.get("/login", passport.authenticate("local"))
-router.get("/signup", signupUser)
+router.post("/login", passport.authenticate("local"))
+router.post("/signup", ...signupUser, passport.authenticate("local"))
 
 
 export default router;
