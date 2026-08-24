@@ -4,33 +4,32 @@ import { api } from "@/lib/api";
 import { useState } from "react";
 import { isAxiosError, type AxiosResponse } from "axios";
 import { Spinner } from "../ui/spinner";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function LoginForm() {
   const [formError, setFormError] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const formMutation = useMutation({
     mutationFn: async (event: React.SubmitEvent<HTMLFormElement>) => {
       event.preventDefault();
-      const res  =
-      await api.post<AxiosResponse>(
+      const res = await api.post<AxiosResponse>(
         "/auth/login",
         Object.fromEntries(new FormData(event.target)),
-      )
+      );
       setFormError("");
-      return res.data
+      return res.data;
     },
     onError: (error) => {
       if (isAxiosError(error)) {
         if (error.status === 401) {
-          setFormError("Username or password is incorrect.")
+          setFormError("Username or password is incorrect.");
         } else {
           setFormError(error.message);
         }
       }
     },
-    onSuccess: () => navigate("/")
+    onSuccess: () => navigate("/"),
   });
 
   return (
@@ -76,9 +75,12 @@ export default function LoginForm() {
               Log In
             </Button>
           )}
-          <Button variant={"secondary"} className="h-10 font-bold">
-            Or Log In With Google
-          </Button>
+          <Link
+            to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
+            className=" flex h-10 font-bold text-sm justify-center items-center  bg-secondary text-background rounded-sm "
+          >
+            <span>Or Sign Up With Google</span>
+          </Link>
         </div>
         <a
           href="/signup"

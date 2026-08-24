@@ -7,19 +7,16 @@ const router = Router();
 router.get("/oauth2/google/login", passport.authenticate("openid"));
 router.get(
   "/oauth2/redirect",
-  passport.authenticate("openid", {
-    failureRedirect: "/api/auth/oauth2/google/login",
-    failureMessage: true,
-  }),
+  passport.authenticate("openid"),
   function (req, res) {
-    res.redirect("/api/posts");
+    res.redirect("http://localhost:5173/");
   },
 );
 
 router.post(
   "/login",
   passport.authenticate("local"),
-  (req: Request, res: Response) => res.end(),
+  (req: Request, res: Response) => res.status(200),
 );
 router.post("/signup", ...signupUser, passport.authenticate("local"));
 

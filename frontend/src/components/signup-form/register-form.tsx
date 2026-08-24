@@ -4,11 +4,11 @@ import { api } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
 import { Spinner } from "../ui/spinner";
 import { isAxiosError, type AxiosResponse } from "axios";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function SignupForm() {
   const [formError, setFormError] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -51,24 +51,25 @@ export default function SignupForm() {
   const formMutation = useMutation({
     mutationFn: async (event: React.SubmitEvent<HTMLFormElement>) => {
       event.preventDefault();
-      setFormError("")
-      return (await api.post<AxiosResponse>(
-        "/auth/signup",
-        Object.fromEntries(new FormData(event.target)),
-      )).data;
+      setFormError("");
+      return (
+        await api.post<AxiosResponse>(
+          "/auth/signup",
+          Object.fromEntries(new FormData(event.target)),
+        )
+      ).data;
     },
     onError: (error) => {
       if (isAxiosError(error)) {
         if (error.status === 409) {
-          setFormError("Username or email already exist.")
+          setFormError("Username or email already exist.");
         }
       }
     },
-    onSuccess: async() => {
-      await navigate("/")
-    }
+    onSuccess: async () => {
+      await navigate("/");
+    },
   });
-
 
   return (
     <form
@@ -139,9 +140,12 @@ export default function SignupForm() {
               Sign Up
             </Button>
           )}
-          <Button variant={"secondary"} className="h-10 font-bold">
-            Or Sign Up With Google
-          </Button>
+          <Link
+            to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
+            className=" flex h-10 font-bold text-sm justify-center items-center  bg-secondary text-background rounded-sm "
+          >
+            <span>Or Sign Up With Google</span>
+          </Link>
         </div>
         <a
           href="/login"

@@ -3,10 +3,10 @@ import cors from "cors";
 import { Router } from "express";
 import session from "express-session";
 
-import searchRouter from "../routes/search";
-import postsRouter from "../routes/posts";
-import tagsRouter from "../routes/tags";
-import authRouter from "../routes/auth";
+import searchRouter from "../routers/search";
+import postsRouter from "../routers/posts";
+import tagsRouter from "../routers/tags";
+import authRouter from "../routers/auth";
 
 import passport from "passport";
 
