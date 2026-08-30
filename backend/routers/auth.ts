@@ -16,7 +16,7 @@ router.get(
 router.post(
   "/login",
   passport.authenticate("local"),
-  (req: Request, res: Response) => res.status(200),
+  (req: Request, res: Response) => res.status(200).end(),
 );
 router.post("/signup", ...signupUser, passport.authenticate("local"));
 

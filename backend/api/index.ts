@@ -7,10 +7,11 @@ import searchRouter from "../routers/search";
 import postsRouter from "../routers/posts";
 import tagsRouter from "../routers/tags";
 import authRouter from "../routers/auth";
+import userRouter from "../routers/user";
 
 import passport from "passport";
 
-import "../lib/passport-google-oauth2";
+// import "../lib/passport-google-oauth2";
 import "../lib/passport-local";
 
 if (!process.env.COOKIE_SECRET)
@@ -42,6 +43,7 @@ router.use("/search", searchRouter);
 router.use("/posts", postsRouter);
 router.use("/tags", tagsRouter);
 router.use("/auth", authRouter);
+router.use("/user", userRouter);
 
 app.use("/api", router);
 

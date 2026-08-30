@@ -1,10 +1,3 @@
-export interface User {
-  id: number;
-  username: string;
-  likes: number;
-  notifications: string[];
-  profilePath: string;
-}
 
 export interface Show {
   name: string;

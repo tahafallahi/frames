@@ -19,7 +19,7 @@ const verify: VerifyFunction = async (username, password, done) => {
         return done(null, false);
       }
     } else {
-      await bcrypt.compare(password, process.env.DUMMY_HASH_12)
+      await bcrypt.compare(password, process.env.DUMMY_HASH_12);
       return done(null, false);
     }
   } catch (error) {
@@ -29,16 +29,49 @@ const verify: VerifyFunction = async (username, password, done) => {
 
 passport.use(new Strategy(verify));
 
-
 passport.serializeUser((user, done) => {
-  return done(null, user.id)
-})
+  return done(null, user.id);
+});
 
-passport.deserializeUser(async(id: string, done) => {
+passport.deserializeUser(async (id: string, done) => {
+  console.log("here");
   try {
-    const user = await prisma.user.findUnique({where:{id}})
-    return done(null, user)
+    let user = await prisma.user.findUnique({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        profilePath: true,
+        bio: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            followers: true,
+            following: true,
+            likes: true,
+            posts: true,
+          },
+        },
+      },
+      where: { id },
+    });
+
+    if (!user)
+      throw new Error("the id saved to cookie doesn't exist in the database");
+
+    const { _count, ...rest } = user;
+
+    const userForSession: Express.User = {
+      ...rest,
+      followingsCount: _count.following,
+      follwersCount: _count.followers,
+      likesCount: _count.likes,
+      postsCount: _count.posts,
+    };
+
+    return done(null, userForSession);
   } catch (error) {
-    return done(error)
+    return done(error);
   }
-})
+});

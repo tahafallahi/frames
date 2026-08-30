@@ -10,6 +10,7 @@ import Feed from "./pages/feed/feed";
 import AuthLayout from "./pages/auth-layout/auth-layout";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
+import UserProvider from "./providers/user-provider";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,9 @@ document.documentElement.classList.add("dark");
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router}></RouterProvider>
+      <UserProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </UserProvider>
     </QueryClientProvider>
   </StrictMode>,
 );

@@ -1,7 +1,6 @@
 import { Link } from "react-router";
 import { Bell } from "lucide-react";
 
-import type { User } from "@/types/types";
 
 import {
   Popover,
@@ -14,7 +13,9 @@ import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
 import SlimCard from "@/components/slim-card/slim-card";
 
-export default function UserControls({ user }: { user?: User }) {
+import type { User } from "@/types/global";
+
+export default function UserControls({ user }: { user?: User}) {
   return (
     <>
       {user ? (
@@ -46,11 +47,11 @@ export default function UserControls({ user }: { user?: User }) {
                     </Button>
                   </div>
                   <div className="flex flex-col gap-2">
-                    {user.notifications.map((n, i) => (
+                    {/* {user.notifications.map((n, i) => (
                       <SlimCard key={i} className="border-l-3">
                         <p>{n}</p>
                       </SlimCard>
-                    ))}
+                    ))} */}
                   </div>
             </PopoverContent>
           </Popover>
