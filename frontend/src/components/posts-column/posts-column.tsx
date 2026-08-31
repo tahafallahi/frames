@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverHeader,
 } from "@/components/ui/popover";
-import { toCapital } from "@/utils/general";
+import { capitilize } from "@/utils/general";
 import { Button } from "../ui/button";
 
 export default function PostsColumn({
@@ -26,7 +26,7 @@ export default function PostsColumn({
     <div className="flex flex-col gap-4">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
-          <p>{toCapital(sort.toLocaleLowerCase())}</p>
+          <p>{capitilize(sort.toLocaleLowerCase())}</p>
           <Popover>
             <PopoverTrigger
               render={<ChevronDown className="translate-y-0.5" />}
