@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
 
-import type { User } from "@/types/global";
+import type { User } from "@/types/comment";
 
 export default function UserControls({ user }: { user: User | null}) {
   return (

@@ -1,6 +1,6 @@
 import { UserContext } from "@/contexts/user-context";
 import { api } from "@/lib/api";
-import type { User } from "@/types/global";
+import type { User } from "@/types/comment";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 

@@ -2,7 +2,7 @@ import { thousandToK } from "@/utils/general";
 import { MessageCircle, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Badge } from "../ui/badge";
 
-import type { Post } from "@/types/feed";
+import type { Post } from "@/types/post";
 import { Link } from "react-router";
 
 export default function PostCard({

@@ -1,3 +1,5 @@
+import type { MediaType } from "./show";
+
 export interface Post {
   id: string;
   title: string;
@@ -13,8 +15,16 @@ export interface Post {
     id: number;
     title: string;
     releaseYear: number;
-    mediaType: "MOVIE" | "TV_SHOW";
+    mediaType: MediaType;
   };
   likesCount: number;
   commentsCount: number;
+}
+
+export interface ApiSearchPost {
+  id: string;
+  title: string;
+  showMediaType: MediaType;
+  showTitle: string;
+  likes: number; 
 }

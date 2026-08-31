@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { api } from "@/lib/api";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import PostCard from "@/components/post-card/post-card";
-import type { Post } from "@/types/feed";
+import type { Post } from "@/types/post";
 import ShowCard from "@/components/show-card/show-card";
 import type { Show } from "@/types/types";
 

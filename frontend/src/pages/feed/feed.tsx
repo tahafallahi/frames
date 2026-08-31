@@ -6,7 +6,7 @@ import PostsColumn from "@/components/posts-column/posts-column";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Filter from "@/components/filter/filter";
 
-import type { Post } from "@/types/feed";
+import type { Post } from "@/types/post";
 import type { SelectedFilters } from "@/types/types";
 
 export default function Feed() {

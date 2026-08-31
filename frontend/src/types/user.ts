@@ -11,3 +11,9 @@ export interface User {
   createdAt: Date | null;
   updatedAt: Date | null;
 }
+
+export interface ApiSearchUser {
+  id: string;
+  username: string;
+  profilePath: string;
+}

@@ -1,6 +1,6 @@
 import { ChevronDown } from "lucide-react";
 
-import type { Post } from "@/types/feed";
+import type { Post } from "@/types/post";
 import PostCard from "../post-card/post-card";
 import {
   PopoverTrigger,
