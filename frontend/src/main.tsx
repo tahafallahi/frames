@@ -5,12 +5,15 @@ import { RouterProvider } from "react-router/dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import "./index.css";
+import UserProvider from "./providers/user-provider";
+
 import Layout from "./pages/layout/layout";
 import Feed from "./pages/feed/feed";
 import AuthLayout from "./pages/auth-layout/auth-layout";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
-import UserProvider from "./providers/user-provider";
+import ViewPost from "./pages/view-post/view-post";
+
 
 const router = createBrowserRouter([
   {
@@ -33,6 +36,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Feed />,
       },
+      {
+        path:"/posts/:postId",
+        element: <ViewPost />,
+      }
     ],
   },
 ]);

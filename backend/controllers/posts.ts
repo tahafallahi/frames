@@ -64,6 +64,7 @@ export async function getPosts(req: Request, res: Response) {
   const posts = (
     await prisma.post.findMany({
       select: {
+        id: true,
         title: true,
         content: true,
         picturePath: true,
@@ -90,4 +91,34 @@ export async function getPosts(req: Request, res: Response) {
   }));
 
   res.json(posts);
+}
+
+export async function getPost(req: Request<{ postId: string }>, res: Response) {
+  const result = await prisma.post.findUnique({
+    where: { id: req.params.postId },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      picturePath: true,
+      tags: { select: { name: true } },
+      createdAt: true,
+      author: { select: { username: true, profilePath: true } },
+      show: { select: { title: true, releaseYear: true, mediaType: true } },
+      _count: { select: { likes: true, comments: true } },
+    },
+  });
+
+  if (!result) {
+    return res.status(404).end();
+  }
+
+  const { _count, ...rest } = result;
+  const post = {
+    ...rest,
+    likesCount: _count.likes,
+    commentsCount: _count.comments,
+  };
+
+  return res.json(post)
 }

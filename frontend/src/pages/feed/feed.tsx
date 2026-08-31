@@ -45,7 +45,7 @@ export default function Feed() {
   return (
     <div className="grid grid-cols-[1fr_fit-content(100ch)] items-start justify-items gap-12">
       <QueryWrapper
-        queryData={postsResponse}
+        query={postsResponse}
         emptyStateMessage={"There are no posts."}
       >
         <PostsColumn
@@ -56,7 +56,7 @@ export default function Feed() {
         />
       </QueryWrapper>
       <QueryWrapper
-        queryData={tagsResponse}
+        query={tagsResponse}
         emptyStateMessage={"There are no tags."}
       >
         <Filter filters={filter} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters}></Filter>
