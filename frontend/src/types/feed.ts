@@ -10,6 +10,7 @@ export interface Post {
     profilePath: string;
   };
   show: {
+    id: number;
     title: string;
     releaseYear: number;
     mediaType: "MOVIE" | "TV_SHOW";

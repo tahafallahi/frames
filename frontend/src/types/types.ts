@@ -1,13 +1,8 @@
 
 export interface Show {
-  name: string;
-  type: "movie" | "tvShow";
-  genres: string[];
-  year: number;
-  score: number;
-  realtedPosts: number;
-  followers: number;
-  img: string;
+  id: number;
+  title: string;
+  posterPath: string;
 }
 
 

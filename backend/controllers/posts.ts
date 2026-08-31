@@ -104,7 +104,7 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
       tags: { select: { name: true } },
       createdAt: true,
       author: { select: { username: true, profilePath: true } },
-      show: { select: { title: true, releaseYear: true, mediaType: true } },
+      show: { select: { id: true, title: true, releaseYear: true, mediaType: true } },
       _count: { select: { likes: true, comments: true } },
     },
   });

@@ -5,11 +5,13 @@ import { Outlet } from "react-router";
 export default function Layout() {
   return (
     <>
-      <Header/>
+      <Header />
       <div className="grid grid-cols-[300px_1fr] items-start justify-items-center">
         <SideBar selectedFeed="All" />
         <div className="pt-6">
-          <Outlet />
+          <div className="grid grid-cols-[1fr_fit-content(100ch)] items-start justify-items gap-12">
+            <Outlet />
+          </div>
         </div>
       </div>
     </>

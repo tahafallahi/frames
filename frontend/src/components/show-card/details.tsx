@@ -6,8 +6,7 @@ export default function Details({ show }: { show: Show }) {
     <div className="flex flex-col gap-2 text-muted-foreground">
       <div className="flex flex-col gap-2">
         <p>Genres: {show.genres.map((g) => toCapital(g)).join(" - ")}</p>
-        <p>Year: {show.year}</p>
-        <p>IMDB Score: {show.score}/10</p>
+        <p>Year: {show.releaseYear}</p>
       </div>
       <hr />
       <div className="flex flex-col gap-2">
