@@ -1,9 +1,7 @@
-import type { User } from "@/types/global";
+import type { UserContext as UserContextType } from "@/types/contexts";
 import { createContext, useContext } from "react";
 
-export const UserContext = createContext<
-  [User | null, React.Dispatch<React.SetStateAction<User | null>>] | null
->(null);
+export const UserContext = createContext<UserContextType>(null);
 
 export function useUser() {
   const context = useContext(UserContext);

@@ -11,11 +11,10 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
-import SlimCard from "@/components/slim-card/slim-card";
 
 import type { User } from "@/types/global";
 
-export default function UserControls({ user }: { user?: User}) {
+export default function UserControls({ user }: { user: User | null}) {
   return (
     <>
       {user ? (
@@ -62,7 +61,7 @@ export default function UserControls({ user }: { user?: User}) {
                 <Button variant={"ghost"} className="p-0" aria-label="Profile">
                   <img
                     className="rounded-full w-8"
-                    src="https://placehold.co/50x50/lightblue/black/?text=profile"
+                    src={user.profilePath ?? "https://placehold.co/50x50/lightblue/black/?text=profile"}
                     alt=""
                   />
                 </ Button>

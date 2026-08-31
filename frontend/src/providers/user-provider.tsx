@@ -11,16 +11,15 @@ export default function UserProvider({
 }) {
   const [user, setUser] = useState<User | null>(null);
 
-  useQuery({
+  const query = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get<User>("/user");
       console.log(response.data);
       if (response.data) setUser(response.data);
     },
-    refetchOnMount: true,
     retry: false,
   });
 
-  return <UserContext value={[user, setUser]}>{children}</UserContext>;
+  return <UserContext value={[user, setUser, query]}>{children}</UserContext>;
 }

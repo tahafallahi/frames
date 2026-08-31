@@ -11,7 +11,7 @@ import userRouter from "../routers/user";
 
 import passport from "passport";
 
-// import "../lib/passport-google-oauth2";
+import "../lib/passport-google-oauth2";
 import "../lib/passport-local";
 
 if (!process.env.COOKIE_SECRET)
