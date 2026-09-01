@@ -1,8 +1,12 @@
 import type { User } from "./user";
 
 export interface Comment {
-  text: string;
-  user: User;
+  id: string;
+  content: string;
+  author: Pick<User, "username" | "profilePath">
   replies: Comment[];
-  likes: number;
+  createdAt: Date;
+  updatedAt: Date;
+  repliesCount: number;
+  likesCount: number;
 }

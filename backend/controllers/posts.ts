@@ -1,8 +1,11 @@
-import type { Request, Response } from "express";
 import { prisma } from "lib/prisma";
 import configs from "../configs";
-import type { PostOrderByWithRelationInput } from "generated/prisma/models";
 import { MediaType } from "generated/prisma/enums";
+import type { Request, Response } from "express";
+import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import type { Comment } from "generated/prisma/client";
+import type { CommentWtihReplies, OutputComment } from "../types/comment";
+import { buildCommentTree } from "services/comment-tree";
 
 export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, tagFilter } = req.query;
@@ -94,8 +97,10 @@ export async function getPosts(req: Request, res: Response) {
 }
 
 export async function getPost(req: Request<{ postId: string }>, res: Response) {
+  const { postId } = req.params;
+
   const result = await prisma.post.findUnique({
-    where: { id: req.params.postId },
+    where: { id: postId },
     select: {
       id: true,
       title: true,
@@ -104,7 +109,9 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
       tags: { select: { name: true } },
       createdAt: true,
       author: { select: { username: true, profilePath: true } },
-      show: { select: { id: true, title: true, releaseYear: true, mediaType: true } },
+      show: {
+        select: { id: true, title: true, releaseYear: true, mediaType: true },
+      },
       _count: { select: { likes: true, comments: true } },
     },
   });
@@ -120,5 +127,52 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
     commentsCount: _count.comments,
   };
 
-  return res.json(post)
+  return res.json(post);
 }
+
+export async function getComments(
+  req: Request<{ postId: string }>,
+  res: Response,
+) {
+  const { postId } = req.params;
+
+  if (!postId) {
+    return res
+      .status(400)
+      .json({ error: "there was no postId parameter in the url" });
+  }
+
+  const result = await prisma.comment.findMany({
+    select: {
+      id: true,
+      content: true,
+      author: { select: { username: true, profilePath: true } },
+      parentId: true,
+      createdAt: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          replies: true,
+          likes: true,
+        },
+      },
+    },
+    where: { postId: postId },
+  });
+
+  if (!result) {
+    return res.status(404).end();
+  }
+
+  const comments = result.map(({ _count, ...rest }) => ({
+    ...rest,
+    repliesCount: _count.replies,
+    likesCount: _count.likes,
+  }));
+
+  const commentsWithReplies = buildCommentTree(comments);
+
+  return res.json(commentsWithReplies);
+}
+
+
