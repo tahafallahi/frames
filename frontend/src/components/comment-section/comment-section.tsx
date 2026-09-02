@@ -4,13 +4,15 @@ import type { ReactElement } from "react";
 
 export default function CommentSection({
   comments,
+  commentsCount,
 }: {
   comments: CommentType[];
+  commentsCount: number;
 }) {
   return (
     <>
-      <div className="flex flex-col gap-3 w-175">
-        <h5>Comments</h5>
+      <div className="flex flex-col gap-3 w-175 ">
+        <h5 className="text-xl font-bold">{commentsCount} Comments</h5>
         <div className="flex flex-col gap-3">
           {comments.map((c, i) => recursiveReplies(c, i))}
         </div>

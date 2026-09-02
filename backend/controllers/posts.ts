@@ -8,7 +8,7 @@ import type { CommentWtihReplies, OutputComment } from "../types/comment";
 import { buildCommentTree } from "services/comment-tree";
 
 export async function getPosts(req: Request, res: Response) {
-  const { sort, page, mediaFilter, tagFilter } = req.query;
+  const { sort, page, mediaFilter, tagFilter, userFilter } = req.query;
   let tagFilterArray: string[];
   let mediaFilterArray: MediaType[];
   let postsOrderBy: PostOrderByWithRelationInput = {};
@@ -33,7 +33,7 @@ export async function getPosts(req: Request, res: Response) {
     postsOrderBy = { createdAt: "desc" };
   }
 
-  if (typeof tagFilter !== "string") {
+  if (tagFilter && typeof tagFilter !== "string") {
     return res.status(400).json({
       error: "tagFilter should be a string",
     });
@@ -45,7 +45,7 @@ export async function getPosts(req: Request, res: Response) {
     tagFilterArray = (await prisma.tag.findMany()).map((t) => t.name);
   }
 
-  if (typeof mediaFilter !== "string") {
+  if (mediaFilter && typeof mediaFilter !== "string") {
     return res.status(400).json({
       error: "mediaFilter should be a string",
     });
@@ -59,10 +59,16 @@ export async function getPosts(req: Request, res: Response) {
         return MediaType.TV_SHOW;
       }
     });
-    console.log(mediaFilterArray);
   } else {
     mediaFilterArray = [MediaType.MOVIE, MediaType.TV_SHOW];
   }
+
+  if (userFilter && typeof userFilter !== "string") {
+    return res.status(400).json({
+      error: "userFilter should be a string",
+    });
+  }
+
 
   const posts = (
     await prisma.post.findMany({
@@ -81,6 +87,7 @@ export async function getPosts(req: Request, res: Response) {
         AND: {
           tags: { some: { name: { in: tagFilterArray } } },
           show: { mediaType: { in: mediaFilterArray } },
+          ...(userFilter && {authorId: userFilter}),
         },
       },
       skip: (Number(page) - 1) * configs.PAGE_LENGTH,
@@ -174,5 +181,3 @@ export async function getComments(
 
   return res.json(commentsWithReplies);
 }
-
-

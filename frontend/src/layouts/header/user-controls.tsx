@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
+import type { User } from "@/types/user";
 
-import type { User } from "@/types/comment";
 
 export default function UserControls({ user }: { user: User | null}) {
   return (
@@ -74,7 +74,9 @@ export default function UserControls({ user }: { user: User | null}) {
                   <ProfileCard user={user} variant={"full"} />
               </PopoverHeader>
                   <div className="flex flex-col gap-2">
-                    <Button className="font-bold">Profile</Button>
+                    <Link to={"/profile/" + user.id}>
+                    Profile
+                    </Link>
                     <Button className="font-bold bg-destructive hover:bg-destructive/80">
                       Log out
                     </Button>

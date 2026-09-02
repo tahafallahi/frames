@@ -13,7 +13,7 @@ import AuthLayout from "./pages/auth-layout/auth-layout";
 import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import ViewPost from "./pages/view-post/view-post";
-
+import Profile from "./pages/profile/profile";
 
 const router = createBrowserRouter([
   {
@@ -37,9 +37,13 @@ const router = createBrowserRouter([
         element: <Feed />,
       },
       {
-        path:"/posts/:postId",
+        path: "/posts/:postId",
         element: <ViewPost />,
-      }
+      },
+      {
+        path: "/profile/:userId",
+        element: <Profile />,
+      },
     ],
   },
 ]);

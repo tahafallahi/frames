@@ -17,6 +17,7 @@ import SlimCard from "@/components/slim-card/slim-card";
 import Profile from "@/components/profile-card/profile-card";
 import type { ApiSearchResponse } from "@/types/search";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
+import { MediaType } from "@/types/show";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -28,7 +29,7 @@ export default function SearchBar() {
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutId = useRef<number>(null);
 
-  const { data, error, isLoading, isError } = useQuery({
+  const query = useQuery({
     queryKey: ["searchResult", input],
     queryFn: () => getSearchResult(input, LIMIT),
     staleTime: STALE_TIME,
@@ -84,11 +85,11 @@ export default function SearchBar() {
               <div className="flex-1">
                 <h3 className="text-base text-foreground">Movies & TV Shows</h3>
                 <QueryWrapper
-                  queryData={{ data: data?.movies, error, isLoading, isError }}
+                  query={query}
                   emptyStateMessage={`There are no movies matching "${input}"`}
                 >
                   <div className="grid grid-cols-3 gap-2 py-3">
-                    {data?.movies.map((s, i) => (
+                    {query.data?.movies.map((s, i) => (
                       <div key={i} className="bg-background">
                         <img
                           className="h-50"
@@ -113,11 +114,11 @@ export default function SearchBar() {
               <div className="flex-1">
                 <h3 className="text-base text-foreground">TV Shows</h3>
                 <QueryWrapper
-                  queryData={{ data: data?.tvs, error, isLoading, isError }}
+                  query={query}
                   emptyStateMessage={`There are no tv shows matching "${input}"`}
                 >
                   <div className="grid grid-cols-3 gap-2 py-3">
-                    {data?.tvs.map((s, i) => (
+                    {query.data?.tvs.map((s, i) => (
                       <div key={i} className="bg-background">
                         <img
                           className="h-50"
@@ -142,11 +143,11 @@ export default function SearchBar() {
               <div className="w-60 flex flex-col gap-3">
                 <h3 className="text-base text-foreground">Users</h3>
                 <QueryWrapper
-                  queryData={{ data: data?.users, error, isLoading, isError }}
+                  query={query}
                   emptyStateMessage={`There are no users matching "${input}"`}
                 >
                   <div className="flex flex-col gap-2">
-                    {data?.users.map((u, i) => (
+                    {query.data?.users.map((u, i) => (
                       <SlimCard key={i}>
                         <Profile user={u} variant={"compact"} />
                       </SlimCard>
@@ -159,16 +160,16 @@ export default function SearchBar() {
             <div className="w-full flex flex-col gap-3">
               <h3 className="text-base text-foreground">Posts</h3>
               <QueryWrapper
-                queryData={{ data: data?.posts, error, isLoading, isError }}
+                query={query}
                 emptyStateMessage={`There are no posts matching "${input}"`}
               >
                 <div className="flex flex-col gap-2">
-                  {data?.posts.map((p, i) => (
+                  {query.data?.posts.map((p, i) => (
                     <SlimCard key={i} className="flex">
                       <div className="flex-1">
                         <p className="text-foreground text-xl ">{p.title}</p>
                         <p>
-                          {p.showMediaType === "MOVIE" ? "Movie" : "TV Show"}:{" "}
+                          {p.showMediaType === MediaType.MOVIE ? "Movie" : "TV Show"}:{" "}
                           {p.showTitle}
                         </p>
                       </div>

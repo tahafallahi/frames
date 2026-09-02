@@ -1,6 +1,7 @@
 import { UserContext } from "@/contexts/user-context";
 import { api } from "@/lib/api";
-import type { User } from "@/types/comment";
+import type { User } from "@/types/user";
+
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
@@ -15,7 +16,6 @@ export default function UserProvider({
     queryKey: ["user"],
     queryFn: async () => {
       const response = await api.get<User>("/user");
-      console.log(response.data);
       if (response.data) setUser(response.data);
     },
     retry: false,

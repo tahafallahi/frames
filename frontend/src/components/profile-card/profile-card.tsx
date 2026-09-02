@@ -1,5 +1,5 @@
-import type { ApiSearchUser } from "@/types/search";
-import type { User } from "@/types/types";
+import type { ApiSearchUser, User } from "@/types/user";
+import { thousandToK } from "@/utils/general";
 
 export default function ProfileCard({
   user,
@@ -15,12 +15,12 @@ export default function ProfileCard({
     }) {
   if (variant === "detailed") {
     return (
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 w-75">
         <div className="flex gap-3 items-center">
           <div className="shrink-0">
             <img
               className="rounded-full w-13"
-              src={user.profilePath}
+              src={user.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
               alt="User's profile picture"
             />
           </div>
@@ -28,18 +28,16 @@ export default function ProfileCard({
             <p className="text-2xl wrap-anywhere">{user.username}</p>
             <p className="text-xs text-muted-foreground">
               Likes recieved:{" "}
-              {user.likes < 1000 ? user.likes : user.likes / 1000 + "k"}
+              {thousandToK(user.likesCount)}
             </p>
           </div>
         </div>
         <div className="flex gap-4 text-sm text-muted-foreground">
-          <p>Following: 420</p>
-          <p>Following: 420</p>
+          <p>Followers: {user.follwersCount}</p>
+          <p>Following: {user.followingsCount}</p>
         </div>
         <p className="text-muted-foreground">
-          I spend most of my time watching movies, the rest of my time is spent
-          talking about movies! My favorites genres are Italian and French
-          movies.
+          {user.bio}
         </p>
       </div>
     );
