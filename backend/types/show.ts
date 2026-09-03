@@ -1,32 +1,19 @@
-export enum MediaType {
-  MOVIE,
-  TV_SHOW,
-}
-
 export interface ApiSearchShow {
   tmdbId: number;
   title: string;
   posterPath: string;
-  mediaType: MediaType;
+  mediaType: "MOVIE" | "TV_SHOW";
   releaseDate: string;
 }
 
-export interface ShowFromTmdb {
+export interface Show {
   tmdbId: number;
   title: string;
   overview: string;
   posterPath: string;
-  mediaType: MediaType;
+  mediaType: "MOVIE" | "TV_SHOW";
   genres: string[]
   releaseYear: string;
-}
-
-export interface ShowFromDb {
-  id: string;
-  tmdbId: number;
-  title: string;
-  overview: string;
-  posterPath: string;
-  mediaType: MediaType;
-  releaseYear: string;
+  postsCount?: number;
+  favoritesCount?: number;
 }

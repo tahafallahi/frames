@@ -9,6 +9,7 @@ import tagsRouter from "../routers/tags";
 import authRouter from "../routers/auth";
 import userRouter from "../routers/user";
 import showRouter from "../routers/show";
+import trendingRouter from "../routers/trending";
 
 import passport from "passport";
 
@@ -45,7 +46,8 @@ router.use("/posts", postsRouter);
 router.use("/tags", tagsRouter);
 router.use("/auth", authRouter);
 router.use("/user", userRouter);
-router.use("/shows", showRouter)
+router.use("/shows", showRouter);
+router.use("/trending", trendingRouter);
 
 app.use("/api", router);
 
