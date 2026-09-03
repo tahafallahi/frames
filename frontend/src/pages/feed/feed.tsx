@@ -7,7 +7,7 @@ import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Filter from "@/components/filter/filter";
 
 import type { Post } from "@/types/post";
-import type { SelectedFilters } from "@/types/types";
+import type { SelectedFilters } from "@/types/filter";
 
 export default function Feed() {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({

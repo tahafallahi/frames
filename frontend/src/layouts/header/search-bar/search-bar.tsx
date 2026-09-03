@@ -18,6 +18,7 @@ import Profile from "@/components/profile-card/profile-card";
 import type { ApiSearchResponse } from "@/types/search";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import { MediaType } from "@/types/show";
+import { Link } from "react-router";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -34,7 +35,7 @@ export default function SearchBar() {
     queryFn: () => getSearchResult(input, LIMIT),
     staleTime: STALE_TIME,
     enabled() {
-      return input.length > 0
+      return input.length > 0;
     },
   });
 
@@ -45,7 +46,6 @@ export default function SearchBar() {
 
     if (timeoutId.current) clearTimeout(timeoutId.current);
     timeoutId.current = setTimeout(() => {
-
       setInput(e.target.value);
       if (e.target.value) setOpen(true);
       document.addEventListener("click", () => setOpen(false));
@@ -89,24 +89,28 @@ export default function SearchBar() {
                   emptyStateMessage={`There are no movies matching "${input}"`}
                 >
                   <div className="grid grid-cols-3 gap-2 py-3">
-                    {query.data?.movies.map((s, i) => (
-                      <div key={i} className="bg-background">
-                        <img
-                          className="h-50"
-                          src={
-                            s.poster_path
-                              ? "https://image.tmdb.org/t/p/w154/" +
-                                s.poster_path
-                              : import.meta.env.VITE_MOVIE_PLACEHOLDER
-                          }
-                          alt={s.title}
-                        />
-                        <div className="py-4">
-                          <p className="text-sm text-center  line-clamp-2  ">
-                            {s.title}
-                          </p>
+                    {query.data?.movies.map((movie, i) => (
+                      <Link to={"/show/movie/" + movie.tmdbId} onClick={() => setOpen(false)} key={i}>
+                        <div
+                          className="bg-background hover:ring-2 ring-primary"
+                        >
+                          <img
+                            className="h-50"
+                            src={
+                              movie.posterPath
+                                ? "https://image.tmdb.org/t/p/w154/" +
+                                  movie.posterPath
+                                : import.meta.env.VITE_MOVIE_PLACEHOLDER
+                            }
+                            alt={movie.title}
+                          />
+                          <div className="py-4">
+                            <p className="text-sm text-center  line-clamp-2  ">
+                              {movie.title}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </QueryWrapper>
@@ -118,24 +122,28 @@ export default function SearchBar() {
                   emptyStateMessage={`There are no tv shows matching "${input}"`}
                 >
                   <div className="grid grid-cols-3 gap-2 py-3">
-                    {query.data?.tvs.map((s, i) => (
-                      <div key={i} className="bg-background">
-                        <img
-                          className="h-50"
-                          src={
-                            s.poster_path
-                              ? "https://image.tmdb.org/t/p/w154/" +
-                                s.poster_path
-                              : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
-                          }
-                          alt={s.title}
-                        />
-                        <div className="py-4">
-                          <p className="text-sm text-center  line-clamp-2  ">
-                            {s.title}
-                          </p>
+                    {query.data?.tvs.map((tv, i) => (
+                      <Link to={"/show/tv/" + tv.tmdbId} onClick={() => setOpen(false)} key={i}>
+                        <div
+                          className="bg-background hover:ring-2 ring-primary"
+                        >
+                          <img
+                            className="h-50"
+                            src={
+                              tv.posterPath
+                                ? "https://image.tmdb.org/t/p/w154/" +
+                                  tv.posterPath
+                                : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
+                            }
+                            alt={tv.title}
+                          />
+                          <div className="py-4">
+                            <p className="text-sm text-center  line-clamp-2  ">
+                              {tv.title}
+                            </p>
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </QueryWrapper>
@@ -169,8 +177,10 @@ export default function SearchBar() {
                       <div className="flex-1">
                         <p className="text-foreground text-xl ">{p.title}</p>
                         <p>
-                          {p.showMediaType === MediaType.MOVIE ? "Movie" : "TV Show"}:{" "}
-                          {p.showTitle}
+                          {p.showMediaType === MediaType.MOVIE
+                            ? "Movie"
+                            : "TV Show"}
+                          : {p.showTitle}
                         </p>
                       </div>
                       <div className="w-20">

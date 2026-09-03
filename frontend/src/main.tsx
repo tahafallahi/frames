@@ -14,6 +14,7 @@ import Login from "./pages/login/login";
 import Signup from "./pages/signup/signup";
 import ViewPost from "./pages/view-post/view-post";
 import Profile from "./pages/profile/profile";
+import Show from "./pages/show/show";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: <Profile />,
+      },
+      {
+        path: "/show/:mediaType/:showId",
+        element: <Show />,
       },
     ],
   },

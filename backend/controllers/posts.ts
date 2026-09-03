@@ -8,9 +8,10 @@ import type { CommentWtihReplies, OutputComment } from "../types/comment";
 import { buildCommentTree } from "services/comment-tree";
 
 export async function getPosts(req: Request, res: Response) {
-  const { sort, page, mediaFilter, tagFilter, userFilter } = req.query;
-  let tagFilterArray: string[];
-  let mediaFilterArray: MediaType[];
+  const { sort, page, mediaFilter, tagFilter, userFilter, showFilter } =
+    req.query;
+  let tagFilterArray: string[] = [];
+  let mediaFilterArray: MediaType[] = [];
   let postsOrderBy: PostOrderByWithRelationInput = {};
 
   if (sort !== "likes" && sort !== "comments" && sort !== "time") {
@@ -41,9 +42,7 @@ export async function getPosts(req: Request, res: Response) {
 
   if (tagFilter) {
     tagFilterArray = tagFilter.split(",");
-  } else {
-    tagFilterArray = (await prisma.tag.findMany()).map((t) => t.name);
-  }
+  } 
 
   if (mediaFilter && typeof mediaFilter !== "string") {
     return res.status(400).json({
@@ -59,13 +58,17 @@ export async function getPosts(req: Request, res: Response) {
         return MediaType.TV_SHOW;
       }
     });
-  } else {
-    mediaFilterArray = [MediaType.MOVIE, MediaType.TV_SHOW];
   }
 
   if (userFilter && typeof userFilter !== "string") {
     return res.status(400).json({
       error: "userFilter should be a string",
+    });
+  }
+
+  if (showFilter && typeof showFilter !== "string") {
+    return res.status(400).json({
+      error: "showFilter should be a string",
     });
   }
 
@@ -85,9 +88,10 @@ export async function getPosts(req: Request, res: Response) {
       },
       where: {
         AND: {
-          tags: { some: { name: { in: tagFilterArray } } },
-          show: { mediaType: { in: mediaFilterArray } },
-          ...(userFilter && {authorId: userFilter}),
+          ...(tagFilterArray.length > 0 && {tags: { some: { name: { in: tagFilterArray } } }}),
+          ...(mediaFilterArray.length > 0 && {show: { mediaType: { in: mediaFilterArray } }}),
+          ...(userFilter && { authorId: userFilter }),
+          ...(showFilter && { showId: showFilter}),
         },
       },
       skip: (Number(page) - 1) * configs.PAGE_LENGTH,

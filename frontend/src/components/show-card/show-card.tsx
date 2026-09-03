@@ -8,13 +8,21 @@ export default function ShowCard({
   variant,
 }: {
   show: Show;
-  variant: "detailed" | "compact";
+  variant: "detailed" | "detailedOmitTitle" | "compact";
 }) {
   if (variant === "detailed") {
     return (
       <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
         <h6 className="text-2xl">{show.title}</h6>
-        <img src={show.posterPath} alt={"Poster of " + show.title} />
+        <img
+          src={
+            show.posterPath
+              ? `${import.meta.env.VITE_IMG_TMDB_URL}/w154/${show.posterPath}`
+              : import.meta.env.VITE_MOVIE_PLACEHOLDER
+          }
+          alt={"Poster of " + show.title}
+          className="h-75"
+        />
         <Details show={show} />
         <div className="flex flex-col gap-1">
           <Button className="h-13 font-bold">
@@ -26,20 +34,33 @@ export default function ShowCard({
         </div>
       </div>
     );
-    // } else if (variant === "full2") {
-    //   return (
-    //     <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
-    //       <img src={show.posterPath} alt={"Poster of " + show.title} />
-    //       <Details show={show} />
-    //     </div>
-    //   );
+  } else if (variant === "detailedOmitTitle") {
+    return (
+      <div className="w-75 px-5 py-3 flex flex-col gap-5 border-l">
+        <img
+          src={
+            show.posterPath
+              ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
+              : import.meta.env.VITE_MOVIE_PLACEHOLDER
+          }
+          alt={"Poster of " + show.title}
+          className="w-75"
+        />
+        <Details show={show} />
+        <Button className="h-13 font-bold">Add to Your Favorites</Button>
+      </div>
+    );
   } else if (variant === "compact") {
     return (
       <div className="relative bg-popover w-75 flex flex-col">
         <h6 className="absolute top-5 left-5 text-3xl font-bold">
           {show.title}
         </h6>
-        <img src={show.posterPath} alt={"Poster of " + show.title} />
+        <img
+          src={show.posterPath}
+          alt={"Poster of " + show.title}
+          className="h-75"
+        />
         <div className="p-3 ">
           <Details show={show} />
         </div>

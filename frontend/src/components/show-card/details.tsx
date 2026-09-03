@@ -10,8 +10,8 @@ export default function Details({ show }: { show: Show }) {
       </div>
       <hr />
       <div className="flex flex-col gap-2">
-        <p>Related Posts: {thousandToK(show.postsCount)}</p>
-        <p>Favorites: {thousandToK(show.favouritesCount)}</p>
+        <p>Related Posts: {show.postsCount? thousandToK(show.postsCount): "0"}</p>
+        <p>Favorites: {show.postsCount? thousandToK(show.favouritesCount): "0"}</p>
       </div>
     </div>
   );

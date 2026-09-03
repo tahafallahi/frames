@@ -16,8 +16,8 @@ export interface Show {
 }
 
 export interface ApiSearchShow {
-  id: number;
+  tmdbId: number;
   title: string;
-  poster_path: string;
-  release_date: string;
+  posterPath: string;
+  releaseDate: string;
 }

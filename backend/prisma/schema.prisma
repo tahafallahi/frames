@@ -50,7 +50,8 @@ model Follows {
 }
 
 model Show {
-  id Int @id
+  id String @id @default(uuid())
+  tmdbId Int 
   title String 
   overview String
   releaseYear Int
@@ -80,7 +81,7 @@ model Post {
   authorId String?
   author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
-  showId Int
+  showId String
   show Show @relation(fields: [showId], references: [id], onDelete: Restrict)
 
   tags Tag[]
@@ -124,7 +125,7 @@ model Trending {
   id String @id @default(uuid())
   popularity Int
 
-  showId Int
+  showId String
   show Show @relation(fields: [showId], references: [id]) 
 
   @@index([showId])

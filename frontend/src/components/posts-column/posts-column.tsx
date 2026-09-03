@@ -23,7 +23,7 @@ export default function PostsColumn({
   setSort: React.Dispatch<React.SetStateAction<"TOP" | "HOT" | "NEW">>;
 }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-175">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
           <p>{capitilize(sort.toLocaleLowerCase())}</p>
