@@ -4,7 +4,7 @@ export enum MediaType {
 }
 
 export interface Show {
-  id: number;
+  tmdbId: number;
   title: string;
   overview: string;
   releaseYear: number;

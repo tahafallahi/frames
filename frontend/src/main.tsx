@@ -15,6 +15,7 @@ import Signup from "./pages/signup/signup";
 import ViewPost from "./pages/view-post/view-post";
 import Profile from "./pages/profile/profile";
 import Show from "./pages/show/show";
+import Trending from "./pages/trending/trending";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
         path: "/show/:mediaType/:showId",
         element: <Show />,
       },
+      {
+        path: "/trending/movie",
+        element: <Trending mediaTypeProp={"MOVIE"}/>
+      },
+      {
+        path: "/trending/tv",
+        element: <Trending mediaTypeProp={"TV_SHOW"}/>
+      }
     ],
   },
 ]);

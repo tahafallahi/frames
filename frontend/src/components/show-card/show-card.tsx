@@ -52,14 +52,18 @@ export default function ShowCard({
     );
   } else if (variant === "compact") {
     return (
-      <div className="relative bg-popover w-75 flex flex-col">
-        <h6 className="absolute top-5 left-5 text-3xl font-bold">
+      <div className="relative bg-popover w-55 flex flex-col">
+        {/* <h6 className="absolute top-5 left-5 text-xl font-bold">
           {show.title}
-        </h6>
+        </h6> */}
         <img
-          src={show.posterPath}
+          src={
+            show.posterPath
+              ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
+              : import.meta.env.VITE_MOVIE_PLACEHOLDER
+          }
           alt={"Poster of " + show.title}
-          className="h-75"
+          className="w-300"
         />
         <div className="p-3 ">
           <Details show={show} />
