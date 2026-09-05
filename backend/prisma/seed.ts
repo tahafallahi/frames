@@ -21,7 +21,7 @@ function slugify(title: string): string {
 }
 
 async function getPosterPath(tmdbId: number, mediaType: MediaType, title: string): Promise<string> {
-  const apiKey = process.env.TMDB_ACCESS_TOKEN;
+  const apiKey = process.env.TMDB_API_KEY;
   if (apiKey) {
     try {
       const endpoint = mediaType === "MOVIE" ? "movie" : "tv";

@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getMovie, getTv } from "controllers/shows";
+import { getShow } from "controllers/shows";
+import { MediaType } from "generated/prisma/enums";
 
 const router = Router();
 
-router.get("/movie/:movieId", getMovie)
-router.get("/tv/:tvId", getTv)
+router.get("/movie/:showId", getShow(MediaType.MOVIE))
+router.get("/tv/:showId", getShow(MediaType.TV_SHOW))
 
 export default router;
