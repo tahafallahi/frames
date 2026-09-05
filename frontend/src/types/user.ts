@@ -9,6 +9,7 @@ export interface User {
   likesCount: number;
   follwersCount: number ;
   followingsCount: number;
+  followings: User[];
   postsCount: number;
   favorites?: Show[];
   createdAt: Date;

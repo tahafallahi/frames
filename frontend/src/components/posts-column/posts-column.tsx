@@ -10,14 +10,16 @@ import {
 } from "@/components/ui/popover";
 import { capitilize } from "@/utils/general";
 import { Button } from "../ui/button";
+import type { UseQueryResult } from "@tanstack/react-query";
+import QueryWrapper from "../query-wrapper/query-wrapper";
 
 export default function PostsColumn({
-  posts,
+  query,
   title,
   sort,
   setSort,
 }: {
-  posts?: Post[];
+  query: UseQueryResult<Post[]>;
   title: string;
   sort: "TOP" | "HOT" | "NEW";
   setSort: React.Dispatch<React.SetStateAction<"TOP" | "HOT" | "NEW">>;
@@ -36,9 +38,9 @@ export default function PostsColumn({
               align="end"
               sideOffset={8}
             >
-              <PopoverHeader>Sort By:
-
-              <hr className="my-1 border-border" />
+              <PopoverHeader>
+                Sort By:
+                <hr className="my-1 border-border" />
               </PopoverHeader>
               {["Top", "Hot", "New"].map((i) => (
                 <>
@@ -65,11 +67,15 @@ export default function PostsColumn({
         </div>
         <div className="font-bold">{title}</div>
       </div>
-      <div className="flex flex-col gap-12">
-        {posts?.map((p, i) => (
-          <PostCard post={p} variant="compact" key={i} />
-        ))}
-      </div>
+      <QueryWrapper query={query}>
+        {query.data && query.data.length > 0 ? 
+        <div className="flex flex-col gap-12">
+          {query.data.map((p, i) => (
+            <PostCard post={p} variant="compact" key={i} />
+          ))}
+        </div> : <p className="pt-10 text-center text-muted-foreground">empty</p>
+        }
+      </QueryWrapper>
     </div>
   );
 }

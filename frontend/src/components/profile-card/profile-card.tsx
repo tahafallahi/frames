@@ -10,7 +10,7 @@ export default function ProfileCard({
       variant: "full" | "detailed";
     }
   | {
-      user: ApiSearchUser;
+      user: ApiSearchUser | User;
       variant: "compact";
     }) {
   if (variant === "detailed") {

@@ -11,7 +11,6 @@ export async function getUser(req: Request<{ userId: string }>, res: Response) {
 
   if (!userId)
     return res
-      .status(400)
       .json({ error: "userId url parameter was not provied" });
 
   const result = await prisma.user.findUnique({
@@ -24,6 +23,7 @@ export async function getUser(req: Request<{ userId: string }>, res: Response) {
       createdAt: true,
       updatedAt: true,
       favorites: true,
+      following: true,
       _count: {
         select: {
           followers: true,
@@ -36,7 +36,7 @@ export async function getUser(req: Request<{ userId: string }>, res: Response) {
     where: { id: userId },
   });
 
-  if (!result) return res.status(404).end()
+  if (!result) return res.json({})
 
   const { _count, ...rest } = result;
 

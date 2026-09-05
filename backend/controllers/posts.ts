@@ -72,6 +72,8 @@ export async function getPosts(req: Request, res: Response) {
     });
   }
 
+  console.log(userFilter)
+
 
   const posts = (
     await prisma.post.findMany({
