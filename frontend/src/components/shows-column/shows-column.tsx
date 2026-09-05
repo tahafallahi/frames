@@ -56,7 +56,7 @@ export default function ShowsColumn({
       </div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 w-full">
         {shows?.map((s, i) => (
-          <Link to={`/show/${mediaType === "MOVIE" ? "movie" : "tv"}/${s.tmdbId}`} key={i} >
+          <Link to={`/show/${mediaType === "MOVIE" ? "movie" : "tv"}/${s.tmdbId}`} key={i} className="hover:ring ring-primary w-fit h-fit">
             <ShowCard show={s} variant="compact"/>
           </Link>
         ))}

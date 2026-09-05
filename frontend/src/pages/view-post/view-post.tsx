@@ -8,7 +8,7 @@ import ShowCard from "@/components/show-card/show-card";
 import CommentSection from "@/components/comment-section/comment-section";
 
 import type { Post } from "@/types/post";
-import type { Show } from "@/types/show";
+import { MediaType, type Show } from "@/types/show";
 import type { Comment } from "@/types/comment";
 
 export default function ViewPost() {
@@ -23,10 +23,12 @@ export default function ViewPost() {
 
   const post = postQuery.data?.data;
 
+  console.log(post?.show.mediaType === MediaType.MOVIE)
+
   const showQuery = useQuery({
     queryKey: ["show", post?.show.id],
     queryFn: async () => {
-      return await api.get<Show>("/shows/" + post?.show.id);
+      return await api.get<Show>(`/shows/${post?.show.mediaType === MediaType.MOVIE? "movie": "tv"}/${post?.show.tmdbId}`);
     },
     enabled: () => postQuery.isSuccess,
   });

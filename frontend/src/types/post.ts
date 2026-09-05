@@ -12,7 +12,8 @@ export interface Post {
     profilePath: string;
   };
   show: {
-    id: number;
+    id: string;
+    tmdbId: number;
     title: string;
     releaseYear: number;
     mediaType: MediaType;
@@ -26,5 +27,5 @@ export interface ApiSearchPost {
   title: string;
   showMediaType: MediaType;
   showTitle: string;
-  likes: number; 
+  likes: number;
 }

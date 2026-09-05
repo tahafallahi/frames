@@ -121,7 +121,7 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
       createdAt: true,
       author: { select: { username: true, profilePath: true } },
       show: {
-        select: { id: true, title: true, releaseYear: true, mediaType: true },
+        select: { tmdbId: true, title: true, releaseYear: true, mediaType: true },
       },
       _count: { select: { likes: true, comments: true } },
     },
