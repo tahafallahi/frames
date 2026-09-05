@@ -56,18 +56,12 @@ export default function Show() {
   return (
     <>
       <div>
-        <QueryWrapper query={postsQuery}>
-          {(postsQuery.data && postsQuery.data.length > 0) ? (
-            <PostsColumn
-              posts={postsQuery.data}
-              title={showQuery.data?.title ?? ""}
-              sort={sort}
-              setSort={setSort}
-            />
-          ) : (
-            <p>empty</p>
-          )}
-        </QueryWrapper>
+        <PostsColumn
+          query={postsQuery}
+          title={showQuery.data?.title ?? ""}
+          sort={sort}
+          setSort={setSort}
+        />
       </div>
       <div className="flex flex-col gap-12 pt-12">
         <QueryWrapper query={showQuery}>

@@ -17,11 +17,11 @@ export default function ShowCard({
         <img
           src={
             show.posterPath
-              ? `${import.meta.env.VITE_IMG_TMDB_URL}/w154/${show.posterPath}`
+              ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
               : import.meta.env.VITE_MOVIE_PLACEHOLDER
           }
           alt={"Poster of " + show.title}
-          className="h-75"
+          className="w-300"
         />
         <Details show={show} />
         <div className="flex flex-col gap-1">

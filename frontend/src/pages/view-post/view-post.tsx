@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { api } from "@/lib/api";
 
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
@@ -28,7 +28,7 @@ export default function ViewPost() {
   const showQuery = useQuery({
     queryKey: ["show", post?.show.id],
     queryFn: async () => {
-      return await api.get<Show>(`/shows/${post?.show.mediaType === MediaType.MOVIE? "movie": "tv"}/${post?.show.tmdbId}`);
+      return (await api.get<Show>(`/shows/${post?.show.mediaType === MediaType.MOVIE? "movie": "tv"}/${post?.show.tmdbId}`)).data;
     },
     enabled: () => postQuery.isSuccess,
   });
@@ -57,7 +57,9 @@ export default function ViewPost() {
 
       <QueryWrapper query={showQuery}>
         {showQuery.isSuccess && (
-          <ShowCard show={showQuery.data.data} variant="detailed" />
+          <Link to={`/show/${showQuery.data.mediaType === MediaType.MOVIE ? "movie": "tv"}/${showQuery.data.tmdbId}`}>
+          <ShowCard show={showQuery.data} variant="detailed" />
+          </Link>
         )}
       </QueryWrapper>
       </div>
