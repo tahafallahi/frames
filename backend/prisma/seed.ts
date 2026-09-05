@@ -1,33 +1,7 @@
-/**
- * Seed script for the Frames project.
- *
- * Setup:
- *   npm i -D ts-node typescript @types/node
- *   npm i bcryptjs
- *
- * Add to package.json:
- *   "prisma": { "seed": "ts-node prisma/seed.ts" }
- *
- * Run:
- *   npx prisma db seed
- *
- * Optional: set TMDB_API_KEY in your env to pull real posters live from TMDB
- * using the tmdbId already on each show. Without it, the script falls back
- * to deterministic (but real, working) photos from picsum.photos so the
- * seed always succeeds offline.
- *
- * Assumes this file lives at prisma/seed.ts, matching the schema's
- * `output = "../generated/prisma"`. Adjust the import path below if you
- * place it elsewhere.
- */
-
 import { MediaType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
 import bcrypt from "bcrypt";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -67,11 +41,6 @@ async function getPosterPath(tmdbId: number, mediaType: MediaType, title: string
   return `https://picsum.photos/seed/${slugify(title)}-poster/500/750`;
 }
 
-// ---------------------------------------------------------------------------
-// Reference data
-// ---------------------------------------------------------------------------
-
-// Real TMDB genre ids, so they line up with what the TMDB API would return.
 const GENRES = {
   ACTION: 28,
   ADVENTURE: 12,
@@ -499,9 +468,7 @@ const REPLIES = [
   "Interesting, I've never thought about it that way.",
 ];
 
-// ---------------------------------------------------------------------------
-// Seed
-// ---------------------------------------------------------------------------
+
 
 async function main() {
   console.log("Clearing existing data...");

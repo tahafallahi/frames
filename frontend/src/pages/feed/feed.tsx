@@ -50,17 +50,12 @@ export default function Feed() {
 
   return (
     <>
-      <QueryWrapper
+      <PostsColumn
         query={postsResponse}
-        emptyStateMessage={"There are no posts."}
-      >
-        <PostsColumn
-          posts={postsResponse.data}
-          title="All"
-          sort={sort}
-          setSort={setSort}
-        />
-      </QueryWrapper>
+        title="All"
+        sort={sort}
+        setSort={setSort}
+      />
       <QueryWrapper
         query={tagsResponse}
         emptyStateMessage={"There are no tags."}
