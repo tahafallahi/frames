@@ -1,4 +1,3 @@
-import { motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 
 import type { Post } from "@/types/post";
@@ -13,7 +12,7 @@ import { Button } from "../ui/button";
 import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import PostCard from "../post-card/post-card";
-import clsx from "clsx";
+import Skeleton from "../skeleton/skeleton";
 
 export default function PostsColumn({
   query,
@@ -89,18 +88,5 @@ export default function PostsColumn({
         </div>
       </QueryWrapper>
     </div>
-  );
-}
-
-function Skeleton({ className }: { className?: string }) {
-  return (
-    <motion.div
-      className={clsx(
-        className,
-        "h-10 bg-linear-to-r from-white/23 via-white/17 to-white/23 rounded-[10px] bg-size-[200%_100%]",
-      )}
-      animate={{ backgroundPositionX: ["0%", "-200%"] }}
-      transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
-    ></motion.div>
   );
 }
