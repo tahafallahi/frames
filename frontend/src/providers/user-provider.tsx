@@ -3,6 +3,7 @@ import { api } from "@/lib/api";
 import type { User } from "@/types/user";
 
 import { useQuery } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
 import { useState } from "react";
 
 export default function UserProvider({
@@ -15,14 +16,19 @@ export default function UserProvider({
   const query = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const response = await api.get<User>("/user");
-      if (response.data) setUser(response.data);
-
-      return response
+      try {
+        const response = await api.get<User>("/user");
+        if (response.data) setUser(response.data);
+        return response;
+      } catch (error) {
+        if (isAxiosError(error) && error.status === 401) {
+          setUser(null);
+        }
+        return null
+      }
     },
     retry: false,
   });
 
-  
   return <UserContext value={[user, setUser, query]}>{children}</UserContext>;
 }

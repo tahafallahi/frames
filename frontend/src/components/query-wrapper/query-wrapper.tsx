@@ -8,10 +8,21 @@ interface props {
   children: React.ReactNode;
 }
 
-export default function QueryWrapper({ query, children, loadingPlaceHolder, emptyStateMessage, isEmpty }: props) {
+export default function QueryWrapper({
+  query,
+  children,
+  loadingPlaceHolder,
+  emptyStateMessage,
+  isEmpty,
+}: props) {
   if (query.isError)
     return <p>{`Something went wrong, please try again later.`}</p>;
   if (query.isPending) return loadingPlaceHolder;
-  if (isEmpty) return <p className="pt-10 text-center text-muted-foreground">{emptyStateMessage ?? "empty"}</p>
+  if (isEmpty)
+    return (
+      emptyStateMessage ?? (
+        <p className="pt-10 text-center text-muted-foreground">"empty"</p>
+      )
+    );
   return children;
 }

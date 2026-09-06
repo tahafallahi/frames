@@ -85,7 +85,7 @@ export default function SearchBar() {
               !query.data?.users.length
             }
             emptyStateMessage={
-              <div className="pb-10">
+              <div className="pb-10 pt-10 text-center text-muted-foreground">
                 {"There were results found for" + input}
               </div>
             }
