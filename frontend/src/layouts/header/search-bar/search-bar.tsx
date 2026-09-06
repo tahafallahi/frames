@@ -1,9 +1,6 @@
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ThumbsUp } from "lucide-react";
-
 import { api } from "@/lib/api";
-import { thousandToK } from "@/utils/general";
 
 import {
   Popover,
@@ -12,13 +9,12 @@ import {
   PopoverTitle,
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
-
-import SlimCard from "@/components/slim-card/slim-card";
-import Profile from "@/components/profile-card/profile-card";
-import type { ApiSearchResponse } from "@/types/search";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
-import { MediaType } from "@/types/show";
-import { Link } from "react-router";
+import ShowDisplay from "./show-display";
+import UserDisplay from "./user-display";
+import PostDisplay from "./post-display";
+
+import type { ApiSearchResponse } from "@/types/search";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -80,121 +76,43 @@ export default function SearchBar() {
             </PopoverTitle>
             <hr className="my-1 border-border" />
           </PopoverHeader>
-          <div className="w-full flex flex-col">
-            <div className="w-full flex gap-5">
-              <div className="flex-1">
-                <h3 className="text-base text-foreground">Movies & TV Shows</h3>
-                <QueryWrapper
-                  query={query}
-                  emptyStateMessage={`There are no movies matching "${input}"`}
-                >
-                  <div className="grid grid-cols-3 gap-2 py-3">
-                    {query.data?.movies.map((movie, i) => (
-                      <Link to={"/show/movie/" + movie.tmdbId} onClick={() => setOpen(false)} key={i}>
-                        <div
-                          className="bg-background hover:ring-2 ring-primary"
-                        >
-                          <img
-                            className="h-50"
-                            src={
-                              movie.posterPath
-                                ? "https://image.tmdb.org/t/p/w154/" +
-                                  movie.posterPath
-                                : import.meta.env.VITE_MOVIE_PLACEHOLDER
-                            }
-                            alt={movie.title}
-                          />
-                          <div className="py-4">
-                            <p className="text-sm text-center  line-clamp-2  ">
-                              {movie.title}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </QueryWrapper>
+          <QueryWrapper
+            query={query}
+            isEmpty={
+              !query.data?.movies.length &&
+              !query.data?.tvs.length &&
+              !query.data?.posts.length &&
+              !query.data?.users.length
+            }
+            emptyStateMessage={
+              <div className="pb-10">
+                {"There were results found for" + input}
               </div>
-              <div className="flex-1">
-                <h3 className="text-base text-foreground">TV Shows</h3>
-                <QueryWrapper
-                  query={query}
-                  emptyStateMessage={`There are no tv shows matching "${input}"`}
-                >
-                  <div className="grid grid-cols-3 gap-2 py-3">
-                    {query.data?.tvs.map((tv, i) => (
-                      <Link to={"/show/tv/" + tv.tmdbId} onClick={() => setOpen(false)} key={i}>
-                        <div
-                          className="bg-background hover:ring-2 ring-primary"
-                        >
-                          <img
-                            className="h-50"
-                            src={
-                              tv.posterPath
-                                ? "https://image.tmdb.org/t/p/w154/" +
-                                  tv.posterPath
-                                : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
-                            }
-                            alt={tv.title}
-                          />
-                          <div className="py-4">
-                            <p className="text-sm text-center  line-clamp-2  ">
-                              {tv.title}
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </QueryWrapper>
-              </div>
-              <div className="w-60 flex flex-col gap-3">
-                <h3 className="text-base text-foreground">Users</h3>
-                <QueryWrapper
-                  query={query}
-                  emptyStateMessage={`There are no users matching "${input}"`}
-                >
-                  <div className="flex flex-col gap-2">
-                    {query.data?.users.map((u, i) => (
-                      <SlimCard key={i}>
-                        <Profile user={u} variant={"compact"} />
-                      </SlimCard>
-                    ))}
-                  </div>
-                </QueryWrapper>
-              </div>
-            </div>
-            <hr className="my-3 border-border" />
-            <div className="w-full flex flex-col gap-3">
-              <h3 className="text-base text-foreground">Posts</h3>
-              <QueryWrapper
-                query={query}
-                emptyStateMessage={`There are no posts matching "${input}"`}
-              >
-                <div className="flex flex-col gap-2">
-                  {query.data?.posts.map((p, i) => (
-                    <SlimCard key={i} className="flex">
-                      <div className="flex-1">
-                        <p className="text-foreground text-xl ">{p.title}</p>
-                        <p>
-                          {p.showMediaType === MediaType.MOVIE
-                            ? "Movie"
-                            : "TV Show"}
-                          : {p.showTitle}
-                        </p>
-                      </div>
-                      <div className="w-20">
-                        <p className="flex gap-3 items-center text-sm">
-                          <ThumbsUp className="w-4" />
-                          {thousandToK(p.likes)}
-                        </p>
-                      </div>
-                    </SlimCard>
-                  ))}
+            }
+            loadingPlaceHolder={"Loading..."}
+          >
+            <div className="w-full flex flex-col">
+              <div className="w-full flex gap-5">
+                <div className="flex-1">
+                  <h3 className="text-base text-foreground">Movies</h3>
+                  <ShowDisplay shows={query.data?.movies} setOpen={setOpen} />
                 </div>
-              </QueryWrapper>
+                <div className="flex-1">
+                  <h3 className="text-base text-foreground">TV Shows</h3>
+                  <ShowDisplay shows={query.data?.tvs} setOpen={setOpen} />
+                </div>
+                <div className="w-60 flex flex-col gap-3">
+                  <h3 className="text-base text-foreground">Users</h3>
+                  <UserDisplay users={query.data?.users} setOpen={setOpen} />
+                </div>
+              </div>
+              <hr className="my-3 border-border" />
+              <div className="w-full flex flex-col gap-3">
+                <h3 className="text-base text-foreground">Posts</h3>
+                <PostDisplay posts={query.data?.posts} setOpen={setOpen} />
+              </div>
             </div>
-          </div>
+          </QueryWrapper>
         </PopoverContent>
       </Popover>
     </>

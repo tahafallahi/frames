@@ -1,17 +1,14 @@
 import { prisma } from "lib/prisma";
 import configs from "../configs";
-import { MediaType } from "generated/prisma/enums";
-import type { Request, Response } from "express";
-import type { PostOrderByWithRelationInput } from "generated/prisma/models";
-import type { Comment } from "generated/prisma/client";
-import type { CommentWtihReplies, OutputComment } from "../types/comment";
+
 import { buildCommentTree } from "services/comment-tree";
 
+import type { Request, Response } from "express";
+import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+
 export async function getPosts(req: Request, res: Response) {
-  const { sort, page, mediaFilter, tagFilter, userFilter, showFilter } =
+  const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =
     req.query;
-  let tagFilterArray: string[] = [];
-  let mediaFilterArray: MediaType[] = [];
   let postsOrderBy: PostOrderByWithRelationInput = {};
 
   if (sort !== "likes" && sort !== "comments" && sort !== "time") {
@@ -34,46 +31,29 @@ export async function getPosts(req: Request, res: Response) {
     postsOrderBy = { createdAt: "desc" };
   }
 
-  if (tagFilter && typeof tagFilter !== "string") {
+  if (tagFilter && typeof tagFilter !== "object") {
     return res.status(400).json({
-      error: "tagFilter should be a string",
+      error: "tagFilter should be of type object",
     });
-  }
-
-  if (tagFilter) {
-    tagFilterArray = tagFilter.split(",");
   } 
 
-  if (mediaFilter && typeof mediaFilter !== "string") {
+  if (mediaFilter && typeof mediaFilter !== "object") {
     return res.status(400).json({
-      error: "mediaFilter should be a string",
+      error: "mediaFilter should be of type object",
     });
   }
 
-  if (mediaFilter) {
-    mediaFilterArray = mediaFilter.split(",").map((f) => {
-      if (f == "movie") {
-        return MediaType.MOVIE;
-      } else {
-        return MediaType.TV_SHOW;
-      }
-    });
-  }
-
-  if (userFilter && typeof userFilter !== "string") {
+  if (userFilter && typeof userFilter !== "object") {
     return res.status(400).json({
-      error: "userFilter should be a string",
+      error: "userFilter should be of type object",
     });
   }
 
-  if (showFilter && typeof showFilter !== "string") {
+  if (showFilter && typeof showFilter !== "object") {
     return res.status(400).json({
-      error: "showFilter should be a string",
+      error: "showFilter should be of type object",
     });
   }
-
-  console.log(userFilter)
-
 
   const posts = (
     await prisma.post.findMany({
@@ -90,10 +70,14 @@ export async function getPosts(req: Request, res: Response) {
       },
       where: {
         AND: {
-          ...(tagFilterArray.length > 0 && {tags: { some: { name: { in: tagFilterArray } } }}),
-          ...(mediaFilterArray.length > 0 && {show: { mediaType: { in: mediaFilterArray } }}),
-          ...(userFilter && { authorId: userFilter }),
-          ...(showFilter && { showId: showFilter}),
+          ...(tagFilter && {
+            tags: { some: { name: { in: tagFilter as string[] } } },
+          }),
+          ...(mediaFilter && {
+            show: { mediaType: { in: mediaFilter as string[]  } },
+          }),
+          ...(userFilter && { authorId: {in: userFilter as string[] } }),
+          ...(showFilter && { showId: {in: showFilter as string[] } }),
         },
       },
       skip: (Number(page) - 1) * configs.PAGE_LENGTH,
@@ -123,7 +107,12 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
       createdAt: true,
       author: { select: { username: true, profilePath: true } },
       show: {
-        select: { tmdbId: true, title: true, releaseYear: true, mediaType: true },
+        select: {
+          tmdbId: true,
+          title: true,
+          releaseYear: true,
+          mediaType: true,
+        },
       },
       _count: { select: { likes: true, comments: true } },
     },

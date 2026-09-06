@@ -56,7 +56,9 @@ export default function PostsColumn({
                     <Button
                       variant={"ghost"}
                       className=" p-0 h-fit"
-                      onClick={() => setSort(i.toUpperCase())}
+                      onClick={() =>
+                        setSort(i.toUpperCase() as "TOP" | "HOT" | "NEW")
+                      }
                     >
                       {i}
                     </Button>
@@ -71,13 +73,13 @@ export default function PostsColumn({
       <QueryWrapper
         query={query}
         loadingPlaceHolder={
-          <>
+          <div className="flex flex-col gap-6">
             {Array(5)
               .fill(null)
               .map((e, i) => (
                 <Skeleton key={i} className="h-50" />
               ))}
-          </>
+          </div>
         }
         isEmpty={!query.data?.length}
       >

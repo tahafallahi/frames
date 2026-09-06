@@ -15,6 +15,7 @@ export async function searchMovie(
       title: r.title,
       posterPath: r.poster_path,
       releaseDate: r.release_date,
+      mediaType: MediaType.MOVIE
     };
   });
 
@@ -33,6 +34,7 @@ export async function searchTV(
       title: r.name,
       posterPath: r.poster_path,
       releaseDate: r.first_air_date,
+      mediaType: MediaType.TV_SHOW
     };
   });
 

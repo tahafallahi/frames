@@ -20,4 +20,5 @@ export interface ApiSearchShow {
   title: string;
   posterPath: string;
   releaseDate: string;
+  mediaType: MediaType;
 }

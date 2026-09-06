@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { Router } from "express";
 import session from "express-session";
+import qs from "qs"
 
 import searchRouter from "../routers/search";
 import postsRouter from "../routers/posts";
@@ -23,6 +24,8 @@ const app = express();
 const router = Router();
 
 //TODO: There's a lot about session save database and cors to be done here.
+
+app.set("query parser", (str: string) => qs.parse(str));
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());

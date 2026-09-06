@@ -2,7 +2,7 @@ import type { UseQueryResult } from "@tanstack/react-query";
 
 interface props {
   query: UseQueryResult;
-  emptyStateMessage?: string | null;
+  emptyStateMessage?: React.ReactNode | null;
   loadingPlaceHolder: React.ReactNode;
   isEmpty: boolean;
   children: React.ReactNode;

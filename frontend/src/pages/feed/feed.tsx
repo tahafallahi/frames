@@ -3,11 +3,11 @@ import { useState } from "react";
 import { api } from "@/lib/api";
 
 import PostsColumn from "@/components/posts-column/posts-column";
-import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Filter from "@/components/filter/filter";
 
 import type { Post } from "@/types/post";
 import type { SelectedFilters } from "@/types/filter";
+import { MediaType } from "@/types/show";
 
 export default function Feed() {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -21,9 +21,14 @@ export default function Feed() {
     queryKey: ["posts", qSort, selectedFilters],
     queryFn: async () =>
       (
-        await api.get<Post[]>(
-          `/posts?sort=${qSort}&page=1&mediaFilter=${selectedFilters.Content.join(",")}&tagFilter=${selectedFilters.Tags.join(",")}`,
-        )
+        await api.get<Post[]>("/posts", {
+          params: {
+            sort: qSort,
+            page: 1,
+            mediaFilter: selectedFilters.Content.map((f => f === "Movie"? MediaType.MOVIE: MediaType.TV_SHOW)),
+            tagFilter: selectedFilters.Tags,
+          },
+        })
       ).data,
   });
 
@@ -37,7 +42,7 @@ export default function Feed() {
     ? [
         {
           title: "Content",
-          items: ["movie", "tv show"],
+          items: ["Movie", "TV Show"],
         },
         {
           title: "Tags",
@@ -56,16 +61,12 @@ export default function Feed() {
         sort={sort}
         setSort={setSort}
       />
-      <QueryWrapper
+      <Filter
         query={tagsResponse}
-        emptyStateMessage={"There are no tags."}
-      >
-        <Filter
-          filters={filter}
-          selectedFilters={selectedFilters}
-          setSelectedFilters={setSelectedFilters}
-        ></Filter>
-      </QueryWrapper>
+        filters={filter}
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+      ></Filter>
     </>
   );
 }
