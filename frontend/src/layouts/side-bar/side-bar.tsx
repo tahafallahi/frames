@@ -22,8 +22,8 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
       <div className="flex flex-col gap-2">
         <h3 className="font-bold">Movies</h3>
         <div className="pl-4 flex flex-col gap-1">
-          {mockShows.map((s) => (
-            <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis">
+          {mockShows.map((s, i) => (
+            <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis" key={i}>
               {s.name}
             </p>
           ))}
@@ -35,8 +35,8 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
       <div className="flex flex-col gap-2">
         <h3 className="font-bold">TV Shows</h3>
         <div className="pl-4 flex flex-col gap-1">
-          {mockShows.map((s) => (
-            <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis">
+          {mockShows.map((s, i) => (
+            <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis" key={i}>
               {s.name}
             </p>
           ))}

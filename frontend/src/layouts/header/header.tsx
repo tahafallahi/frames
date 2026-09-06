@@ -12,11 +12,11 @@ export default function Header({ variant }: { variant?: "compact" }) {
         <Link to="/">Frames</Link>
       </h1>
       {variant === "compact" ? null : (
-        <>
+        <div className="max-w-175 flex-1">
           <SearchBar />
-        </>
+        </ div>
       )}
-      {!userQuery.isLoading ? (
+      {userQuery.isSuccess ? (
         <UserControls user={user} />
       ) : (
         <div>Loading...</div>

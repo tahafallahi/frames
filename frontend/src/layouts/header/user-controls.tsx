@@ -5,20 +5,20 @@ import { Bell } from "lucide-react";
 import {
   Popover,
   PopoverContent,
-  PopoverHeader,
   PopoverTitle,
+  PopoverHeader,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import ProfileCard from "@/components/profile-card/profile-card";
-import type { User } from "@/types/user";
 
+import type { User } from "@/types/user";
 
 export default function UserControls({ user }: { user: User | null}) {
   return (
     <>
       {user ? (
-        <div className="w-44 flex shrink-0 justify-between items-center">
+        <div className="flex gap-6 shrink-0 justify-between items-center">
           <h2>
             <Link to="/create">Create</Link>
           </h2>
@@ -45,13 +45,13 @@ export default function UserControls({ user }: { user: User | null}) {
                       dismiss all
                     </Button>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    {/* {user.notifications.map((n, i) => (
+                  {/* <div className="flex flex-col gap-2">
+                    {user.notifications.map((n, i) => (
                       <SlimCard key={i} className="border-l-3">
                         <p>{n}</p>
                       </SlimCard>
-                    ))} */}
-                  </div>
+                    ))}
+                  </div> */}
             </PopoverContent>
           </Popover>
 
@@ -85,7 +85,7 @@ export default function UserControls({ user }: { user: User | null}) {
           </Popover>
         </div>
       ) : (
-        <div className="w-39 mx-5 flex shrink-0 justify-between items-center">
+        <div className=" mx-5 flex shrink-0 justify-between items-center">
           <h2><Link to="login">Log In</Link></h2>
           <h2><Link to="login">Sign Up</Link></h2>
         </div>

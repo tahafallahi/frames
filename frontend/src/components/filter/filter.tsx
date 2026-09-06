@@ -54,10 +54,11 @@ export default function Filter({
             <div key={i} className="flex flex-col gap-2">
               <h6 className="text-base ">{f.title}:</h6>
               <div className="flex flex-wrap gap-2">
-                {f.items.map((tag) => (
+                {f.items.map((tag, i) => (
                   <Button
                     variant={"ghost"}
                     onClick={() => handleClick(f.title, tag)}
+                    key={i}
                   >
                     <Badge
                       variant={

@@ -52,7 +52,7 @@ export default function SearchBar() {
     <>
       <Input
         ref={inputRef}
-        className="w-175 h-11 px-5 mx-10 border-primary rounded-full focus-visible:ring-ring"
+        className="h-11 px-5 border-primary rounded-full focus-visible:ring-ring"
         autoComplete="off"
         placeholder="Search"
         onChange={handleInput}
@@ -120,7 +120,6 @@ export default function SearchBar() {
 }
 
 async function getSearchResult(query: string, limit: number) {
-  console.log("fired");
   const result = await api.get<ApiSearchResponse>(
     `/search?query=${query}&limit=${limit}`,
   );

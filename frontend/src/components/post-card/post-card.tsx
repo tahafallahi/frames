@@ -55,8 +55,8 @@ export default function PostCard({
               </div>
             </div>
             <div className="flex content-center">
-              {post.tags.map((t) => (
-                <Badge variant={"outline"}>{t.name}</Badge>
+              {post.tags.map((t, i) => (
+                <Badge variant={"outline"} key={i}>{t.name}</Badge>
               ))}
             </div>
           </div>
@@ -91,8 +91,8 @@ export default function PostCard({
             </div>
           </div>
           <div className="flex content-center">
-            {post.tags.map((t) => (
-              <Badge variant={"outline"}>{t.name}</Badge>
+            {post.tags.map((t, i) => (
+              <Badge variant={"outline"} key={i}>{t.name}</Badge>
             ))}
           </div>
         </div>

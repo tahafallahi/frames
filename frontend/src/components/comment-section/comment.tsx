@@ -3,7 +3,6 @@ import { thousandToK } from "@/utils/general";
 import { MessageCircle, Reply, ThumbsDown, ThumbsUp } from "lucide-react";
 
 export default function Comment({ comment }: { comment: Comment }) {
-  console.log(comment)
   return (
     <div className="px-5 py-3 flex gap-5 border-l border-primary bg-popover" >
       <div className="shrink-0">

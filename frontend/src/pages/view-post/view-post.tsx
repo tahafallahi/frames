@@ -24,8 +24,6 @@ export default function ViewPost() {
 
   const post = postQuery.data?.data;
 
-  console.log(post?.show.mediaType === MediaType.MOVIE);
-
   const showQuery = useQuery({
     queryKey: ["show", post?.show.id],
     queryFn: async () => {

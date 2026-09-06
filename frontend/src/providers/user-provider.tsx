@@ -17,9 +17,12 @@ export default function UserProvider({
     queryFn: async () => {
       const response = await api.get<User>("/user");
       if (response.data) setUser(response.data);
+
+      return response
     },
     retry: false,
   });
 
+  
   return <UserContext value={[user, setUser, query]}>{children}</UserContext>;
 }

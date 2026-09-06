@@ -26,13 +26,17 @@ export default function PostsColumn({
   setSort: React.Dispatch<React.SetStateAction<"TOP" | "HOT" | "NEW">>;
 }) {
   return (
-    <div className="flex flex-col gap-4 w-175">
+    <div className="flex flex-col gap-4">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
           <p>{capitilize(sort.toLocaleLowerCase())}</p>
           <Popover>
             <PopoverTrigger
-              render={<ChevronDown className="translate-y-0.5" />}
+              render={
+                <Button variant="ghost">
+                  <ChevronDown className="translate-y-0.5" />
+                </Button>
+              }
             ></PopoverTrigger>
             <PopoverContent
               className="w-fit items-start gap-2"

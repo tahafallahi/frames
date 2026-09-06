@@ -25,11 +25,11 @@ function recursiveReplies(comment: CommentType, key: number): ReactElement {
   if (comment.repliesCount < 1) return <Comment key={key} comment={comment} />;
 
   return (
-    <>
+    <div key={key}>
       <Comment comment={comment} />
       <div className="pl-10 flex flex-col gap-3">
         {comment.replies.map((r, i) => recursiveReplies(r, i))}
       </div>
-    </>
+    </div>
   );
 }

@@ -35,8 +35,6 @@ export default function Trending({
     observer.observe(loadMoreRef.current!);
   });
 
-  console.log(showQuery.data);
-
   return (
     <>
       <div>
