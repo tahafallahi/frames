@@ -2,6 +2,8 @@ import UserControls from "./user-controls";
 import SearchBar from "./search-bar/search-bar";
 import { Link } from "react-router";
 import { useUser } from "@/contexts/user-context";
+import QueryWrapper from "@/components/query-wrapper/query-wrapper";
+import Skeleton from "@/components/skeleton/skeleton";
 
 export default function Header({ variant }: { variant?: "compact" }) {
   const [user, , userQuery] = useUser();
@@ -14,13 +16,22 @@ export default function Header({ variant }: { variant?: "compact" }) {
       {variant === "compact" ? null : (
         <div className="max-w-175 flex-1">
           <SearchBar />
-        </ div>
+        </div>
       )}
-      {userQuery.isSuccess ? (
-        <UserControls user={user} />
-      ) : (
-        <div>Loading...</div>
-      )}
+
+      <QueryWrapper
+        query={userQuery}
+        isEmpty={!user}
+        loadingPlaceHolder={
+          <div className="flex gap-6 shrink-0 justify-between items-center">
+            <Skeleton className="h-5 w-11"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+            <Skeleton className="h-10 w-10 rounded-full"/>
+          </div>
+        }
+      >
+        {userQuery.isSuccess && <UserControls user={user} />}
+      </QueryWrapper>
     </header>
   );
 }
