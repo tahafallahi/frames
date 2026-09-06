@@ -4,6 +4,7 @@ import { Badge } from "../ui/badge";
 
 import type { Post } from "@/types/post";
 import { Link } from "react-router";
+import { MediaType } from "@/types/show";
 
 export default function PostCard({
   post,
@@ -18,7 +19,7 @@ export default function PostCard({
         <div className="w-175 px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
           <div className="flex justify-between text-muted-foreground text-sm">
             <p>
-              {post.show.mediaType === "MOVIE" ? "Movie" : "TV Show"}:{" "}
+              {post.show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}:{" "}
               {post.show.title}
             </p>
             <div className="flex gap-8">
@@ -64,7 +65,7 @@ export default function PostCard({
     );
   } else if (variant === "full") {
     return (
-      <div className="bg-popover w-175 px-5 py-3 flex flex-col gap-8 border-l border-primary">
+      <div className="bg-popover px-5 py-3 flex flex-col gap-8 border-l border-primary">
         <div className="flex flex-col gap-2">
           <div>
             <h4 className="text-2xl font-bold">{post.title}</h4>

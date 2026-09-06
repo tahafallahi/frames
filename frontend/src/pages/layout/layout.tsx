@@ -9,7 +9,7 @@ export default function Layout() {
       <div className="grid grid-cols-[300px_1fr] items-start justify-items-center">
         <SideBar selectedFeed="All" />
         <div className="pt-6" >
-          <div className="grid grid-cols-[1fr_fit-content(100ch)] items-start justify-items gap-12">
+          <div className="grid grid-cols-[minmax(100px,700px)_minmax(100px,300px)] items-start justify-items gap-12">
             <Outlet />
           </div>
         </div>

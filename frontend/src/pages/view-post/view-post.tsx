@@ -10,6 +10,7 @@ import CommentSection from "@/components/comment-section/comment-section";
 import type { Post } from "@/types/post";
 import { MediaType, type Show } from "@/types/show";
 import type { Comment } from "@/types/comment";
+import Skeleton from "@/components/skeleton/skeleton";
 
 export default function ViewPost() {
   const { postId } = useParams();
@@ -23,14 +24,18 @@ export default function ViewPost() {
 
   const post = postQuery.data?.data;
 
-  console.log(post?.show.mediaType === MediaType.MOVIE)
+  console.log(post?.show.mediaType === MediaType.MOVIE);
 
   const showQuery = useQuery({
     queryKey: ["show", post?.show.id],
     queryFn: async () => {
-      return (await api.get<Show>(`/shows/${post?.show.mediaType === MediaType.MOVIE? "movie": "tv"}/${post?.show.tmdbId}`)).data;
+      return (
+        await api.get<Show>(
+          `/shows/${post?.show.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${post?.show.tmdbId}`,
+        )
+      ).data;
     },
-    enabled: () => postQuery.isSuccess,
+    enabled: postQuery.isSuccess,
   });
 
   const commentsQuery = useQuery({
@@ -38,30 +43,65 @@ export default function ViewPost() {
     queryFn: async () => {
       return await api.get<Comment[]>("/posts/" + post?.id + "/comments");
     },
-    enabled: () => postQuery.isSuccess,
+    enabled: postQuery.isSuccess,
   });
 
   return (
     <>
-      <div className="flex flex-col gap-10 pt-5">
-        <QueryWrapper query={postQuery}>
+      <div className="flex flex-col gap-10">
+        <QueryWrapper
+          query={postQuery}
+          isEmpty={!!(postQuery.data && !Object.keys(postQuery.data).length)}
+          loadingPlaceHolder={<Skeleton className="h-100" />}
+        >
           {post && <PostCard variant={"full"} post={post}></PostCard>}
         </QueryWrapper>
-        <QueryWrapper query={commentsQuery}>
+        <QueryWrapper
+          query={commentsQuery}
+          isEmpty={
+            !!(commentsQuery.data && !Object.keys(commentsQuery.data).length)
+          }
+          loadingPlaceHolder={
+            <div className="flex flex-col gap-4">
+              {Array(10)
+                .fill(null)
+                .map((s, i) => (
+                  <Skeleton key={i} />
+                ))}
+            </div>
+          }
+        >
           {commentsQuery.isSuccess && (
-            <CommentSection comments={commentsQuery.data.data} commentsCount={post!.commentsCount}/>
+            <CommentSection
+              comments={commentsQuery.data.data}
+              commentsCount={post!.commentsCount}
+            />
           )}
         </QueryWrapper>
       </div>
-      <div className="pt-5">
-
-      <QueryWrapper query={showQuery}>
-        {showQuery.isSuccess && (
-          <Link to={`/show/${showQuery.data.mediaType === MediaType.MOVIE ? "movie": "tv"}/${showQuery.data.tmdbId}`}>
-          <ShowCard show={showQuery.data} variant="detailed" />
-          </Link>
-        )}
-      </QueryWrapper>
+      <div>
+        <QueryWrapper
+          query={showQuery}
+          isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
+          loadingPlaceHolder={
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-6 w-50" />
+              <Skeleton className="h-100" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
+            </div>
+          }
+        >
+          {showQuery.isSuccess && (
+            <Link
+              to={`/show/${showQuery.data.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${showQuery.data.tmdbId}`}
+            >
+              <ShowCard show={showQuery.data} variant="detailed" />
+            </Link>
+          )}
+        </QueryWrapper>
       </div>
     </>
   );

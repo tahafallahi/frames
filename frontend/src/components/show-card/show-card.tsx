@@ -12,8 +12,9 @@ export default function ShowCard({
 }) {
   if (variant === "detailed") {
     return (
-      <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
+      <div className="flex flex-col gap-3">
         <h6 className="text-2xl">{show.title}</h6>
+      <div className="px-5 py-3 flex flex-col gap-5 border-l">
         <img
           src={
             show.posterPath
@@ -33,10 +34,11 @@ export default function ShowCard({
           </Button>
         </div>
       </div>
+      </div>
     );
   } else if (variant === "detailedOmitTitle") {
     return (
-      <div className="w-75 px-5 py-3 flex flex-col gap-5 border-l">
+      <div className="px-5 py-3 flex flex-col gap-5 border-l">
         <img
           src={
             show.posterPath
