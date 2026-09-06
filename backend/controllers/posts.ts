@@ -35,7 +35,7 @@ export async function getPosts(req: Request, res: Response) {
     return res.status(400).json({
       error: "tagFilter should be of type object",
     });
-  } 
+  }
 
   if (mediaFilter && typeof mediaFilter !== "object") {
     return res.status(400).json({
@@ -74,10 +74,14 @@ export async function getPosts(req: Request, res: Response) {
             tags: { some: { name: { in: tagFilter as string[] } } },
           }),
           ...(mediaFilter && {
-            show: { mediaType: { in: mediaFilter as string[]  } },
+            show: { mediaType: { in: mediaFilter as string[] } },
           }),
-          ...(userFilter && { authorId: {in: userFilter as string[] } }),
-          ...(showFilter && { showId: {in: showFilter as string[] } }),
+          ...(userFilter && { authorId: { in: userFilter as string[] } }),
+          ...(showFilter && {
+            show: {tmdbId: {
+              in: showFilter.map((f: string) => Number(f)),
+            },}
+          }),
         },
       },
       skip: (Number(page) - 1) * configs.PAGE_LENGTH,

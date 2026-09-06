@@ -2,6 +2,7 @@ import Filter from "@/components/filter/filter";
 import PostsColumn from "@/components/posts-column/posts-column";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import ShowCard from "@/components/show-card/show-card";
+import Skeleton from "@/components/skeleton/skeleton";
 import { api } from "@/lib/api";
 import type { SelectedFilters } from "@/types/filter";
 import type { Post } from "@/types/post";
@@ -24,7 +25,13 @@ export default function Show() {
     queryFn: async () =>
       (
         await api.get<Post[]>(
-          `/posts?sort=${qSort}&page=1&showFilter=${showId}&tagFilter=${selectedFilters.Tags.join(",")}`,
+          `/posts`,
+          {params: {
+            sort: qSort,
+            page: 1,
+            showFilter: [showId],
+            tagFilter: selectedFilters.Tags
+          }}
         )
       ).data,
   });
@@ -64,22 +71,27 @@ export default function Show() {
         />
       </div>
       <div className="flex flex-col gap-12 pt-12">
-        <QueryWrapper query={showQuery}>
-          {showQuery.data ? (
+        <QueryWrapper
+          query={showQuery}
+          isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
+          loadingPlaceHolder={
+            <div>
+              <Skeleton />
+            </div>
+          }
+        >
+          {showQuery.isSuccess ? (
             <ShowCard show={showQuery.data} variant="detailedOmitTitle" />
           ) : (
             <p>empty</p>
           )}
         </QueryWrapper>
-        <QueryWrapper query={tagQuery}>
-          {tagQuery.data && (
-            <Filter
-              filters={filter}
-              selectedFilters={selectedFilters}
-              setSelectedFilters={setSelectedFilters}
-            />
-          )}
-        </QueryWrapper>
+        <Filter
+          query={tagQuery}
+          filters={filter}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
       </div>
     </>
   );
