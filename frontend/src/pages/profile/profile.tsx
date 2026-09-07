@@ -5,7 +5,6 @@ import { useParams } from "react-router";
 
 import PostsColumn from "@/components/posts-column/posts-column";
 import ProfileColumn from "@/components/profile-column/profile-column";
-import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 
 import type { Post } from "@/types/post";
 
@@ -19,7 +18,14 @@ export default function Profile() {
     queryFn: async () =>
       (
         await api.get<Post[]>(
-          `/posts?sort=${qSort}&page=1&userFilter=${userId}`,
+          `/posts`,
+          {
+            params:{
+              sort: qSort,
+              page: 1,
+              userFilter: [userId]
+            }
+          },
         )
       ).data,
   });
@@ -29,21 +35,14 @@ export default function Profile() {
   return (
     <>
       <div>
-        <QueryWrapper
+        <PostsColumn
           query={postsQuery}
-          emptyStateMessage={"There are no posts."}
-        >
-          {posts?.length !== 0? (
-            <PostsColumn
-              posts={posts}
-              title={posts?.length + " Posts"}
-              sort={sort}
-              setSort={setSort}
-            />
-          ): <p>empty</p>}
-        </QueryWrapper>
+          title={posts?.length + " Posts"}
+          sort={sort}
+          setSort={setSort}
+        />
       </div>
-      <div >
+      <div>
         <ProfileColumn userId={userId!} />
       </div>
     </>

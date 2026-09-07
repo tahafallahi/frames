@@ -6,6 +6,7 @@ import QueryWrapper from "../query-wrapper/query-wrapper";
 import { useUser } from "@/contexts/user-context";
 import FavoriteShows from "../favorite-shows/favorite-shows";
 import { Button } from "../ui/button";
+import Skeleton from "../skeleton/skeleton";
 
 export default function ProfileColumn({ userId }: { userId: string }) {
   const [user] = useUser();
@@ -20,11 +21,18 @@ export default function ProfileColumn({ userId }: { userId: string }) {
       <div className="flex flex-col gap-4">
         <h3 className="text-2xl">Profile</h3>
         <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
-          <QueryWrapper query={userQuery}>
+          <QueryWrapper
+            query={userQuery}
+            isEmpty={!!(userQuery.data && !Object.keys(userQuery.data))}
+            loadingPlaceHolder={
+              <div>
+                <Skeleton />
+              </div>
+            }
+          >
             {userQuery.data && (
               <ProfileCard user={userQuery.data} variant="detailed" />
             )}
-          </QueryWrapper>
 
           {user && userQuery.data && user.id === userQuery.data.id ? (
             <div className="flex flex-col gap-2 px-5 py-2 border-l">
@@ -39,6 +47,7 @@ export default function ProfileColumn({ userId }: { userId: string }) {
           {userQuery.data?.favorites && (
             <FavoriteShows shows={userQuery.data.favorites} />
           )}
+          </QueryWrapper>
         </div>
       </div>
     </>

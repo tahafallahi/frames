@@ -1,7 +1,6 @@
 import Filter from "@/components/filter/filter";
 import FollowingColumn from "@/components/following-column/following-column";
 import PostsColumn from "@/components/posts-column/posts-column";
-import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
 import type { SelectedFilters } from "@/types/filter";
@@ -39,14 +38,13 @@ export default function FollowingsFeed() {
     },
   });
 
-  const tagsResponse = useQuery({
+  const tagQuery = useQuery({
     queryKey: ["tags"],
     queryFn: async () =>
       (await api.get<{ id: number; name: string }[]>(`/tags`)).data,
   });
 
-  
-  const filter = tagsResponse.data
+  const filter = tagQuery.data
     ? [
         {
           title: "Content",
@@ -54,7 +52,7 @@ export default function FollowingsFeed() {
         },
         {
           title: "Tags",
-          items: tagsResponse.data.map((t) => {
+          items: tagQuery.data.map((t) => {
             return t.name;
           }),
         },
@@ -79,8 +77,14 @@ export default function FollowingsFeed() {
           title="Your Followings' posts"
         />
       </div>
-      <div>{user && <FollowingColumn followings={user?.followings} />}
-      <Filter filters={filter} selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+      <div>
+        {user && <FollowingColumn followings={user?.followings} />}
+        <Filter
+          query={tagQuery}
+          filters={filter}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+        />
       </div>
     </>
   );

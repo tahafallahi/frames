@@ -27,8 +27,7 @@ export default function ProfileCard({
           <div className="flex flex-col">
             <p className="text-2xl wrap-anywhere">{user.username}</p>
             <p className="text-xs text-muted-foreground">
-              Likes recieved:{" "}
-              {thousandToK(user.likesCount)}
+              Likes recieved: {thousandToK(user.likesCount)}
             </p>
           </div>
         </div>
@@ -36,9 +35,7 @@ export default function ProfileCard({
           <p>Followers: {user.follwersCount}</p>
           <p>Following: {user.followingsCount}</p>
         </div>
-        <p className="text-muted-foreground">
-          {user.bio}
-        </p>
+        <p className="text-muted-foreground">{user.bio}</p>
       </div>
     );
   } else if (variant === "full") {
@@ -47,15 +44,14 @@ export default function ProfileCard({
         <div className="shrink-0">
           <img
             className="rounded-full w-13"
-            src={user.profilePath}
+            src={user.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
             alt="User's profile picture"
           />
         </div>
         <div className="flex flex-col">
           <p className="text-2xl wrap-anywhere">{user.username}</p>
           <p className="text-xs text-muted-foreground">
-            Likes recieved:{" "}
-            {user.likes < 1000 ? user.likes : user.likes / 1000 + "k"}
+            Likes recieved: {thousandToK(user.likesCount)}
           </p>
         </div>
       </div>
@@ -66,11 +62,7 @@ export default function ProfileCard({
         <div className="shrink-0">
           <img
             className="rounded-full w-8 "
-            src={
-              user.profilePath
-                ? user.profilePath
-                : import.meta.env.VITE_PROFILE_PLACEHOLDER
-            }
+            src={user.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
             alt="User's profile picture"
           />
         </div>

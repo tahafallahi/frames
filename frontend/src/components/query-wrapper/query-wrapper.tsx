@@ -21,7 +21,7 @@ export default function QueryWrapper({
   if (isEmpty)
     return (
       emptyStateMessage ?? (
-        <p className="pt-10 text-center text-muted-foreground">"empty"</p>
+        <p className="pt-10 text-center text-muted-foreground">empty</p>
       )
     );
   return children;
