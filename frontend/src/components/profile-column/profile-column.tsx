@@ -26,7 +26,20 @@ export default function ProfileColumn({ userId }: { userId: string }) {
             isEmpty={!!(userQuery.data && !Object.keys(userQuery.data))}
             loadingPlaceHolder={
               <div>
-                <Skeleton />
+                <div className="flex gap-4">
+                  <Skeleton className="rounded-full w-13 h-13" />
+                  <div className="flex flex-col gap-2 justify-center">
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-3 w-30" />
+                  </div>
+                </div>
+                <Skeleton className="h-3  mt-2 ml-2" />
+                <div className="mt-6">
+                  <Skeleton className="h-3  mt-2 ml-2" />
+                  <Skeleton className="h-3  mt-2 ml-2" />
+                  <Skeleton className="h-3  mt-2 ml-2" />
+                </div>
+                <Skeleton className="h-10  mt-7 ml-2" />
               </div>
             }
           >
@@ -34,19 +47,19 @@ export default function ProfileColumn({ userId }: { userId: string }) {
               <ProfileCard user={userQuery.data} variant="detailed" />
             )}
 
-          {user && userQuery.data && user.id === userQuery.data.id ? (
-            <div className="flex flex-col gap-2 px-5 py-2 border-l">
-              <p>Change profile picture</p>
-              <p>Change username</p>
-              <p>Change bio</p>
-            </div>
-          ) : (
-            <Button>Follow</Button>
-          )}
+            {user && userQuery.data && user.id === userQuery.data.id ? (
+              <div className="flex flex-col gap-2 px-5 py-2 border-l">
+                <p>Change profile picture</p>
+                <p>Change username</p>
+                <p>Change bio</p>
+              </div>
+            ) : (
+              <Button>Follow</Button>
+            )}
 
-          {userQuery.data?.favorites && (
-            <FavoriteShows shows={userQuery.data.favorites} />
-          )}
+            {!!userQuery.data?.favorites?.length && (
+              <FavoriteShows shows={userQuery.data.favorites} />
+            )}
           </QueryWrapper>
         </div>
       </div>

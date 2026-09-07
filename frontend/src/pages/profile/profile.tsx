@@ -37,7 +37,7 @@ export default function Profile() {
       <div>
         <PostsColumn
           query={postsQuery}
-          title={posts?.length + " Posts"}
+          title={(posts?.length ?? "") + " Posts"}
           sort={sort}
           setSort={setSort}
         />
