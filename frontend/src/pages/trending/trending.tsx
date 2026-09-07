@@ -35,10 +35,10 @@ export default function Trending({
       entries.forEach((entry) => {
         if (entry.isIntersecting) void showQuery.fetchNextPage();
       });
-    });
+    }, {rootMargin: "0px 0px 1500px 0px "});
 
     observer.observe(loadMoreRef.current!);
-  });
+  }, []);
 
   return (
     <>
