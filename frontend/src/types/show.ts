@@ -22,3 +22,8 @@ export interface ApiSearchShow {
   releaseDate: string;
   mediaType: MediaType;
 }
+
+export interface TrendingTitles {
+  movies: {title: string, tmdbId: number}[]
+  tvs: {title: string, tmdbId: number}[]
+}

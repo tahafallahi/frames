@@ -23,3 +23,27 @@ export function getTrendingShows(mediaType: MediaType) {
     }
   };
 }
+
+export async function getTrendingShowsTitle(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const { page } = req.query;
+
+  if (page && typeof page !== "string") {
+    return res.status(400).json({ error: "page query must be of type string" });
+  }
+
+  try {
+    const movies = (await getTrendingMoviesTmdb(Number(page) || 1)).map(
+      (s) => ({ title: s.title, tmdbId: s.tmdbId }),
+    );
+    const tvs = (await getTrendingTvTmdb(Number(page) || 1)).map(
+      (s) => ({ title: s.title, tmdbId: s.tmdbId }),
+    );
+    return res.json({ movies, tvs });
+  } catch (error) {
+    next(error);
+  }
+}
