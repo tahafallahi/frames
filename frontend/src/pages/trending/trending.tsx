@@ -1,16 +1,16 @@
-import QueryWrapper from "@/components/query-wrapper/query-wrapper";
-import ShowsColumn from "@/components/shows-column/shows-column";
-import { api } from "@/lib/api";
-import type { Show } from "@/types/show";
+import { useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
+import { api } from "@/lib/api";
+
+import ShowsColumn from "@/components/shows-column/shows-column";
+
+import type { Show } from "@/types/show";
 
 export default function Trending({
-  mediaTypeProp,
+  mediaType,
 }: {
-  mediaTypeProp: "MOVIE" | "TV_SHOW";
+  mediaType: "MOVIE" | "TV_SHOW";
 }) {
-  const [mediaType, setMediaType] = useState(mediaTypeProp);
   const loadMoreRef = useRef(null);
 
   const showQuery = useInfiniteQuery({
@@ -20,7 +20,12 @@ export default function Trending({
     queryFn: async ({ pageParam }) =>
       (
         await api.get<Show[]>(
-          `/trending/${mediaType === "MOVIE" ? "movie" : "tv"}?page=${pageParam}`,
+          `/trending/${mediaType === "MOVIE" ? "movie" : "tv"}`,
+          {
+            params: {
+              page: pageParam,
+            },
+          },
         )
       ).data,
   });
@@ -28,7 +33,7 @@ export default function Trending({
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) void showQuery.fetchNextPage() ;
+        if (entry.isIntersecting) void showQuery.fetchNextPage();
       });
     });
 
@@ -38,15 +43,7 @@ export default function Trending({
   return (
     <>
       <div>
-        <QueryWrapper query={showQuery}>
-          {showQuery.data && (
-            <ShowsColumn
-              shows={showQuery.data.pages.flat()}
-              mediaType={mediaType}
-              setMediaType={setMediaType}
-            />
-          )}
-        </QueryWrapper>
+        <ShowsColumn query={showQuery} mediaType={mediaType} />
         <div ref={loadMoreRef}></div>
       </div>
     </>

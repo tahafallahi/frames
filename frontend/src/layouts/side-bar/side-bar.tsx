@@ -15,13 +15,13 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
     <div className="sticky top-18 h-[calc(100dvh-72px)] w-75 p-10 border-r text-2xl flex flex-col gap-10">
       <div className="flex flex-col gap-1">
         {tabs.map(([t, l], i) => (
-          <Link to={l}>
+          <Link to={l} key={i}>
             {t === selectedFeed ? (
-              <h3 key={i} className="text-primary font-bold">
+              <h3  className="text-primary font-bold">
                 {t}
               </h3>
             ) : (
-              <h3 key={i} className="hover:text-primary">
+              <h3 className="hover:text-primary">
                 {t}
               </h3>
             )}

@@ -53,11 +53,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/trending/movie",
-        element: <Trending mediaTypeProp={"MOVIE"}/>
+        element: <Trending mediaType={"MOVIE"}/>
       },
       {
         path: "/trending/tv",
-        element: <Trending mediaTypeProp={"TV_SHOW"}/>
+        element: <Trending mediaType={"TV_SHOW"}/>
       },
       {
         path: "/followings",
