@@ -17,7 +17,7 @@ export default function ShowDisplay({ shows, setOpen }: Props) {
         >
           <div className="bg-background hover:ring-2 ring-primary">
             <img
-              className="w-full h-auto aspect-9/16"
+              className="w-full h-auto aspect-2/3"
               src={
                 show.posterPath
                   ? "https://image.tmdb.org/t/p/w154/" + show.posterPath

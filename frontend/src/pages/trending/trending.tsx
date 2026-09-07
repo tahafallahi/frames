@@ -5,6 +5,7 @@ import { api } from "@/lib/api";
 import ShowsColumn from "@/components/shows-column/shows-column";
 
 import type { Show } from "@/types/show";
+import Skeleton from "@/components/skeleton/skeleton";
 
 export default function Trending({
   mediaType,
@@ -13,11 +14,11 @@ export default function Trending({
 }) {
   const loadMoreRef = useRef(null);
 
-  const showQuery = useInfiniteQuery({
+  const showQuery = useInfiniteQuery<Show[], Error>({
     queryKey: ["show", mediaType],
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageparam) => lastPageparam + 1,
-    queryFn: async ({ pageParam }) =>
+    getNextPageParam: (lastPage, allPages, lastPageParam) => lastPageParam + 1,
+    queryFn: async ({ pageParam }): Promise<Show[]> =>
       (
         await api.get<Show[]>(
           `/trending/${mediaType === "MOVIE" ? "movie" : "tv"}`,
@@ -31,20 +32,32 @@ export default function Trending({
   });
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) void showQuery.fetchNextPage();
-      });
-    }, {rootMargin: "0px 0px 1500px 0px "});
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) void showQuery.fetchNextPage();
+        });
+      },
+      { rootMargin: "0px 0px 1500px 0px " },
+    );
 
     observer.observe(loadMoreRef.current!);
   }, []);
 
   return (
     <>
-      <div>
+      <div className="col-span-2">
         <ShowsColumn query={showQuery} mediaType={mediaType} />
         <div ref={loadMoreRef}></div>
+        {showQuery.isFetchingNextPage && (
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2">
+            {Array(4)
+              .fill(null)
+              .map((x, i) => (
+                <Skeleton key={i} className="h-auto w-full aspect-2/3" />
+              ))}
+          </div>
+        )}
       </div>
     </>
   );

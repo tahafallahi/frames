@@ -22,7 +22,7 @@ export default function ShowCard({
               : import.meta.env.VITE_MOVIE_PLACEHOLDER
           }
           alt={"Poster of " + show.title}
-          className="w-300"
+          className="w-full h-auto aspect-2/3"
         />
         <Details show={show} />
         <div className="flex flex-col gap-1">
@@ -46,7 +46,7 @@ export default function ShowCard({
               : import.meta.env.VITE_MOVIE_PLACEHOLDER
           }
           alt={"Poster of " + show.title}
-          className="w-75"
+          className="w-full h-auto aspect-2/3"
         />
         <Details show={show} />
         <Button className="h-13 font-bold">Add to Your Favorites</Button>
@@ -54,10 +54,7 @@ export default function ShowCard({
     );
   } else if (variant === "compact") {
     return (
-      <div className="relative bg-popover w-55 flex flex-col">
-        {/* <h6 className="absolute top-5 left-5 text-xl font-bold">
-          {show.title}
-        </h6> */}
+      <div className="relative bg-popover flex flex-col h-full">
         <img
           src={
             show.posterPath
@@ -65,9 +62,12 @@ export default function ShowCard({
               : import.meta.env.VITE_MOVIE_PLACEHOLDER
           }
           alt={"Poster of " + show.title}
-          className="w-300"
+          className="w-full h-auto aspect-2/3"
         />
-        <div className="p-3 ">
+        <div className="p-3 flex flex-col gap-3">
+        <h6 className="text-xl font-bold">
+          {show.title}
+        </h6>
           <Details show={show} />
         </div>
       </div>
