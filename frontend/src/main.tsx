@@ -17,6 +17,7 @@ import Profile from "./pages/profile/profile";
 import Show from "./pages/show/show";
 import Trending from "./pages/trending/trending";
 import FollowingsFeed from "./pages/followings-feed/followings-feed";
+import CreatePost from "./pages/create-post/create-post";
 
 const router = createBrowserRouter([
   {
@@ -53,16 +54,20 @@ const router = createBrowserRouter([
       },
       {
         path: "/trending/movie",
-        element: <Trending mediaType={"MOVIE"}/>
+        element: <Trending mediaType={"MOVIE"} />,
       },
       {
         path: "/trending/tv",
-        element: <Trending mediaType={"TV_SHOW"}/>
+        element: <Trending mediaType={"TV_SHOW"} />,
       },
       {
         path: "/followings",
-        element: <FollowingsFeed />
-      }
+        element: <FollowingsFeed />,
+      },
+      {
+        path: "/create",
+        element: <CreatePost />,
+      },
     ],
   },
 ]);

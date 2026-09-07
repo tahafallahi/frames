@@ -24,15 +24,14 @@ export default function Show() {
     queryKey: ["posts", qSort, showId, selectedFilters],
     queryFn: async () =>
       (
-        await api.get<Post[]>(
-          `/posts`,
-          {params: {
+        await api.get<Post[]>(`/posts`, {
+          params: {
             sort: qSort,
             page: 1,
             showFilter: [showId],
-            tagFilter: selectedFilters.Tags
-          }}
-        )
+            tagFilter: selectedFilters.Tags,
+          },
+        })
       ).data,
   });
 
@@ -75,8 +74,12 @@ export default function Show() {
           query={showQuery}
           isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
           loadingPlaceHolder={
-            <div>
-              <Skeleton />
+            <div className="flex flex-col gap-2">
+              <Skeleton className="h-100" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
+              <Skeleton variant="line" />
             </div>
           }
         >
