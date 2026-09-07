@@ -1,5 +1,4 @@
 import { useUser } from "@/contexts/user-context";
-import mockShows from "@/testing/mocks/shows";
 import { Link } from "react-router";
 
 export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
@@ -33,14 +32,14 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           <h3 className="hover:text-primary">Movies</h3>
         </Link>
         <div className="pl-4 flex flex-col gap-1 text-xl">
-          {mockShows.map((s, i) => (
+          {/* {mockShows.map((s, i) => (
             <p
               className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis "
               key={i}
             >
               {s.name}
             </p>
-          ))}
+          ))} */}
           <Link to="/" className="text-secondary underline">
             See more
           </Link>
@@ -51,14 +50,14 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           <h3 className="hover:text-primary">TV Shows</h3>
         </Link>
         <div className="pl-4 flex flex-col gap-1 text-xl">
-          {mockShows.map((s, i) => (
+          {/* {mockShows.map((s, i) => (
             <p
               className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis"
               key={i}
             >
               {s.name}
             </p>
-          ))}
+          ))} */}
           <Link to="/" className="text-secondary underline">
             See more
           </Link>
