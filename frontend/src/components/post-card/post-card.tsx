@@ -54,7 +54,7 @@ export default function PostCard({
                 <p>share</p>
               </div>
             </div>
-            <div className="flex content-center">
+            <div className="flex content-center gap-2">
               {post.tags.map((t, i) => (
                 <Badge variant={"outline"} key={i}>{t.name}</Badge>
               ))}
@@ -90,7 +90,7 @@ export default function PostCard({
               <p>share</p>
             </div>
           </div>
-          <div className="flex content-center">
+          <div className="flex content-center gap-2">
             {post.tags.map((t, i) => (
               <Badge variant={"outline"} key={i}>{t.name}</Badge>
             ))}

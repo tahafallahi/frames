@@ -1,3 +1,5 @@
+import QueryWrapper from "@/components/query-wrapper/query-wrapper";
+import Skeleton from "@/components/skeleton/skeleton";
 import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
 import type { TrendingTitles } from "@/types/show";
@@ -37,19 +39,33 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           <h3 className="hover:text-primary">Movies</h3>
         </Link>
         <div className="pl-4 flex flex-col gap-1 text-xl">
-          {trendingQuery.data?.movies.slice(0, 6).map((s, i) => (
-            <Link to={`/show/movie/${s.tmdbId}`}>
-              <p
-                className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis "
-                key={i}
-              >
-                {s.title}
-              </p>
-            </Link>
-          ))}
+          <QueryWrapper
+            query={trendingQuery}
+            isEmpty={!trendingQuery.data?.movies.length}
+            loadingPlaceHolder={
+              <div className="flex flex-col gap-3">
+                {Array(7)
+                  .fill(null)
+                  .map((x, i) => (
+                    <Skeleton variant="line" key={i} />
+                  ))}
+              </div>
+            }
+          >
+            {trendingQuery.data?.movies.slice(0, 6).map((s, i) => (
+              <Link to={`/show/movie/${s.tmdbId}`}>
+                <p
+                  className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis "
+                  key={i}
+                >
+                  {s.title}
+                </p>
+              </Link>
+            ))}
           <Link to="/trending/movie" className="text-secondary underline">
             See more
           </Link>
+          </QueryWrapper>
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -57,6 +73,20 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           <h3 className="hover:text-primary">TV Shows</h3>
         </Link>
         <div className="pl-4 flex flex-col gap-1 text-xl">
+          <QueryWrapper
+            query={trendingQuery}
+            isEmpty={!trendingQuery.data?.movies.length}
+            loadingPlaceHolder={
+              <div className="flex flex-col gap-3">
+                {Array(7)
+                  .fill(null)
+                  .map((x, i) => (
+                    <Skeleton variant="line" key={i} />
+                  ))}
+              </div>
+            }
+          >
+
           {trendingQuery.data?.tvs.slice(0, 6).map((s, i) => (
             <Link to={`/show/tv/${s.tmdbId}`}>
               <p
@@ -70,6 +100,7 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           <Link to="/trending/tv" className="text-secondary underline">
             See more
           </Link>
+          </QueryWrapper>
         </div>
       </div>
     </div>
