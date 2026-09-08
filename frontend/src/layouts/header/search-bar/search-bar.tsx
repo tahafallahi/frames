@@ -8,13 +8,14 @@ import {
   PopoverHeader,
   PopoverTitle,
 } from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import ShowDisplay from "./show-display";
 import UserDisplay from "./user-display";
 import PostDisplay from "./post-display";
 
 import type { ApiSearchResponse } from "@/types/search";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { SearchIcon } from "lucide-react";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -50,15 +51,19 @@ export default function SearchBar() {
 
   return (
     <>
-      <Input
-        ref={inputRef}
-        className="h-11 px-5 border-primary rounded-full focus-visible:ring-ring"
-        autoComplete="off"
-        placeholder="Search"
-        onChange={handleInput}
-        onClick={(e) => e.stopPropagation()}
-        onFocus={() => input && setOpen(true)}
-      ></Input>
+      <InputGroup className="h-11 px-4 border-primary rounded-full">
+        <InputGroupInput
+          ref={inputRef}
+          autoComplete="off"
+          placeholder="Search"
+          onChange={handleInput}
+          onClick={(e) => e.stopPropagation()}
+          onFocus={() => input && setOpen(true)}
+        />
+        <InputGroupAddon align="inline-end">
+          <SearchIcon />
+        </InputGroupAddon>
+      </InputGroup>
 
       <Popover open={open}>
         <PopoverContent
@@ -86,7 +91,7 @@ export default function SearchBar() {
             }
             emptyStateMessage={
               <div className="pb-10 pt-10 text-center text-muted-foreground">
-                {"There were results found for" + input}
+                {`There were results found for: "${input}"`}
               </div>
             }
             loadingPlaceHolder={"Loading..."}

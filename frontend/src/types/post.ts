@@ -29,3 +29,9 @@ export interface ApiSearchPost {
   showTitle: string;
   likes: number;
 }
+
+export interface PostForm {
+  title: string;
+  showTitle: string;
+  content: string;
+}
