@@ -109,7 +109,7 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
       picturePath: true,
       tags: { select: { name: true } },
       createdAt: true,
-      author: { select: { username: true, profilePath: true } },
+      author: { select: { id: true, username: true, profilePath: true } },
       show: {
         select: {
           tmdbId: true,
@@ -152,7 +152,7 @@ export async function getComments(
     select: {
       id: true,
       content: true,
-      author: { select: { username: true, profilePath: true } },
+      author: { select: { id: true, username: true, profilePath: true } },
       parentId: true,
       createdAt: true,
       updatedAt: true,

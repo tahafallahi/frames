@@ -1,6 +1,7 @@
 import type { Comment } from "@/types/comment";
 import { thousandToK } from "@/utils/general";
 import { MessageCircle, Reply, ThumbsDown, ThumbsUp } from "lucide-react";
+import { Link } from "react-router";
 
 export default function Comment({ comment }: { comment: Comment }) {
   return (
@@ -14,7 +15,9 @@ export default function Comment({ comment }: { comment: Comment }) {
       </div>
       <div className="flex flex-col gap-5 text-muted-foreground">
         <div className="flex flex-col gap-2">
-          <p className="font-bold">{comment.author.username}</p>
+          <Link to={`/profile/${comment.author.id}`} >
+          <p className="font-bold hover:text-primary">{comment.author.username}</p>
+          </Link>
           <p>{comment.content}</p>
         </div>
         <div className="flex  gap-8">

@@ -3,7 +3,7 @@ import type { User } from "./user";
 export interface Comment {
   id: string;
   content: string;
-  author: Pick<User, "username" | "profilePath">
+  author: Pick<User, "id" |"username" | "profilePath">
   replies: Comment[];
   createdAt: Date;
   updatedAt: Date;

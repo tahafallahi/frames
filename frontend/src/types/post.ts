@@ -8,6 +8,7 @@ export interface Post {
   tags: { name: string }[];
   createdAt: string;
   author: {
+    id: string;
     username: string;
     profilePath: string;
   };

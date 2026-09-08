@@ -56,7 +56,9 @@ export default function PostCard({
             </div>
             <div className="flex content-center gap-2">
               {post.tags.map((t, i) => (
-                <Badge variant={"outline"} key={i}>{t.name}</Badge>
+                <Badge variant={"outline"} key={i}>
+                  {t.name}
+                </Badge>
               ))}
             </div>
           </div>
@@ -69,7 +71,9 @@ export default function PostCard({
         <div className="flex flex-col gap-2">
           <div>
             <h4 className="text-2xl font-bold">{post.title}</h4>
-            <p className="text-sm">@{post.author.username}</p>
+            <Link to={`/profile/${post.author.id}`} >
+              <p className="text-sm hover:text-primary w-fit">@{post.author.username}</p>
+            </Link>
           </div>
           <p className="text-muted-foreground">{post.content}</p>
         </div>
@@ -92,7 +96,9 @@ export default function PostCard({
           </div>
           <div className="flex content-center gap-2">
             {post.tags.map((t, i) => (
-              <Badge variant={"outline"} key={i}>{t.name}</Badge>
+              <Badge variant={"outline"} key={i}>
+                {t.name}
+              </Badge>
             ))}
           </div>
         </div>

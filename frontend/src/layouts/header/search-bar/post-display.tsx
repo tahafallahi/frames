@@ -3,6 +3,7 @@ import type { ApiSearchPost } from "@/types/post";
 import { MediaType } from "@/types/show";
 import { thousandToK } from "@/utils/general";
 import { ThumbsUp } from "lucide-react";
+import { Link } from "react-router";
 
 interface Props {
   posts: ApiSearchPost[] | undefined;
@@ -13,7 +14,9 @@ export default function PostDisplay({ posts, setOpen }: Props) {
   return (
     <div className="flex flex-col gap-2">
       {posts?.map((p, i) => (
-        <SlimCard key={i} className="flex">
+        <Link to={`/posts/${p.id}`} key={i} onClick={() => setOpen(false)}>
+
+        <SlimCard className="flex hover:ring-1 ring-primary">
           <div className="flex-1">
             <p className="text-foreground text-xl ">{p.title}</p>
             <p>
@@ -28,6 +31,7 @@ export default function PostDisplay({ posts, setOpen }: Props) {
             </p>
           </div>
         </SlimCard>
+        </ Link> 
       ))}
     </div>
   );
