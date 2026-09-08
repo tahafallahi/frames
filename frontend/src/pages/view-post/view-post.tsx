@@ -93,11 +93,8 @@ export default function ViewPost() {
           }
         >
           {showQuery.isSuccess && (
-            <Link
-              to={`/show/${showQuery.data.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${showQuery.data.tmdbId}`}
-            >
+            
               <ShowCard show={showQuery.data} variant="detailed" />
-            </Link>
           )}
         </QueryWrapper>
       </div>

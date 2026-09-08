@@ -1,7 +1,8 @@
 import Details from "./details";
 import { Button } from "../ui/button";
 import { capitilize } from "@/utils/general";
-import type { ApiSearchShow, Show } from "@/types/show";
+import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
+import { Link } from "react-router";
 
 export default function ShowCard({
   show,
@@ -13,17 +14,25 @@ export default function ShowCard({
   if (variant === "detailed") {
     return (
       <div className="flex flex-col gap-3">
-        <h6 className="text-2xl">{show.title}</h6>
+        <Link
+          to={`/show/${show.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${show.tmdbId}`}
+        >
+          <h6 className="text-2xl hover:text-primary">{show.title}</h6>
+        </Link>
         <div className="px-5 py-3 flex flex-col gap-5 border-l">
-          <img
-            src={
-              show.posterPath
-                ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
-                : import.meta.env.VITE_MOVIE_PLACEHOLDER
-            }
-            alt={"Poster of " + show.title}
-            className="w-full h-auto aspect-2/3"
-          />
+          <Link
+            to={`/show/${show.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${show.tmdbId}`}
+          >
+            <img
+              src={
+                show.posterPath
+                  ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
+                  : import.meta.env.VITE_MOVIE_PLACEHOLDER
+              }
+              alt={"Poster of " + show.title}
+              className="w-full h-auto aspect-2/3"
+            />
+          </Link>
           <Details show={show} />
           <div className="flex flex-col gap-1">
             <Button className="h-13 font-bold">
