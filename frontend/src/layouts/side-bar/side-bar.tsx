@@ -53,10 +53,9 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
             }
           >
             {trendingQuery.data?.movies.slice(0, 6).map((s, i) => (
-              <Link to={`/show/movie/${s.tmdbId}`}>
+              <Link to={`/show/movie/${s.tmdbId}`} key={i}>
                 <p
                   className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis "
-                  key={i}
                 >
                   {s.title}
                 </p>
@@ -88,10 +87,9 @@ export default function SideBar({ selectedFeed }: { selectedFeed: string }) {
           >
 
           {trendingQuery.data?.tvs.slice(0, 6).map((s, i) => (
-            <Link to={`/show/tv/${s.tmdbId}`}>
+            <Link to={`/show/tv/${s.tmdbId}`} key={i}>
               <p
                 className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis "
-                key={i}
               >
                 {s.title}
               </p>

@@ -98,10 +98,12 @@ export default function SearchBar() {
           <QueryWrapper
             query={query}
             isEmpty={
-              !query.data?.movies.length &&
-              !query.data?.tvs.length &&
-              !query.data?.posts.length &&
-              !query.data?.users.length
+              query.data
+                ? !query.data.movies.length &&
+                  !query.data.tvs.length &&
+                  !query.data.posts.length &&
+                  !query.data.users.length
+                : false
             }
             emptyStateMessage={
               <div className="pb-10 pt-10 text-center text-muted-foreground">

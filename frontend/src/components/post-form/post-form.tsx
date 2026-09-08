@@ -21,6 +21,7 @@ import {
 import type React from "react";
 import type { ApiSearchResponse } from "@/types/search";
 import type { ApiSearchShow } from "@/types/show";
+import { isAxiosError } from "axios";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -38,7 +39,7 @@ export default function PostForm({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const query = useQuery({
-    queryKey: ["searchResult", input],
+    queryKey: ["formSearchResult", input],
     queryFn: () => getSearchResult(input, LIMIT),
     staleTime: STALE_TIME,
     enabled: input.length > 0,
@@ -74,7 +75,7 @@ export default function PostForm({
             <Combobox
               id="show"
               name="showId"
-              items={query.data}
+              items={query.data && query.data}
               onInputValueChange={(input) => {
                 handleInput(input);
               }}
@@ -151,18 +152,23 @@ export default function PostForm({
 }
 
 async function getSearchResult(query: string, limit: number) {
-  const result = (
-    await api.get<ApiSearchResponse>(`/search?query=${query}&limit=${limit}`)
-  ).data;
+  try {
 
-  return [
-    {
-      value: "Movies",
-      items: result.movies,
-    },
-    {
-      value: "TV Shows",
-      items: result.tvs,
-    },
-  ];
+    const result = (
+      await api.get<ApiSearchResponse>(`/search?query=${query}&limit=${limit}`)
+    ).data;
+  
+    return [
+      {
+        value: "Movies",
+        items: result.movies,
+      },
+      {
+        value: "TV Shows",
+        items: result.tvs,
+      },
+    ];
+  } catch (error) {
+    if (isAxiosError(error)) return null
+  }
 }

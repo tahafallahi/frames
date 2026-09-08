@@ -14,7 +14,7 @@ export async function searchMovie(
       tmdbId: r.id,
       title: r.title,
       posterPath: r.poster_path,
-      releaseDate: r.release_date,
+      releaseDate: r.release_date.split("-")[0],
       mediaType: MediaType.MOVIE
     };
   });
@@ -33,7 +33,7 @@ export async function searchTV(
       tmdbId: r.id,
       title: r.name,
       posterPath: r.poster_path,
-      releaseDate: r.first_air_date,
+      releaseDate: r.first_air_date.split("-")[0],
       mediaType: MediaType.TV_SHOW
     };
   });
