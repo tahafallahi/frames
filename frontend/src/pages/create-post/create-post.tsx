@@ -1,63 +1,77 @@
 import PostForm from "@/components/post-form/post-form";
+import QueryWrapper from "@/components/query-wrapper/query-wrapper";
+import ShowCard from "@/components/show-card/show-card";
+import Skeleton from "@/components/skeleton/skeleton";
 import { api } from "@/lib/api";
-import type { PostForm as PostFormType } from "@/types/post";
-import type { ApiSearchResponse } from "@/types/search";
-import { MediaType, type ApiSearchShow } from "@/types/show";
+import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-const DEBOUNCE_DELAY = 500;
-const STALE_TIME = 1000 * 60;
-const LIMIT = 12;
+const DEBOUNCE_DELAY = 300;
 
 export default function CreatePost() {
-  const [form, setForm] = useState<PostFormType>({
-    title: "",
-    showTitle: "",
-    content: "",
+  const [show, setShow] = useState<ApiSearchShow | null>(null);
+  const timeoutId = useRef<number>(null);
+
+  const showQuery = useQuery({
+    queryKey: ["show", show],
+    queryFn: async () =>
+      (
+        await api.get<Show>(
+          `/shows/${show?.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${show?.tmdbId}`,
+        )
+      ).data,
+    enabled: !!show,
   });
 
-  const searcgQuery = useQuery({
-    queryKey: ["searchResult", form.showTitle],
-    queryFn: () => getSearchResult(form.showTitle, LIMIT),
-    staleTime: STALE_TIME,
-    enabled: form.showTitle.length > 0,
-  });
+  function debounceSetShow(show: ApiSearchShow) {
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
+      setShow(show);
+    }, DEBOUNCE_DELAY);
+  }
+
+  function handleFormSubmit(e: React.SubmitEvent) {
+    e.preventDefault();
+    const form = new FormData(e.target);
+  }
+  
 
   return (
     <>
       <div>
-        <PostForm form={form} setForm={setForm} />
+        <PostForm
+          handleFormSubmit={handleFormSubmit}
+          setShow={debounceSetShow}
+        />
       </div>
-      <div className="grid grid-cols-3 gap-2 py-3">
-        {searcgQuery.data &&
-          searcgQuery.data.movies.map((s: ApiSearchShow, i) => (
-            <div className="bg-background hover:ring-2 ring-primary" key={i}>
-              <img
-                className="w-full h-auto aspect-2/3"
-                src={
-                  s.posterPath
-                    ? "https://image.tmdb.org/t/p/w154/" + s.posterPath
-                    : s.mediaType === MediaType.MOVIE
-                      ? import.meta.env.VITE_MOVIE_PLACEHOLDER
-                      : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
-                }
-                alt={s.title}
-              />
-              <div className="py-4">
-                <p className="text-sm text-center  line-clamp-2  ">{s.title}</p>
+      <div>
+        {showQuery.isEnabled && show && (
+          <QueryWrapper
+            query={showQuery}
+            isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
+            loadingPlaceHolder={
+              <div>
+                <Skeleton className="h-7 mb-4" />
+                <Skeleton className="ml-4 h-100" />
+                <div className="ml-4 mt-4 flex flex-col gap-2">
+                  <Skeleton variant="line" />
+                  <Skeleton variant="line" />
+                  <Skeleton variant="line" />
+                  <Skeleton variant="line" />
+                  <Skeleton variant="line" />
+                  <Skeleton variant="line" className="w-50" />
+                  <Skeleton variant="line" className="w-50" />
+                </div>
               </div>
-            </div>
-          ))}
+            }
+          >
+            {showQuery.data && (
+              <ShowCard variant="detailedOmitButtons" show={showQuery.data} />
+            )}
+          </QueryWrapper>
+        )}
       </div>
     </>
   );
-}
-
-async function getSearchResult(query: string, limit: number) {
-  const result = await api.get<ApiSearchResponse>(
-    `/search?query=${query}&limit=${limit}`,
-  );
-
-  return result.data;
 }

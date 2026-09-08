@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 
@@ -14,7 +14,11 @@ import UserDisplay from "./user-display";
 import PostDisplay from "./post-display";
 
 import type { ApiSearchResponse } from "@/types/search";
-import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { SearchIcon } from "lucide-react";
 
 const DEBOUNCE_DELAY = 500;
@@ -45,9 +49,19 @@ export default function SearchBar() {
     timeoutId.current = setTimeout(() => {
       setInput(e.target.value);
       if (e.target.value) setOpen(true);
-      document.addEventListener("click", () => setOpen(false));
     }, DEBOUNCE_DELAY);
   }
+
+  useEffect(() => {
+    function handleClickOutside() {
+      setOpen(false);
+    }
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -91,7 +105,7 @@ export default function SearchBar() {
             }
             emptyStateMessage={
               <div className="pb-10 pt-10 text-center text-muted-foreground">
-                {`There were results found for: "${input}"`}
+                {`There was no result matching: "${input}"`}
               </div>
             }
             loadingPlaceHolder={"Loading..."}

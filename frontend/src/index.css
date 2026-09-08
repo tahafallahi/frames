@@ -6,15 +6,6 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* --background: oklch(96.115% 0.00011 271.152);
-  --background-l1: oklch(92.843% 0.00762 187.672);
-  --background-l2: oklch(68.295% 0.00008 271.152);
-  --text: oklch(21.779% 0.00002 271.152);
-  --text-mute: oklch(42.024% 0.00005 271.152);
-  --primary: oklch(76.658% 0.15988 163.355);
-  --secondray: oklch(84.617% 0.06055 173.527);
-  --warning: oklch(74.082% 0.13438 19.658); */
-
   --background: oklch(96.115% 0.00011 271.152);
   --foreground: oklch(21.779% 0.00002 271.152);
 
@@ -28,8 +19,8 @@
   --secondary-foreground: oklch(21.779% 0.00002 271.152);
   /* --muted: oklch(0.97 0 0); */
   --muted-foreground: oklch(42.024% 0.00005 271.152);
-  /* --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0); */
+  --accent:  oklch(98.843% 0.00762 187.672);
+  --accent-foreground: oklch(76.658% 0.15988 163.355);
   --border: oklch(68.295% 0.00008 271.152);
   /* --input: oklch(0.922 0 0); */
   --ring: oklch(76.658% 0.15988 163.355);
@@ -76,8 +67,8 @@
   --secondary-foreground: oklch(22.087% 0.00773 182.387);
   /* --muted: oklch(0.97 0 0); */
   --muted-foreground: oklch(76.676% 0.00009 271.152);
-  /* --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0); */
+  --accent: oklch(35.413% 0.01149 135.131);
+  --accent-foreground: oklch(89.099% 0.17688 164.775);
   --border: oklch(51.028% 0.00006 271.152);
   /* --input: oklch(0.922 0 0); */
   --ring: oklch(89.099% 0.17688 164.775);
