@@ -94,7 +94,7 @@ export default function ViewPost() {
         >
           {showQuery.isSuccess && (
             
-              <ShowCard show={showQuery.data} variant="detailed" />
+              <ShowCard show={showQuery.data} title/>
           )}
         </QueryWrapper>
       </div>

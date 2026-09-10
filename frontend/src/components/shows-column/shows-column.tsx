@@ -83,7 +83,7 @@ export default function ShowsColumn({
               key={i}
               className="hover:ring ring-primary"
             >
-              <ShowCard show={s} variant="compact" />
+              <ShowCard show={s}/>
             </Link>
           ))}
         </div>

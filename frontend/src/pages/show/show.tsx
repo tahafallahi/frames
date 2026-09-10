@@ -69,7 +69,7 @@ export default function Show() {
           setSort={setSort}
         />
       </div>
-      <div className="flex flex-col gap-12 pt-12">
+      <div className="flex flex-col gap-12">
         <QueryWrapper
           query={showQuery}
           isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
@@ -84,7 +84,11 @@ export default function Show() {
           }
         >
           {showQuery.isSuccess ? (
-            <ShowCard show={showQuery.data} variant="detailedOmitTitle" />
+            <ShowCard
+              show={showQuery.data}
+              buttons={["writePost", "favorite"]}
+              overview
+            />
           ) : (
             <p>empty</p>
           )}
