@@ -67,7 +67,7 @@ export default function CreatePost() {
             }
           >
             {showQuery.data && (
-              <ShowCard variant="detailedOmitButtons" show={showQuery.data} />
+              <ShowCard show={showQuery.data} title overview />
             )}
           </QueryWrapper>
         )}

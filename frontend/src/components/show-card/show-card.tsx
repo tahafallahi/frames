@@ -22,7 +22,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
   function handleWritePost() {}
 
   return (
-    <div className="flex flex-col gap-3 text-muted-foreground ">
+    <div className="flex flex-col gap-3">
       {title && (
         <Link
           to={`/show/${show.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${show.tmdbId}`}
@@ -31,7 +31,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
         </Link>
       )}
 
-      <div className="px-5 py-3 flex flex-col gap-3 border-l">
+      <div className="px-5 py-3 flex flex-col gap-3 border-l text-muted-foreground">
         <Link
           to={`/show/${show.mediaType === MediaType.MOVIE ? "movie" : "tv"}/${show.tmdbId}`}
         >
@@ -48,7 +48,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
         {overview && (
           <>
             <div className="flex flex-col gap-1">
-              <p className={fullOverviewExpanded ? "line-clamp-3" : ""}>
+              <p className={fullOverviewExpanded ? "" : "line-clamp-3"}>
                 {show.overview}
               </p>
               <Button
@@ -58,13 +58,13 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
               >
                 {fullOverviewExpanded ? (
                   <>
-                    <p> More</p>
-                    <ChevronDown className="size-5 translate-y-0.5" />
+                    <p>Less</p>
+                    <ChevronUp className="size-5 translate-y-0.5" />
                   </>
                 ) : (
                   <>
-                    <p>Less</p>
-                    <ChevronUp className="size-5 translate-y-0.5" />
+                    <p> More</p>
+                    <ChevronDown className="size-5 translate-y-0.5" />
                   </>
                 )}
               </Button>
@@ -73,24 +73,26 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
           </>
         )}
         <Details show={show} />
-        {buttons &&
-        <div className="flex flex-col gap-1">
-          {buttons?.includes("writePost") && (
-            <Button className="min-h-13 font-bold min-w-0">
-              Write About This{" "}
-              {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
-            </Button>
-          )}
-          {buttons?.includes("favorite") && (
-            <Button
-            className="h-13 font-bold"
-              variant={buttons?.includes("writePost") ? "secondary" : "default"}
-            >
-              Add to Your Favorites
-            </Button>
-          )}
-        </div>
-        }
+        {buttons && (
+          <div className="flex flex-col gap-1">
+            {buttons?.includes("writePost") && (
+              <Button className="min-h-13 font-bold min-w-0">
+                Write About This{" "}
+                {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
+              </Button>
+            )}
+            {buttons?.includes("favorite") && (
+              <Button
+                className="h-13 font-bold"
+                variant={
+                  buttons?.includes("writePost") ? "secondary" : "default"
+                }
+              >
+                Add to Your Favorites
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

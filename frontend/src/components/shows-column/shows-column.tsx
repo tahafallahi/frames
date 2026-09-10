@@ -10,6 +10,7 @@ import type {
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import type { Show } from "@/types/show";
 import Skeleton from "../skeleton/skeleton";
+import SimpleShowCard from "./simple-show-card";
 
 export default function ShowsColumn({
   query,
@@ -83,7 +84,7 @@ export default function ShowsColumn({
               key={i}
               className="hover:ring ring-primary"
             >
-              <ShowCard show={s}/>
+              <SimpleShowCard show={s}/>
             </Link>
           ))}
         </div>
