@@ -85,35 +85,7 @@ export async function getComments(
       .json({ error: "there was no postId parameter in the url" });
   }
 
-  const result = await prisma.comment.findMany({
-    select: {
-      id: true,
-      content: true,
-      author: { select: { id: true, username: true, profilePath: true } },
-      parentId: true,
-      createdAt: true,
-      updatedAt: true,
-      _count: {
-        select: {
-          replies: true,
-          likes: true,
-        },
-      },
-    },
-    where: { postId: postId },
-  });
 
-  if (!result) {
-    return res.status(404).end();
-  }
-
-  const comments = result.map(({ _count, ...rest }) => ({
-    ...rest,
-    repliesCount: _count.replies,
-    likesCount: _count.likes,
-  }));
-
-  const commentsWithReplies = buildCommentTree(comments);
 
   return res.json(commentsWithReplies);
 }

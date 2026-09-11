@@ -250,3 +250,4 @@ export async function getPosts(
 
   return posts;
 }
+
