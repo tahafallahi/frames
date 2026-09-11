@@ -18,7 +18,9 @@ interface Props {
 export default function ShowCard({ show, buttons, overview, title }: Props) {
   const [fullOverviewExpanded, setFullOverviewExpanded] = useState(false);
 
-  function handleAddFavorite() {}
+  function handleAddFavorite() {
+    
+  }
   function handleWritePost() {}
 
   return (
@@ -87,6 +89,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
                 variant={
                   buttons?.includes("writePost") ? "secondary" : "default"
                 }
+                onClick={handleAddFavorite}
               >
                 Add to Your Favorites
               </Button>
