@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy, type VerifyFunction } from "passport-local";
 import { prisma } from "./prisma";
+import db from "database/db";
 
 const verify: VerifyFunction = async (username, password, done) => {
   if (!process.env.DUMMY_HASH_12) {
@@ -35,41 +36,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id: string, done) => {
   try {
-    let user = await prisma.user.findUnique({
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        profilePath: true,
-        bio: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            followers: true,
-            following: true,
-            likes: true,
-            posts: true,
-          },
-        },
-      },
-      where: { id },
-    });
-
-    if (!user)
-      throw new Error("the id saved to cookie doesn't exist in the database");
-
-    const { _count, ...rest } = user;
-
-    const userForSession: Express.User = {
-      ...rest,
-      followingsCount: _count.following,
-      follwersCount: _count.followers,
-      likesCount: _count.likes,
-      postsCount: _count.posts,
-    };
-
-    return done(null, userForSession);
+    return done(null, await db.getUser(id));
   } catch (error) {
     return done(error);
   }

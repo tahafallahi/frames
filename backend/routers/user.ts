@@ -5,7 +5,7 @@ import { requireLogin } from "middlewares/require-login";
 const router = Router();
 
 router.get("/:userId", getUser);
-router.get("/", getLoggedInUser);
+router.get("/", requireLogin, getLoggedInUser);
 
 router.post("/favorites", requireLogin, addFavorite);
 
