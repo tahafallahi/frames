@@ -1,8 +1,13 @@
-import express from "express";
+import express, {
+  type ErrorRequestHandler,
+  type NextFunction,
+  type Request,
+  type Response,
+} from "express";
 import cors from "cors";
 import { Router } from "express";
 import session from "express-session";
-import qs from "qs"
+import qs from "qs";
 
 import searchRouter from "../routers/search";
 import postsRouter from "../routers/posts";
@@ -16,6 +21,7 @@ import passport from "passport";
 
 // import "../lib/passport-google-oauth2";
 import "../lib/passport-local";
+import { errorHandler } from "controllers/errorHandler";
 
 if (!process.env.COOKIE_SECRET)
   throw new Error("COOKIE_SECRET is not provided in enviroment variables");
@@ -53,6 +59,8 @@ router.use("/shows", showRouter);
 router.use("/trending", trendingRouter);
 
 app.use("/api", router);
+app.use(errorHandler);
+
 
 if (process.env.NODE_ENV === "development") {
   app.listen(3333, (err) => {

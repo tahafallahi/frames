@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
 import { MediaType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
-import { isAxiosError } from "node_modules/axios/index.cjs";
+import { isAxiosError } from "axios";
 import { getMovieFromTmdb, getTvFromTmdb } from "services/tmdb-services";
 
 export function getLoggedInUser(req: Request, res: Response) {

@@ -2,6 +2,7 @@ import { MediaType } from "generated/prisma/enums";
 import { tmdbApi } from "lib/api";
 import { type ApiSearchShow, type Show } from "types/show";
 import { movieGenreIdToName, tvGenreIdToName } from "utils/tmdb";
+import { mapTmdbShowToDb } from "./tmdb-mapper";
 
 export async function searchMovie(
   query: string,
@@ -45,29 +46,13 @@ export async function getMovieFromTmdb(movieId: number): Promise<Show> {
     const movie = (await tmdbApi.get("/movie/" + movieId)).data;
 
 
-  return {
-    tmdbId: movie.id,
-    title: movie.title,
-    overview: movie.overview,
-    posterPath: movie.poster_path,
-    releaseYear: movie.release_date.split("-")[0],
-    mediaType: MediaType.MOVIE,
-    genres: movie.genres.map((g: { id: Number; name: String }) => g.name),
-  };
+  return mapTmdbShowToDb(movie, MediaType.MOVIE)
 }
 
 export async function getTvFromTmdb(tvId: number): Promise<Show> {
   const tv = (await tmdbApi.get("/tv/" + tvId)).data;
 
-  return {
-    tmdbId: tv.id,
-    title: tv.name,
-    overview: tv.overview,
-    posterPath: tv.poster_path,
-    releaseYear: tv.first_air_date.split("-")[0],
-    mediaType: MediaType.TV_SHOW,
-    genres: tv.genres.map((g: { id: Number; name: String }) => g.name),
-  };
+  return mapTmdbShowToDb(tv, MediaType.TV_SHOW)
 }
 
 export async function getTrendingMoviesTmdb(page: number): Promise<Show[]> {

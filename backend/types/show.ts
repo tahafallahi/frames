@@ -13,7 +13,7 @@ export interface Show {
   posterPath: string | null;
   mediaType: "MOVIE" | "TV_SHOW";
   genres: string[]
-  releaseYear?: number;
+  releaseYear: number;
   postsCount?: number;
   favoritesCount?: number;
 }

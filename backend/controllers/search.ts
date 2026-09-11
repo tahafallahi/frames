@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
-import { tmdbApi } from "lib/api";
 
-import { searchPost, searchUser } from "services/db-search";
+import { searchPost, searchUser } from "database/db-search";
 import { searchMovie, searchTV } from "services/tmdb-services";
 
 export async function getSearchResult(req: Request, res: Response) {

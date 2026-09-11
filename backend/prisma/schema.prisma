@@ -54,7 +54,7 @@ model Show {
   tmdbId Int 
   title String 
   overview String
-  releaseYear Int?
+  releaseYear Int
   mediaType MediaType
   posterPath String?
   genres String[]
