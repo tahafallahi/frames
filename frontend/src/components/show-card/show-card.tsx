@@ -4,6 +4,8 @@ import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
 import { Link } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 type ButtonKey = "favorite" | "writePost";
 
@@ -18,10 +20,31 @@ interface Props {
 export default function ShowCard({ show, buttons, overview, title }: Props) {
   const [fullOverviewExpanded, setFullOverviewExpanded] = useState(false);
 
+  const favoriteMutation = useMutation({
+    mutationFn: async ({
+      showId,
+      mediaType,
+    }: {
+      showId: number;
+      mediaType: MediaType;
+    }) =>
+      (
+        await api.post<Show>("/user/favorites", {
+          showId,
+          mediaType,
+        })
+      ).data,
+  });
+
   function handleAddFavorite() {
-    
+    const result = favoriteMutation.mutate({
+      showId: show.tmdbId,
+      mediaType: show.mediaType,
+    });
+
+    console.log(result)
   }
-  function handleWritePost() {}
+  // function handleWritePost() {}
 
   return (
     <div className="flex flex-col gap-3">

@@ -56,7 +56,7 @@ export async function getUser(req: Request<{ userId: string }>, res: Response) {
   return res.json(user);
 }
 
-export const favoriteValidators = [
+export const addFavorite = [
   body("showId")
     .notEmpty()
     .withMessage("showId must can not be empty.")
@@ -72,22 +72,25 @@ export const favoriteValidators = [
     .bail()
     .isIn(Object.values(MediaType))
     .withMessage("mediaType must be either MOVIE or TV_SHOW."),
+
+  async (req: Request, res: Response) => {
+    if (!validationResult(req).isEmpty()) {
+      throw new ValidationError(
+        "Validation failed",
+        validationResult(req).array(),
+      );
+    }
+
+    const { showId, mediaType } = matchedData(req);
+    console.log(showId);
+
+    const show = await db.getOrCreateShow(showId, mediaType);
+
+    await prisma.user.update({
+      where: { id: req.user!.id },
+      data: { favorites: { connect: { id: show.id } } },
+    });
+
+    res.status(204).end();
+  },
 ];
-
-export async function addFavorite(req: Request, res: Response) {
-  if (!validationResult(req).isEmpty()) {
-    throw new ValidationError(
-      "Validation failed",
-      validationResult(req).array(),
-    );
-  }
-
-  const { showId, mediaType } = matchedData(req);
-
-  const show = await db.getOrCreateShow(showId, mediaType);
-
-  return await prisma.user.update({
-    where: { id: req.user?.id },
-    data: { favorites: { connect: { id: show.id } } },
-  });
-}

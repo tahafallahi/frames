@@ -26,7 +26,7 @@ export async function getOrCreateShow(
         },
       },
     },
-    where: { AND: { tmdbId: Number(tmdbId), mediaType: mediaType } },
+    where: { AND: { tmdbId: tmdbId, mediaType: mediaType } },
   });
 
   if (result) {
@@ -77,7 +77,7 @@ export async function getShow(
         },
       },
     },
-    where: { AND: { tmdbId: Number(tmdbId), mediaType: mediaType } },
+    where: { AND: { tmdbId: tmdbId, mediaType: mediaType } },
   });
 
   if (result) {

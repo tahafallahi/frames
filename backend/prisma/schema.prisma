@@ -12,6 +12,13 @@ enum MediaType {
   TV_SHOW
 }
 
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String   
+  expiresAt   DateTime
+}
+
 model FederatedUser {
   subject String @id
   user_id String @unique

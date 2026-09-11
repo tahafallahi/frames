@@ -56,14 +56,6 @@ const verify: VerifyFunction = async (tokens, done) => {
         data: { subject: sub, provider: iss, user_id: newUser.id },
       });
 
-      console.log(
-        "new user created" + sub,
-        email,
-        picture,
-        name,
-        iss,
-        username,
-      );
 
       return done(null, { id: newFederatedUser.user_id });
     }

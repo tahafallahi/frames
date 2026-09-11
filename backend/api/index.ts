@@ -22,6 +22,8 @@ import passport from "passport";
 // import "../lib/passport-google-oauth2";
 import "../lib/passport-local";
 import { errorHandler } from "controllers/errorHandler";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import { prisma } from "lib/prisma";
 
 if (!process.env.COOKIE_SECRET)
   throw new Error("COOKIE_SECRET is not provided in enviroment variables");
@@ -40,6 +42,11 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000, //ms
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
     cookie: {
       secure: false,
       sameSite: "lax",
@@ -60,7 +67,6 @@ router.use("/trending", trendingRouter);
 
 app.use("/api", router);
 app.use(errorHandler);
-
 
 if (process.env.NODE_ENV === "development") {
   app.listen(3333, (err) => {
