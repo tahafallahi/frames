@@ -21,8 +21,6 @@ export async function getComments(postId: string) {
     where: { postId: postId },
   });
 
-  if (!result.length) throw new NotFoundError(`Comments for posts ${postId}`)
-
   const comments = result.map(({ _count, ...rest }) => ({
     ...rest,
     repliesCount: _count.replies,

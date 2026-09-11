@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 
-import { searchPost, searchUser } from "database/db-search";
+import { searchPost, searchUser } from "database/search";
 import { searchMovie, searchTV } from "services/tmdb-services";
 
 export async function getSearchResult(req: Request, res: Response) {

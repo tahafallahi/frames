@@ -1,11 +1,8 @@
-import { prisma } from "lib/prisma";
-import configs from "../configs";
-
-import { buildCommentTree } from "services/comment-tree";
+import db from "database/db";
+import { ValidationError } from "error/AppErrors";
 
 import type { Request, Response } from "express";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
-import db from "database/db";
 
 export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =
@@ -79,13 +76,9 @@ export async function getComments(
 ) {
   const { postId } = req.params;
 
-  if (!postId) {
-    return res
-      .status(400)
-      .json({ error: "there was no postId parameter in the url" });
-  }
+  if (!postId) throw new ValidationError("PostId parameter must exist");
 
+  const comments = await db.getComments(postId)
 
-
-  return res.json(commentsWithReplies);
+  return res.send(comments);
 }
