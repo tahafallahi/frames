@@ -4,6 +4,8 @@ import { MediaType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
 import { isAxiosError } from "axios";
 import { getMovieFromTmdb, getTvFromTmdb } from "services/tmdb-services";
+import { ValidationError } from "error/AppErrors";
+import db from "database/db";
 
 export function getLoggedInUser(req: Request, res: Response) {
   if (!req.user) return res.status(401).end();
@@ -74,22 +76,18 @@ export const favoriteValidators = [
 
 export async function addFavorite(req: Request, res: Response) {
   if (!validationResult(req).isEmpty()) {
-    res.send(400).json({ error: validationResult(req) });
+    throw new ValidationError(
+      "Validation failed",
+      validationResult(req).array(),
+    );
   }
 
   const { showId, mediaType } = matchedData(req);
 
-  try {
-    const show =
-      mediaType === MediaType.MOVIE
-        ? await getMovieFromTmdb(showId)
-        : await getTvFromTmdb(showId);
-    
-  } catch (error) {
-    if (isAxiosError(error)) {
-      if (error.status === 404) {
-        res.status(404).json({error: "showId is not a valid tmdb id."})
-      }
-    }
-  }
+  const show = await db.getOrCreateShow(showId, mediaType);
+
+  return await prisma.user.update({
+    where: { id: req.user?.id },
+    data: { favorites: { connect: { id: show.id } } },
+  });
 }

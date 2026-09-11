@@ -7,6 +7,7 @@ export interface ApiSearchShow {
 }
 
 export interface Show {
+  id: string;
   tmdbId: number;
   title: string;
   overview: string;

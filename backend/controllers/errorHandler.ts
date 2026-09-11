@@ -1,3 +1,4 @@
+import { ValidationError } from "error/AppErrors";
 import type { ErrorRequestHandler } from "express";
 
 export const errorHandler: ErrorRequestHandler = (
@@ -13,5 +14,5 @@ export const errorHandler: ErrorRequestHandler = (
     console.error("UNEXPECTED ERROR", err);
   }
 
-  res.status(statusCode).json({ error: message });
+  res.status(statusCode).json({ error: message, ...(err instanceof ValidationError  && err.details ?{details: err.details}: {}) });
 };

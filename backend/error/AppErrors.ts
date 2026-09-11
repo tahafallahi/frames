@@ -17,7 +17,16 @@ export class NotFoundError extends AppError {
 }
 
 export class ValidationError extends AppError {
-  constructor(message = "Invalid request parameters") {
+  details: unknown;
+
+  constructor(message = "Invalid request parameters", details?: unknown) {
     super(message, 400)
+    this.details = details;
+  }
+}
+
+export class UnauthorizedError extends AppError {
+  constructor() {
+    super("Access denied", 401);
   }
 }
