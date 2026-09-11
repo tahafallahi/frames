@@ -41,7 +41,7 @@ model User {
   comments Comment[]
   following Follows[] @relation("Follower")
   followers Follows[] @relation("Followee")
-  favorites Show[]
+  favorites Show[] 
   likes Like[]
 }
 

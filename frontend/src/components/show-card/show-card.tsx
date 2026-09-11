@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { useUser } from "@/contexts/user-context";
 
 type ButtonKey = "favorite" | "writePost";
 
@@ -19,8 +20,13 @@ interface Props {
 
 export default function ShowCard({ show, buttons, overview, title }: Props) {
   const [fullOverviewExpanded, setFullOverviewExpanded] = useState(false);
+  const [user] = useUser();
+  
+  const [isFavorite, setIsFavorite] = useState(
+    true
+  );
 
-  const favoriteMutation = useMutation({
+  const addFavoriteMutation = useMutation({
     mutationFn: async ({
       showId,
       mediaType,
@@ -36,14 +42,38 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
       ).data,
   });
 
-  function handleAddFavorite() {
-    const result = favoriteMutation.mutate({
-      showId: show.tmdbId,
-      mediaType: show.mediaType,
-    });
+  const removeFavoriteMutation = useMutation({
+    mutationFn: async ({
+      showId,
+      mediaType,
+    }: {
+      showId: number;
+      mediaType: MediaType;
+    }) =>
+      (
+        await api.post<Show>("/user/favorites-remove", {
+          showId,
+          mediaType,
+        })
+      ).data,
+  });
 
-    console.log(result)
+  function handleAddFavorite() {
+    if (isFavorite) {
+      removeFavoriteMutation.mutate({
+        showId: show.tmdbId,
+        mediaType: show.mediaType,
+      });
+      setIsFavorite(!isFavorite);
+    } else {
+      addFavoriteMutation.mutate({
+        showId: show.tmdbId,
+        mediaType: show.mediaType,
+      });
+      setIsFavorite(!isFavorite);
+    }
   }
+
   // function handleWritePost() {}
 
   return (
@@ -106,7 +136,17 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
                 {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
               </Button>
             )}
-            {buttons?.includes("favorite") && (
+            {buttons?.includes("favorite") && isFavorite ? (
+              <Button
+                className="h-13 font-bold"
+                variant={
+                  buttons?.includes("writePost") ? "secondary" : "default"
+                }
+                onClick={handleAddFavorite}
+              >
+                Remove from Favorites
+              </Button>
+            ) : (
               <Button
                 className="h-13 font-bold"
                 variant={

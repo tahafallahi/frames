@@ -1,666 +1,602 @@
-import { MediaType } from "generated/prisma/enums";
-import { prisma } from "lib/prisma";
+/**
+ * Prisma seed script
+ *
+ * Populates the database with realistic users, shows/movies, posts,
+ * threaded comments, follows, tags, likes and a couple of trending entries.
+ *
+ * Setup:
+ *   npm i -D @faker-js/faker bcryptjs tsx
+ *   npm i -D @types/bcryptjs   (if you're on plain TS)
+ *
+ * Add to package.json:
+ *   "prisma": { "seed": "tsx prisma/seed.ts" }
+ *
+ * Run:
+ *   npx prisma db seed
+ *
+ * Note: your generator outputs the client to "../generated/prisma",
+ * so we import from there instead of "@prisma/client".
+ */
+
+import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
+import { prisma } from "../lib/prisma";
+import { MediaType } from "generated/prisma/enums";
+import db from "database/db";
 
+// Deterministic-ish output so re-running gives similar "flavor" of data
+faker.seed(20260911);
 
-function randomInt(min: number, max: number): number {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const DEMO_PASSWORD_HASH = bcrypt.hashSync("Passw0rd!", 10);
 
-function pickRandom<T>(arr: T[]): T {
-  return arr[randomInt(0, arr.length - 1)];
-}
+// ---------------------------------------------------------------------------
+// Reference data
+// ---------------------------------------------------------------------------
 
-function pickRandomN<T>(arr: T[], n: number): T[] {
-  const shuffled = [...arr].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(n, arr.length));
-}
-
-function slugify(title: string): string {
-  return title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
-
-async function getPosterPath(tmdbId: number, mediaType: MediaType, title: string): Promise<string> {
-  const apiKey = process.env.TMDB_API_KEY;
-  if (apiKey) {
-    try {
-      const endpoint = mediaType === "MOVIE" ? "movie" : "tv";
-      const res = await fetch(
-        `https://api.themoviedb.org/3/${endpoint}/${tmdbId}?api_key=${apiKey}`
-      );
-      if (res.ok) {
-        const data = (await res.json()) as { poster_path?: string };
-        if (data.poster_path) {
-          return `https://image.tmdb.org/t/p/w500${data.poster_path}`;
-        }
-      }
-    } catch {
-      // fall through to placeholder
-    }
-  }
-  return `https://picsum.photos/seed/${slugify(title)}-poster/500/750`;
-}
-
-const GENRES = {
-  ACTION: 28,
-  ADVENTURE: 12,
-  ANIMATION: 16,
-  COMEDY: 35,
-  CRIME: 80,
-  DOCUMENTARY: 99,
-  DRAMA: 18,
-  FAMILY: 10751,
-  FANTASY: 14,
-  HISTORY: 36,
-  HORROR: 27,
-  MUSIC: 10402,
-  MYSTERY: 9648,
-  ROMANCE: 10749,
-  SCI_FI: 878,
-  THRILLER: 53,
-  WAR: 10752,
-  WESTERN: 37,
-} as const;
-
-const GENRE_NAMES: Record<number, string> = {
-  [GENRES.ACTION]: "Action",
-  [GENRES.ADVENTURE]: "Adventure",
-  [GENRES.ANIMATION]: "Animation",
-  [GENRES.COMEDY]: "Comedy",
-  [GENRES.CRIME]: "Crime",
-  [GENRES.DOCUMENTARY]: "Documentary",
-  [GENRES.DRAMA]: "Drama",
-  [GENRES.FAMILY]: "Family",
-  [GENRES.FANTASY]: "Fantasy",
-  [GENRES.HISTORY]: "History",
-  [GENRES.HORROR]: "Horror",
-  [GENRES.MUSIC]: "Music",
-  [GENRES.MYSTERY]: "Mystery",
-  [GENRES.ROMANCE]: "Romance",
-  [GENRES.SCI_FI]: "Science Fiction",
-  [GENRES.THRILLER]: "Thriller",
-  [GENRES.WAR]: "War",
-  [GENRES.WESTERN]: "Western",
-};
-
-interface ShowSeed {
+type ShowSeed = {
   tmdbId: number;
   title: string;
   overview: string;
   releaseYear: number;
   mediaType: MediaType;
-  genres: number[];
-}
+  genres: string[];
+};
 
+// tmdbId values correspond to the real TMDB ids for these titles — double
+// check against the TMDB API before relying on them for poster fetching.
 const SHOWS: ShowSeed[] = [
-  {
-    tmdbId: 278,
-    title: "The Shawshank Redemption",
-    overview:
-      "A banker wrongly convicted of murder forms an unlikely friendship with a fellow inmate over two decades in Shawshank State Penitentiary.",
-    releaseYear: 1994,
-    mediaType: "MOVIE",
-    genres: [GENRES.DRAMA, GENRES.CRIME],
-  },
-  {
-    tmdbId: 155,
-    title: "The Dark Knight",
-    overview:
-      "Batman faces his greatest psychological and physical test when a chaotic criminal calling himself the Joker unleashes havoc on Gotham City.",
-    releaseYear: 2008,
-    mediaType: "MOVIE",
-    genres: [GENRES.ACTION, GENRES.CRIME, GENRES.DRAMA, GENRES.THRILLER],
-  },
-  {
-    tmdbId: 680,
-    title: "Pulp Fiction",
-    overview:
-      "The lives of two mob hitmen, a boxer, and a gangster's wife intertwine in four tales of violence and redemption across Los Angeles.",
-    releaseYear: 1994,
-    mediaType: "MOVIE",
-    genres: [GENRES.CRIME, GENRES.DRAMA],
-  },
-  {
-    tmdbId: 27205,
-    title: "Inception",
-    overview:
-      "A thief who steals corporate secrets through dream-sharing technology is given a chance at redemption if he can pull off the impossible: inception.",
-    releaseYear: 2010,
-    mediaType: "MOVIE",
-    genres: [GENRES.ACTION, GENRES.SCI_FI, GENRES.ADVENTURE],
-  },
-  {
-    tmdbId: 550,
-    title: "Fight Club",
-    overview:
-      "An insomniac office worker and a soap salesman form an underground fight club that spirals into something far more dangerous.",
-    releaseYear: 1999,
-    mediaType: "MOVIE",
-    genres: [GENRES.DRAMA],
-  },
-  {
-    tmdbId: 603,
-    title: "The Matrix",
-    overview:
-      "A hacker discovers that reality as he knows it is a simulation controlled by machines, and joins a rebellion to free humanity.",
-    releaseYear: 1999,
-    mediaType: "MOVIE",
-    genres: [GENRES.ACTION, GENRES.SCI_FI],
-  },
-  {
-    tmdbId: 157336,
-    title: "Interstellar",
-    overview:
-      "A team of explorers travels through a wormhole in search of a new habitable planet as Earth becomes increasingly uninhabitable.",
-    releaseYear: 2014,
-    mediaType: "MOVIE",
-    genres: [GENRES.ADVENTURE, GENRES.DRAMA, GENRES.SCI_FI],
-  },
-  {
-    tmdbId: 496243,
-    title: "Parasite",
-    overview:
-      "A poor family schemes to become employed by a wealthy household, setting off a chain of events that blurs the line between class and survival.",
-    releaseYear: 2019,
-    mediaType: "MOVIE",
-    genres: [GENRES.COMEDY, GENRES.THRILLER, GENRES.DRAMA],
-  },
-  {
-    tmdbId: 438631,
-    title: "Dune",
-    overview:
-      "A young heir to a powerful noble family must travel to a dangerous desert planet to secure the future of his people.",
-    releaseYear: 2021,
-    mediaType: "MOVIE",
-    genres: [GENRES.SCI_FI, GENRES.ADVENTURE],
-  },
-  {
-    tmdbId: 19995,
-    title: "Avatar",
-    overview:
-      "A paraplegic Marine dispatched to the moon Pandora finds himself torn between following orders and protecting the world he feels is his home.",
-    releaseYear: 2009,
-    mediaType: "MOVIE",
-    genres: [GENRES.SCI_FI, GENRES.ADVENTURE, GENRES.FANTASY],
-  },
   {
     tmdbId: 1396,
     title: "Breaking Bad",
     overview:
-      "A high school chemistry teacher turned methamphetamine manufacturer partners with a former student to secure his family's financial future.",
+      "A high school chemistry teacher turned methamphetamine manufacturer teams up with a former student as he tries to secure his family's future before a terminal diagnosis catches up with him.",
     releaseYear: 2008,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.CRIME, GENRES.DRAMA, GENRES.THRILLER],
-  },
-  {
-    tmdbId: 66732,
-    title: "Stranger Things",
-    overview:
-      "When a young boy disappears in a small Indiana town, his friends, family, and local police uncover a mystery involving secret experiments and otherworldly forces.",
-    releaseYear: 2016,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.DRAMA, GENRES.FANTASY, GENRES.HORROR],
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Drama", "Crime", "Thriller"],
   },
   {
     tmdbId: 1399,
     title: "Game of Thrones",
     overview:
-      "Noble families vie for control of the Iron Throne while an ancient threat awakens beyond a massive wall in the north.",
+      "Noble families vie for control of the Iron Throne while an ancient threat stirs beyond a massive wall of ice in the far north.",
     releaseYear: 2011,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.DRAMA, GENRES.FANTASY, GENRES.ACTION],
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Fantasy", "Drama", "Action"],
   },
   {
-    tmdbId: 2316,
-    title: "The Office",
+    tmdbId: 66732,
+    title: "Stranger Things",
     overview:
-      "A mockumentary crew captures the daily grind of an eccentric paper company staff at the Scranton branch of Dunder Mifflin.",
-    releaseYear: 2005,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.COMEDY],
-  },
-  {
-    tmdbId: 1668,
-    title: "Friends",
-    overview:
-      "Six friends navigate careers, romance, and adulthood together in 1990s Manhattan.",
-    releaseYear: 1994,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.COMEDY, GENRES.ROMANCE],
+      "A group of kids in a small 1980s town uncover a secret government lab, a monstrous parallel dimension, and a girl with terrifying abilities.",
+    releaseYear: 2016,
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Sci-Fi", "Horror", "Drama"],
   },
   {
     tmdbId: 82856,
     title: "The Mandalorian",
     overview:
-      "A lone bounty hunter travels the outer reaches of the galaxy, far from the authority of the New Republic, and finds himself an unexpected companion.",
+      "A lone bounty hunter roams the outer reaches of the galaxy, far from the authority of the New Republic, while protecting a mysterious young charge.",
     releaseYear: 2019,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.SCI_FI, GENRES.ADVENTURE, GENRES.FANTASY],
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Sci-Fi", "Action", "Adventure"],
   },
   {
-    tmdbId: 87739,
-    title: "The Queen's Gambit",
+    tmdbId: 100088,
+    title: "The Last of Us",
     overview:
-      "An orphaned chess prodigy struggles with addiction while rising to the top of the competitive chess world in the 1960s.",
-    releaseYear: 2020,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.DRAMA],
-  },
-  {
-    tmdbId: 60059,
-    title: "Better Call Saul",
-    overview:
-      "A small-time lawyer with big ambitions slowly transforms into the morally flexible fixer he's destined to become.",
-    releaseYear: 2015,
-    mediaType: "TV_SHOW",
-    genres: [GENRES.CRIME, GENRES.DRAMA],
-  },
-];
-
-const TAGS = [
-  "must-watch",
-  "rewatch",
-  "spoilers",
-  "underrated",
-  "binge-worthy",
-  "plot-twist",
-  "cinematography",
-  "series-finale",
-  "recommendation",
-  "hot-take",
-];
-
-interface UserSeed {
-  username: string;
-  email: string;
-  bio: string;
-}
-
-const USERS: UserSeed[] = [
-  { username: "alexrivera92", email: "alex.rivera@example.com", bio: "Film school dropout, professional couch critic. 🍿" },
-  { username: "mchen_reviews", email: "m.chen@example.com", bio: "TV writer by day, deep-dive rewatcher by night." },
-  { username: "sophiegoeswatching", email: "sophie.g@example.com", bio: "Currently working through the AFI top 100. Send help." },
-  { username: "deepakfromqueens", email: "deepak.q@example.com", bio: "If it's got a twist ending I've probably seen it three times." },
-  { username: "lunaslate", email: "luna.slate@example.com", bio: "Horror movies are my comfort food." },
-  { username: "thegreatgatsby_ben", email: "ben.g@example.com", bio: "Comparing every new release to Fight Club whether it's fair or not." },
-  { username: "priya.codes.and.watches", email: "priya.k@example.com", bio: "Software engineer by day, binge-watcher by night." },
-  { username: "noah_onreplay", email: "noah.r@example.com", bio: "I will not shut up about Better Call Saul." },
-  { username: "camillewrites", email: "camille.w@example.com", bio: "Freelance writer, currently obsessed with Korean cinema." },
-  { username: "jaydeewatches", email: "jaydee.w@example.com", bio: "Just here for the plot twists." },
-  { username: "em_reviews_things", email: "em.reviews@example.com", bio: "Rating everything out of 10 whether you asked or not." },
-  { username: "tomthecinephile", email: "tom.c@example.com", bio: "35mm or nothing." },
-  { username: "hana.k", email: "hana.k@example.com", bio: "Sci-fi nerd, will die on the Dune hill." },
-  { username: "marcusonthecouch", email: "marcus.c@example.com", bio: "Rewatching sitcoms until the heat death of the universe." },
-];
-
-interface PostSeed {
-  tmdbId: number;
-  title: string;
-  content: string;
-  tags: string[];
-  withImage?: boolean;
-}
-
-const POSTS: PostSeed[] = [
-  {
-    tmdbId: 278,
-    title: "Just finished my annual rewatch and I'm an emotional wreck (as usual)",
-    content:
-      "There's a reason this tops every 'best movies' list. The way Andy's patience pays off over decades still gets me every single time. Also, Morgan Freeman's narration is doing so much heavy lifting. The ending hits different no matter how many times I've seen it.",
-    tags: ["rewatch", "must-watch"],
-  },
-  {
-    tmdbId: 155,
-    title: "Heath Ledger's Joker still hasn't been topped",
-    content:
-      "Rewatched this last night for probably the 15th time and the interrogation scene is just perfect filmmaking. Every choice he makes feels unpredictable but weirdly logical at the same time. Curious what people think holds up better as blockbuster filmmaking, this or something more recent.",
-    tags: ["cinematography", "hot-take"],
-  },
-  {
-    tmdbId: 680,
-    title: "The non-linear structure works so much better on a rewatch",
-    content:
-      "First time I watched this I was mostly confused about the timeline. Second watch, everything clicks into place and you start noticing all the little callbacks. Tarantino's dialogue is on another level here.",
-    tags: ["rewatch", "plot-twist"],
-  },
-  {
-    tmdbId: 27205,
-    title: "Ok so does the top actually stop spinning or not",
-    content:
-      "I know this discussion is like 15 years old at this point, but I just showed it to my roommate who'd never seen it and we argued about the ending for an hour. What's your take, dream or reality?",
-    tags: ["plot-twist", "spoilers"],
-  },
-  {
-    tmdbId: 550,
-    title: "This movie gets better every time I revisit it",
-    content:
-      "Watched it again for a film class assignment and the twist holds up way better than I remembered. Might be one of the best character reveals in movie history and I say that fully aware of how played out that opinion is.",
-    tags: ["rewatch", "plot-twist"],
-    withImage: true,
-  },
-  {
-    tmdbId: 603,
-    title: "The practical effects still look better than most CGI today",
-    content:
-      "Caught a re-release on the big screen last weekend and the bullet time sequences are still jaw-dropping. Wild that this came out in 1999 and still looks better than a lot of modern blockbusters.",
-    tags: ["cinematography", "must-watch"],
-  },
-  {
-    tmdbId: 157336,
-    title: "That docking scene might be the most tense five minutes in any movie",
-    content:
-      "No dialogue, just Hans Zimmer's score building and building. I was gripping the armrest the entire time even though I've seen this movie ten times at this point.",
-    tags: ["cinematography", "must-watch"],
-  },
-  {
-    tmdbId: 496243,
-    title: "The genre shift in the second half completely changes the movie",
-    content:
-      "Went in expecting a slow drama and got a thriller, a dark comedy, and something close to horror all rolled into one. That Best Picture win was earned.",
-    tags: ["must-watch", "spoilers"],
-  },
-  {
-    tmdbId: 438631,
-    title: "Villeneuve made the sandworms feel genuinely massive",
-    content:
-      "The scale of everything in this movie is insane, every shot feels designed to make you feel small. Really curious how they handle the back half of the book in the sequel.",
-    tags: ["cinematography", "must-watch"],
-    withImage: true,
-  },
-  {
-    tmdbId: 19995,
-    title: "Still holds up visually more than a decade later",
-    content:
-      "Rewatched this ahead of the sequels and the underwater sequences from the newer movies clearly took cues from how immersive Pandora felt in the original.",
-    tags: ["cinematography", "rewatch"],
-  },
-  {
-    tmdbId: 1396,
-    title: "Ozymandias might be the best episode of television ever made",
-    content:
-      "No spoilers for anyone still working through it, but that episode is non-stop dread from start to finish. Bryan Cranston's performance during that phone call scene destroyed me.",
-    tags: ["spoilers", "series-finale"],
-  },
-  {
-    tmdbId: 1396,
-    title: "Rewatching from the start and Walt is so much more unlikable than I remembered",
-    content:
-      "It's easy to forget how much of a coward he is in season one once you've seen where he ends up. The writing on this show is unbelievably patient.",
-    tags: ["rewatch", "hot-take"],
-  },
-  {
-    tmdbId: 66732,
-    title: "Season 1 still hits different than the later seasons",
-    content:
-      "There's something about the smaller-scale mystery in season one that I miss. The newer seasons go bigger but the first one nailed that 80s small-town horror vibe perfectly.",
-    tags: ["binge-worthy", "hot-take"],
-  },
-  {
-    tmdbId: 1399,
-    title: "Can we talk about the Red Wedding years later",
-    content:
-      "Still think about how blindsided everyone was watching this live. No show has replicated that feeling of genuine shock since.",
-    tags: ["spoilers", "plot-twist"],
+      "Twenty years after modern civilization has been destroyed, a hardened survivor is hired to smuggle a teenage girl out of an oppressive quarantine zone.",
+    releaseYear: 2023,
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Drama", "Horror", "Sci-Fi"],
   },
   {
     tmdbId: 2316,
-    title: "Rewatching this for probably the 6th time and it still works",
-    content:
-      "Comfort show doesn't even begin to describe it. Michael Scott's cringe humor somehow gets funnier every time instead of more uncomfortable.",
-    tags: ["rewatch", "binge-worthy"],
+    title: "The Office",
+    overview:
+      "A mockumentary crew follows the daily lives of the employees at a mid-sized paper company in Scranton, Pennsylvania.",
+    releaseYear: 2005,
+    mediaType: MediaType.TV_SHOW,
+    genres: ["Comedy"],
   },
   {
-    tmdbId: 1668,
-    title: "Which era of Friends is actually the best",
-    content:
-      "Early seasons have the best chemistry but later seasons have some of the funniest individual episodes. Curious where everyone lands on this.",
-    tags: ["hot-take", "rewatch"],
+    tmdbId: 278,
+    title: "The Shawshank Redemption",
+    overview:
+      "A banker wrongly convicted of murder forms an unlikely friendship with a fellow inmate over the course of a two-decade prison sentence.",
+    releaseYear: 1994,
+    mediaType: MediaType.MOVIE,
+    genres: ["Drama"],
   },
   {
-    tmdbId: 82856,
-    title: "Baby Yoda carried season one and I stand by that",
-    content:
-      "The show found its footing once it leaned into the found-family dynamic between Mando and Grogu. Some of the best Star Wars content in years, easily.",
-    tags: ["must-watch", "binge-worthy"],
-    withImage: true,
+    tmdbId: 155,
+    title: "The Dark Knight",
+    overview:
+      "Batman raises the stakes in his war on crime as Gotham's new district attorney and a chaotic new criminal mastermind push the city to the brink.",
+    releaseYear: 2008,
+    mediaType: MediaType.MOVIE,
+    genres: ["Action", "Crime", "Drama"],
   },
   {
-    tmdbId: 87739,
-    title: "Didn't think a show about chess could be this tense",
-    content:
-      "Every match felt like a fight scene somehow. Anya Taylor-Joy's performance carries the entire show, and the costume design deserves way more credit than it gets.",
-    tags: ["must-watch", "underrated"],
+    tmdbId: 27205,
+    title: "Inception",
+    overview:
+      "A thief who steals corporate secrets through dream-sharing technology is offered a chance to have his criminal history erased in exchange for planting an idea instead of stealing one.",
+    releaseYear: 2010,
+    mediaType: MediaType.MOVIE,
+    genres: ["Sci-Fi", "Action", "Thriller"],
   },
   {
-    tmdbId: 60059,
-    title: "This might actually be better than Breaking Bad",
-    content:
-      "Controversial opinion, but Jimmy's slow transformation into Saul is some of the best character writing on TV. The final season stuck the landing perfectly.",
-    tags: ["hot-take", "series-finale"],
+    tmdbId: 157336,
+    title: "Interstellar",
+    overview:
+      "A team of explorers travel through a wormhole in search of a new home for humanity as Earth becomes increasingly uninhabitable.",
+    releaseYear: 2014,
+    mediaType: MediaType.MOVIE,
+    genres: ["Sci-Fi", "Drama", "Adventure"],
+  },
+  {
+    tmdbId: 496243,
+    title: "Parasite",
+    overview:
+      "Greed and class discrimination threaten the newly formed symbiotic relationship between a wealthy family and a destitute clan living in the same house.",
+    releaseYear: 2019,
+    mediaType: MediaType.MOVIE,
+    genres: ["Drama", "Thriller", "Comedy"],
+  },
+  {
+    tmdbId: 438631,
+    title: "Dune",
+    overview:
+      "A young heir to a noble family is thrust into a battle for control of a desert planet that holds the most valuable resource in the universe.",
+    releaseYear: 2021,
+    mediaType: MediaType.MOVIE,
+    genres: ["Sci-Fi", "Adventure"],
+  },
+  {
+    tmdbId: 872585,
+    title: "Oppenheimer",
+    overview:
+      "The story of J. Robert Oppenheimer's role in the development of the atomic bomb and the moral reckoning that followed.",
+    releaseYear: 2023,
+    mediaType: MediaType.MOVIE,
+    genres: ["Drama", "History"],
+  },
+  {
+    tmdbId: 545611,
+    title: "Everything Everywhere All at Once",
+    overview:
+      "An exhausted laundromat owner is swept into an adventure where she must connect with parallel versions of herself to save existence.",
+    releaseYear: 2022,
+    mediaType: MediaType.MOVIE,
+    genres: ["Sci-Fi", "Comedy", "Action"],
   },
 ];
 
-const TOP_LEVEL_COMMENTS = [
-  "Completely agree, one of my all-time favorites.",
-  "I actually think it's a bit overrated but I get the appeal.",
-  "This is exactly what I needed to read today, going to rewatch tonight.",
-  "The ending lives rent free in my head.",
-  "Hard disagree, but I respect the take.",
-  "Wait until you watch it a third time, it somehow gets even better.",
-  "I remember watching this for the first time and being floored.",
-  "The score alone makes this worth revisiting.",
-  "Underrated pick honestly, more people should be talking about this.",
-  "This thread is making me want to start a rewatch tonight.",
-  "Saying this as someone who's seen it way too many times: still holds up.",
-  "The pacing drags a little for me in the middle but the payoff is worth it.",
-  "This is now the third post today that's convinced me to rewatch it.",
-  "Not me adding this to my watchlist for the fifth time because of a comment section.",
+const TAG_NAMES = [
+  "spoilers",
+  "review",
+  "fan-theory",
+  "discussion",
+  "recommendation",
+  "rewatch",
+  "season-finale",
+  "cinematography",
+  "soundtrack",
+  "hot-take",
+  "casting",
+  "easter-eggs",
+  "behind-the-scenes",
+  "prediction",
+  "comparison",
 ];
 
-const REPLIES = [
-  "Right?? I felt the exact same way.",
-  "Haha same, ended up rewatching the whole thing that weekend.",
-  "That's fair, I can see where you're coming from.",
-  "Exactly what I was thinking!",
-  "Lol I was NOT ready for that reveal either.",
-  "Same here, still think about it honestly.",
-  "This is the most correct comment in this thread.",
-  "Interesting, I've never thought about it that way.",
+const USER_SEEDS = [
+  {
+    username: "maren_watches",
+    bioTopic: "prestige dramas and slow-burn thrillers",
+  },
+  {
+    username: "kjeldberg",
+    bioTopic: "practical effects and old-school sci-fi",
+  },
+  { username: "screentime_sam", bioTopic: "anything A24 puts out" },
+  { username: "noor.reviews", bioTopic: "character-driven writing" },
+  { username: "popcorn_theory", bioTopic: "fan theories nobody asked for" },
+  { username: "dvillanueva", bioTopic: "cinematography and long takes" },
+  { username: "lateshowlena", bioTopic: "finales that stick the landing" },
+  { username: "reel_rachel", bioTopic: "underrated 2010s films" },
+  { username: "binged_it_all", bioTopic: "whatever's trending this week" },
+  { username: "tommo_critiques", bioTopic: "score and soundtrack breakdowns" },
+  { username: "quietcinema", bioTopic: "slow cinema and mood pieces" },
+  { username: "hana_streams", bioTopic: "K-dramas and international film" },
+  { username: "cast_and_crew", bioTopic: "who's working with who these days" },
+  {
+    username: "midnight_marathon",
+    bioTopic: "horror and psychological thrillers",
+  },
+  { username: "arjun.on.film", bioTopic: "worldbuilding and franchise lore" },
+  { username: "second_screen_sadie", bioTopic: "live-tweeting finales" },
+  { username: "callum_reviews", bioTopic: "comedy pacing and ensemble casts" },
+  {
+    username: "the_last_watchlist",
+    bioTopic: "clearing out a backlog no one else finished",
+  },
+  { username: "priya_plots", bioTopic: "plot structure and pacing" },
+  { username: "gritty_reboots", bioTopic: "adaptations done right (or wrong)" },
+  {
+    username: "off_the_shelf_omar",
+    bioTopic: "deep cuts nobody else has seen",
+  },
+  {
+    username: "finalact_fiona",
+    bioTopic: "endings that ruin or redeem a show",
+  },
+  {
+    username: "backlot_ben",
+    bioTopic: "production trivia and behind-the-scenes stories",
+  },
+  {
+    username: "wren_watches_everything",
+    bioTopic: "genre-hopping between horror and rom-coms",
+  },
 ];
 
+const POST_TITLE_TEMPLATES: Array<(title: string, genre: string) => string> = [
+  (t) => `Just finished ${t} and I need to talk about it`,
+  (t, g) => `Why ${t} might be the best ${g.toLowerCase()} in years`,
+  (t) => `Unpopular opinion: ${t} is a little overrated`,
+  (t) =>
+    `Rewatched ${t} this weekend and caught things I missed the first time`,
+  (t) => `${t} spoiler thread — come yell with me`,
+  (t) => `The ending of ${t} has been living in my head rent free`,
+  (t) => `Where does ${t} rank for you all-time?`,
+  (t) => `Can we talk about the pacing in ${t}?`,
+  (t) => `${t} soundtrack has been on repeat all week`,
+  (t) => `Finally got around to ${t} — was it worth the hype?`,
+];
 
+const POST_BODY_OPENERS = [
+  "Okay so I know I'm late to this, but I finally sat down and watched it start to finish.",
+  "Went in with pretty low expectations and came out fully converted.",
+  "This has been sitting in my watchlist for way too long and I regret waiting.",
+  "Rewatched this with a friend who'd never seen it, and their reactions made me appreciate it even more.",
+  "I've seen this recommended everywhere for months, so I finally gave it a shot.",
+  "Not sure why nobody warned me how much this would wreck me emotionally.",
+];
 
-async function main() {
-  console.log("Clearing existing data...");
+const POST_BODY_MIDDLES = [
+  "The pacing dragged a little in the middle stretch, but everything paid off by the end.",
+  "The performances carried scenes that would've fallen flat with a weaker cast.",
+  "I wasn't expecting the tone shift halfway through, but it worked better than I thought it would.",
+  "Some of the side characters felt underused, which is a shame given how strong the setup was.",
+  "The score does a lot of heavy lifting in the quieter scenes.",
+  "A few plot threads got wrapped up a little too neatly for my taste.",
+];
+
+const POST_BODY_CLOSERS = [
+  "Would genuinely recommend it to anyone who's on the fence.",
+  "Curious what everyone else thought about the third act.",
+  "Already planning a rewatch, which almost never happens for me.",
+  "Not perfect, but easily one of the more memorable things I've watched this year.",
+  "Would love to hear if anyone felt differently about the ending.",
+  "Adding this to my list of comfort rewatches going forward.",
+];
+
+const COMMENT_TEMPLATES = [
+  "Completely agree, especially about the pacing in the back half.",
+  "I actually had the opposite reaction — the slow build was my favorite part.",
+  "The ending hit way harder than I expected, glad someone else is talking about this.",
+  "Been saying this for weeks, glad it's finally getting recognition.",
+  "Respectfully disagree, I think the middle stretch dragged a bit too much.",
+  "This is exactly why I keep recommending it to everyone I know.",
+  "Wait until you see how it all ties together in the finale.",
+  "The soundtrack alone makes it worth a rewatch honestly.",
+  "I went in skeptical and left with a completely different opinion.",
+  "Solid take, though I'd still put the earlier seasons above this one.",
+  "The character work here is criminally underrated.",
+  "Same reaction here, did not expect to feel this much about a side character.",
+];
+
+const REPLY_TEMPLATES = [
+  "Fair point, I hadn't thought about it that way.",
+  "Ha, yeah I felt that too on my second watch.",
+  "Still not fully convinced, but I get where you're coming from.",
+  "Exactly — that's what pushed it from good to great for me.",
+  "Honestly might have to rewatch it now just to check.",
+  "That scene lives in my head rent free too.",
+];
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function pick<T>(arr: T[]): T {
+  return faker.helpers.arrayElement(arr);
+}
+
+function pickSome<T>(arr: T[], min: number, max: number): T[] {
+  return faker.helpers.arrayElements(arr, { min, max });
+}
+
+function buildPostContent(showTitle: string): string {
+  return [
+    pick(POST_BODY_OPENERS),
+    pick(POST_BODY_MIDDLES),
+    pick(POST_BODY_CLOSERS),
+  ].join(" ");
+}
+
+// ---------------------------------------------------------------------------
+// Seed steps
+// ---------------------------------------------------------------------------
+
+async function resetDatabase() {
+  // Order matters because of foreign key constraints.
   await prisma.like.deleteMany();
   await prisma.comment.deleteMany();
   await prisma.post.deleteMany();
-  await prisma.trending.deleteMany();
-  await prisma.federatedUser.deleteMany();
-  await prisma.follows.deleteMany();
-  await prisma.user.deleteMany();
-  await prisma.show.deleteMany();
   await prisma.tag.deleteMany();
-  await prisma.genre.deleteMany();
+  await prisma.trending.deleteMany();
+  await prisma.follows.deleteMany();
+  await prisma.federatedUser.deleteMany();
+  await prisma.show.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.session.deleteMany();
+}
 
-  console.log("Seeding genres...");
-  await prisma.genre.createMany({
-    data: Object.entries(GENRE_NAMES).map(([id, name]) => ({ id: Number(id), name })),
-  });
-
-  console.log("Seeding shows (this may take a moment if fetching real posters)...");
-  const showRecords: Record<number, { id: string }> = {};
-  for (const show of SHOWS) {
-    const posterPath = await getPosterPath(show.tmdbId, show.mediaType, show.title);
-    const created = await prisma.show.create({
+async function seedUsers() {
+  const users = [];
+  for (const seed of USER_SEEDS) {
+    const user = await prisma.user.create({
       data: {
-        tmdbId: show.tmdbId,
-        title: show.title,
-        overview: show.overview,
-        releaseYear: show.releaseYear,
-        mediaType: show.mediaType,
-        posterPath,
-        genres: { connect: show.genres.map((id) => ({ id })) },
+        username: seed.username,
+        email: faker.internet.email({ firstName: seed.username }).toLowerCase(),
+        hashedPassword: DEMO_PASSWORD_HASH,
+        bio: `Here for ${seed.bioTopic}. ${faker.person.bio()}`,
+        profilePath: faker.image.avatarGitHub(),
       },
     });
-    showRecords[show.tmdbId] = { id: created.id };
+    users.push(user);
   }
 
-  console.log("Seeding tags...");
-  await prisma.tag.createMany({ data: TAGS.map((name) => ({ name })) });
-
-  console.log("Seeding users...");
-  const passwordHash = await bcrypt.hash("Password123!", 10);
-  const userRecords: { id: string; username: string }[] = [];
-  for (const u of USERS) {
-    const created = await prisma.user.create({
+  // A handful of users sign in via a federated provider instead of a password.
+  const federatedCandidates = faker.helpers.arrayElements(users, 4);
+  for (const [i, user] of federatedCandidates.entries()) {
+    await prisma.federatedUser.create({
       data: {
-        username: u.username,
-        email: u.email,
-        hashedPassword: passwordHash,
-        bio: u.bio,
-        profilePath: `https://i.pravatar.cc/300?u=${u.username}`,
+        subject: faker.string.uuid(),
+        user_id: user.id,
+        provider: i % 2 === 0 ? "google" : "github",
       },
     });
-    userRecords.push({ id: created.id, username: created.username });
   }
 
-  console.log("Seeding federated identities...");
-  await prisma.federatedUser.create({
-    data: {
-      subject: "google-oauth2|108234871234567890123",
-      user_id: userRecords[6].id, // priya.codes.and.watches
-      provider: "google",
-    },
-  });
-  await prisma.federatedUser.create({
-    data: {
-      subject: "github|8823412",
-      user_id: userRecords[11].id, // tomthecinephile
-      provider: "github",
-    },
-  });
+  return users;
+}
 
-  console.log("Seeding follows...");
-  const followPairs = new Set<string>();
-  for (const user of userRecords) {
-    const followCount = randomInt(3, 6);
-    const candidates = userRecords.filter((u) => u.id !== user.id);
-    const targets = pickRandomN(candidates, followCount);
-    for (const target of targets) {
-      const key = `${user.id}:${target.id}`;
-      if (followPairs.has(key)) continue;
-      followPairs.add(key);
+async function seedShows() {
+  const shows = [];
+  for (const s of SHOWS) {
+    const show = await prisma.show.create({
+      data: {
+        tmdbId: s.tmdbId,
+        title: s.title,
+        posterPath: (await db.getShow(s.tmdbId, s.mediaType)).posterPath,
+        overview: s.overview,
+        releaseYear: s.releaseYear,
+        mediaType: s.mediaType,
+        genres: s.genres,
+      },
+    });
+    shows.push(show);
+  }
+  return shows;
+}
+
+async function seedTrending(shows: Awaited<ReturnType<typeof seedShows>>) {
+  const trendingShows = faker.helpers.arrayElements(shows, 10);
+  for (const show of trendingShows) {
+    await prisma.trending.create({
+      data: {
+        showId: show.id,
+        popularity: faker.number.int({ min: 50, max: 9999 }),
+      },
+    });
+  }
+}
+
+async function seedTags() {
+  const tags = [];
+  for (const name of TAG_NAMES) {
+    const tag = await prisma.tag.create({ data: { name } });
+    tags.push(tag);
+  }
+  return tags;
+}
+
+async function seedFollows(users: Awaited<ReturnType<typeof seedUsers>>) {
+  const seen = new Set<string>();
+  for (const follower of users) {
+    const followeeCount = faker.number.int({ min: 2, max: 8 });
+    const followees = faker.helpers.arrayElements(
+      users.filter((u) => u.id !== follower.id),
+      followeeCount,
+    );
+    for (const followee of followees) {
+      const key = `${follower.id}:${followee.id}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
       await prisma.follows.create({
-        data: { followerId: user.id, followeeId: target.id },
+        data: { followerId: follower.id, followeeId: followee.id },
       });
     }
   }
+}
 
-  console.log("Seeding favorites...");
-  const showIds = Object.values(showRecords).map((s) => s.id);
-  for (const user of userRecords) {
-    const favCount = randomInt(2, 5);
-    const favorites = pickRandomN(showIds, favCount);
+async function seedFavorites(
+  users: Awaited<ReturnType<typeof seedUsers>>,
+  shows: Awaited<ReturnType<typeof seedShows>>,
+) {
+  for (const user of users) {
+    const favoriteShows = pickSome(shows, 1, 5);
     await prisma.user.update({
       where: { id: user.id },
-      data: { favorites: { connect: favorites.map((id) => ({ id })) } },
-    });
-  }
-
-  console.log("Seeding posts, comments, and likes...");
-  for (const postSeed of POSTS) {
-    const show = showRecords[postSeed.tmdbId];
-    const author = pickRandom(userRecords);
-    const post = await prisma.post.create({
       data: {
-        title: postSeed.title,
-        content: postSeed.content,
-        picturePath: postSeed.withImage
-          ? `https://picsum.photos/seed/${slugify(postSeed.title)}/800/450`
-          : null,
-        authorId: author.id,
-        showId: show.id,
-        tags: { connect: postSeed.tags.map((name) => ({ name })) },
+        favorites: { connect: favoriteShows.map((s) => ({ id: s.id })) },
       },
     });
+  }
+}
 
-    // Top-level comments
-    const commentCount = randomInt(2, 4);
-    const commenters = pickRandomN(userRecords, commentCount);
-    const createdComments: { id: string }[] = [];
-    for (const commenter of commenters) {
-      const comment = await prisma.comment.create({
+async function seedPosts(
+  users: Awaited<ReturnType<typeof seedUsers>>,
+  shows: Awaited<ReturnType<typeof seedShows>>,
+  tags: Awaited<ReturnType<typeof seedTags>>,
+) {
+  const posts = [];
+
+  for (const show of shows) {
+    const postCount = faker.number.int({ min: 1, max: 4 });
+    for (let i = 0; i < postCount; i++) {
+      const author = pick(users);
+      const genre = pick(show.genres.length ? show.genres : ["story"]);
+      const titleTemplate = pick(POST_TITLE_TEMPLATES);
+
+      const post = await prisma.post.create({
         data: {
-          content: pickRandom(TOP_LEVEL_COMMENTS),
-          postId: post.id,
-          authorId: commenter.id,
+          title: titleTemplate(show.title, genre),
+          content: buildPostContent(show.title),
+          authorId: author.id,
+          showId: show.id,
+          tags: { connect: pickSome(tags, 1, 3).map((t) => ({ id: t.id })) },
         },
       });
-      createdComments.push({ id: comment.id });
+      posts.push(post);
     }
+  }
 
-    // Occasional replies (1-2 levels deep)
-    for (const comment of createdComments) {
-      if (Math.random() < 0.5) {
-        const replyCount = randomInt(1, 2);
-        for (let i = 0; i < replyCount; i++) {
-          const replier = pickRandom(userRecords);
-          await prisma.comment.create({
+  return posts;
+}
+
+async function seedComments(
+  users: Awaited<ReturnType<typeof seedUsers>>,
+  posts: Awaited<ReturnType<typeof seedPosts>>,
+) {
+  const comments = [];
+
+  for (const post of posts) {
+    const topLevelCount = faker.number.int({ min: 0, max: 6 });
+    for (let i = 0; i < topLevelCount; i++) {
+      const author = pick(users);
+      const comment = await prisma.comment.create({
+        data: {
+          content: pick(COMMENT_TEMPLATES),
+          postId: post.id,
+          authorId: author.id,
+        },
+      });
+      comments.push(comment);
+
+      // Occasionally add one or two replies to this comment.
+      if (faker.datatype.boolean({ probability: 0.4 })) {
+        const replyCount = faker.number.int({ min: 1, max: 2 });
+        for (let j = 0; j < replyCount; j++) {
+          const replyAuthor = pick(users);
+          const reply = await prisma.comment.create({
             data: {
-              content: pickRandom(REPLIES),
+              content: pick(REPLY_TEMPLATES),
               postId: post.id,
-              authorId: replier.id,
+              authorId: replyAuthor.id,
               parentId: comment.id,
             },
           });
+          comments.push(reply);
         }
       }
     }
+  }
 
-    // Likes on the post
-    const likers = pickRandomN(userRecords, randomInt(2, userRecords.length));
+  return comments;
+}
+
+async function seedLikes(
+  users: Awaited<ReturnType<typeof seedUsers>>,
+  posts: Awaited<ReturnType<typeof seedPosts>>,
+  comments: Awaited<ReturnType<typeof seedComments>>,
+) {
+  const seenPostLikes = new Set<string>();
+  const seenCommentLikes = new Set<string>();
+
+  for (const post of posts) {
+    const likers = pickSome(users, 0, 12);
     for (const liker of likers) {
+      const key = `${liker.id}:${post.id}`;
+      if (seenPostLikes.has(key)) continue;
+      seenPostLikes.add(key);
       await prisma.like.create({
         data: { userId: liker.id, postId: post.id },
       });
     }
+  }
 
-    // Likes on a subset of comments
-    const allComments = await prisma.comment.findMany({ where: { postId: post.id } });
-    for (const comment of allComments) {
-      if (Math.random() < 0.6) {
-        const commentLikers = pickRandomN(userRecords, randomInt(1, 4));
-        for (const liker of commentLikers) {
-          try {
-            await prisma.like.create({
-              data: { userId: liker.id, commentId: comment.id },
-            });
-          } catch {
-            // skip on unique constraint collision (same user already liked)
-          }
-        }
-      }
+  for (const comment of comments) {
+    const likers = pickSome(users, 0, 6);
+    for (const liker of likers) {
+      const key = `${liker.id}:${comment.id}`;
+      if (seenCommentLikes.has(key)) continue;
+      seenCommentLikes.add(key);
+      await prisma.like.create({
+        data: { userId: liker.id, commentId: comment.id },
+      });
     }
   }
+}
 
-  console.log("Seeding trending...");
-  for (const show of SHOWS) {
-    await prisma.trending.create({
-      data: {
-        showId: showRecords[show.tmdbId].id,
-        popularity: randomInt(50, 5000),
-      },
-    });
-  }
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
 
-  console.log("Done seeding.");
+async function main() {
+  console.log("Resetting database...");
+  await resetDatabase();
+
+  console.log("Seeding users...");
+  const users = await seedUsers();
+
+  console.log("Seeding shows...");
+  const shows = await seedShows();
+
+  console.log("Seeding trending shows...");
+  await seedTrending(shows);
+
+  console.log("Seeding tags...");
+  const tags = await seedTags();
+
+  console.log("Seeding follows...");
+  await seedFollows(users);
+
+  console.log("Seeding favorites...");
+  await seedFavorites(users, shows);
+
+  console.log("Seeding posts...");
+  const posts = await seedPosts(users, shows, tags);
+
+  console.log("Seeding comments...");
+  const comments = await seedComments(users, posts);
+
+  console.log("Seeding likes...");
+  await seedLikes(users, posts, comments);
+
+  console.log(
+    `Done. Created ${users.length} users, ${shows.length} shows, ${posts.length} posts, ${comments.length} comments.`,
+  );
 }
 
 main()
   .catch((e) => {
     console.error(e);
-    process.exit(1);
+    process.exitCode = 1;
   })
   .finally(async () => {
     await prisma.$disconnect();
