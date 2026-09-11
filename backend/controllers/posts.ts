@@ -5,6 +5,7 @@ import { buildCommentTree } from "services/comment-tree";
 
 import type { Request, Response } from "express";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import db from "database/db";
 
 export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =
@@ -55,83 +56,19 @@ export async function getPosts(req: Request, res: Response) {
     });
   }
 
-  const posts = (
-    await prisma.post.findMany({
-      select: {
-        id: true,
-        title: true,
-        content: true,
-        picturePath: true,
-        tags: { select: { name: true } },
-        createdAt: true,
-        author: { select: { username: true, profilePath: true } },
-        show: { select: { title: true, releaseYear: true, mediaType: true } },
-        _count: { select: { likes: true, comments: true } },
-      },
-      where: {
-        AND: {
-          ...(tagFilter && {
-            tags: { some: { name: { in: tagFilter as string[] } } },
-          }),
-          ...(mediaFilter && {
-            show: { mediaType: { in: mediaFilter as string[] } },
-          }),
-          ...(userFilter && { authorId: { in: userFilter as string[] } }),
-          ...(showFilter && {
-            show: {tmdbId: {
-              in: showFilter.map((f: string) => Number(f)),
-            },}
-          }),
-        },
-      },
-      skip: (Number(page) - 1) * configs.PAGE_LENGTH,
-      take: configs.PAGE_LENGTH,
-      orderBy: postsOrderBy,
-    })
-  ).map(({ _count, ...post }) => ({
-    ...post,
-    likesCount: _count.likes,
-    commentsCount: _count.comments,
-  }));
+  const posts = await db.getPosts(Number(page), postsOrderBy, {
+    tagFilter,
+    mediaFilter,
+    userFilter,
+    showFilter,
+  } as {});
 
   res.json(posts);
 }
 
 export async function getPost(req: Request<{ postId: string }>, res: Response) {
   const { postId } = req.params;
-
-  const result = await prisma.post.findUnique({
-    where: { id: postId },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      picturePath: true,
-      tags: { select: { name: true } },
-      createdAt: true,
-      author: { select: { id: true, username: true, profilePath: true } },
-      show: {
-        select: {
-          tmdbId: true,
-          title: true,
-          releaseYear: true,
-          mediaType: true,
-        },
-      },
-      _count: { select: { likes: true, comments: true } },
-    },
-  });
-
-  if (!result) {
-    return res.status(404).end();
-  }
-
-  const { _count, ...rest } = result;
-  const post = {
-    ...rest,
-    likesCount: _count.likes,
-    commentsCount: _count.comments,
-  };
+  const post = await db.getPost(postId);
 
   return res.json(post);
 }

@@ -2,8 +2,6 @@ import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
 import { MediaType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
-import { isAxiosError } from "axios";
-import { getMovieFromTmdb, getTvFromTmdb } from "services/tmdb-services";
 import { ValidationError } from "error/AppErrors";
 import db from "database/db";
 

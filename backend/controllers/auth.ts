@@ -2,7 +2,6 @@ import type { NextFunction, Request, Response } from "express";
 import { prisma } from "lib/prisma";
 import bcrypt from "bcrypt";
 import { body, matchedData, validationResult } from "express-validator";
-import { error } from "node:console";
 
 const singupValidators = [
   body("username")
