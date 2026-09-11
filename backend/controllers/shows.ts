@@ -1,4 +1,4 @@
-import { getMovieFromTmdb, getTvFromTmdb } from "services/tmdb";
+import { getMovieFromTmdb, getTvFromTmdb } from "services/tmdb-services";
 import { prisma } from "../lib/prisma";
 import type { Request, Response } from "express";
 import { MediaType } from "generated/prisma/enums";

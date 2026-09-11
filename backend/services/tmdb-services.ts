@@ -42,7 +42,8 @@ export async function searchTV(
 }
 
 export async function getMovieFromTmdb(movieId: number): Promise<Show> {
-  const movie = (await tmdbApi.get("/movie/" + movieId)).data;
+    const movie = (await tmdbApi.get("/movie/" + movieId)).data;
+
 
   return {
     tmdbId: movie.id,

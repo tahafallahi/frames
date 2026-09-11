@@ -54,20 +54,14 @@ model Show {
   tmdbId Int 
   title String 
   overview String
-  releaseYear Int
+  releaseYear Int?
   mediaType MediaType
-  posterPath String
+  posterPath String?
+  genres String[]
 
   posts Post[]
   trendings Trending[]
-  genres Genre[]
   users User[]
-}
-
-model Genre {
-  id Int @id
-  name String @unique
-  shows Show[]
 }
 
 model Post {

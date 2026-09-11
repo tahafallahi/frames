@@ -10,10 +10,10 @@ export interface Show {
   tmdbId: number;
   title: string;
   overview: string;
-  posterPath: string;
+  posterPath: string | null;
   mediaType: "MOVIE" | "TV_SHOW";
   genres: string[]
-  releaseYear: string;
+  releaseYear?: number;
   postsCount?: number;
   favoritesCount?: number;
 }
