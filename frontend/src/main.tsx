@@ -18,6 +18,7 @@ import Show from "./pages/show/show";
 import Trending from "./pages/trending/trending";
 import FollowingsFeed from "./pages/followings-feed/followings-feed";
 import CreatePost from "./pages/create-post/create-post";
+import { Toaster } from "./components/ui/toast";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +82,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <RouterProvider router={router}></RouterProvider>
+        <Toaster timeout={import.meta.env.VITE_TOASTER_TIMEOUT} />
       </UserProvider>
     </QueryClientProvider>
   </StrictMode>,

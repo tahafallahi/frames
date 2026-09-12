@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { User } from "@/types/user";
 import { Spinner } from "../ui/spinner";
+import { toast } from "../ui/toast";
 
 export default function AddFavoriteButton({
   user,
@@ -32,7 +33,15 @@ export default function AddFavoriteButton({
           mediaType,
         })
       ).data,
-    onSuccess: () => setUser({ ...user, favorites: [...user.favorites, show] }),
+    onSuccess: () => {
+      setUser({ ...user, favorites: [...user.favorites, show] });
+    },
+    onError: () => {
+      toast.add({
+        type: "error",
+        description: `Something went wrong, please try again later.`,
+      });
+    },
   });
 
   const removeFavoriteMutation = useMutation({
@@ -49,11 +58,18 @@ export default function AddFavoriteButton({
           mediaType,
         })
       ).data,
-    onSuccess: () =>
+    onSuccess: () => {
       setUser({
         ...user,
         favorites: [...user.favorites.filter((f) => f.id !== show.id)],
-      }),
+      });
+    },
+    onError: () => {
+      toast.add({
+        type: "error",
+        description: `Something went wrong, please try again later.`,
+      });
+    },
   });
 
   function handleAddFavorite() {
@@ -76,7 +92,7 @@ export default function AddFavoriteButton({
       onClick={handleAddFavorite}
     >
       Remove from Favorites
-      {removeFavoriteMutation.isPending && <Spinner data-icon="inline-end"/>}
+      {removeFavoriteMutation.isPending && <Spinner data-icon="inline-end" />}
     </Button>
   ) : (
     <Button
@@ -85,7 +101,7 @@ export default function AddFavoriteButton({
       onClick={handleAddFavorite}
     >
       Add to Your Favorites
-      {addFavoriteMutation.isPending && <Spinner  data-icon="inline-end"  />}
+      {addFavoriteMutation.isPending && <Spinner data-icon="inline-end" />}
     </Button>
   );
 }
