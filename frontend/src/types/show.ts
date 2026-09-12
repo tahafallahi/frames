@@ -24,6 +24,11 @@ export interface ApiSearchShow {
   mediaType: MediaType;
 }
 
+export interface ShowIdentifier {
+  tmdbId: number;
+  mediaType: MediaType;
+}
+
 export interface TrendingTitles {
   movies: {title: string, tmdbId: number}[]
   tvs: {title: string, tmdbId: number}[]

@@ -29,15 +29,15 @@ const LIMIT = 10;
 
 export default function PostForm({
   handleFormSubmit,
-  setShow
+  setShow,
 }: {
   handleFormSubmit: React.SubmitEventHandler<HTMLFormElement>;
-  setShow: (show: ApiSearchShow | null) => void
+  setShow: (show: ApiSearchShow | null) => void;
 }) {
   const [input, setInput] = useState("");
   const timeoutId = useRef<number>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  
   const query = useQuery({
     queryKey: ["formSearchResult", input],
     queryFn: () => getSearchResult(input, LIMIT),
@@ -47,12 +47,14 @@ export default function PostForm({
 
   function handleInput(i: string) {
     if (timeoutId.current) clearTimeout(timeoutId.current);
-    if(i.length < 1) setShow(null);
+    if (i.length < 1) setShow(null);
     timeoutId.current = setTimeout(() => {
       setInput(i);
     }, DEBOUNCE_DELAY);
   }
 
+ 
+  
   return (
     <div className="flex flex-col gap-3">
       <h3 className="text-2xl font-bold">Create New Post</h3>
@@ -82,11 +84,8 @@ export default function PostForm({
               itemToStringValue={(show: ApiSearchShow) =>
                 show.tmdbId.toString()
               }
-              itemToStringLabel={(show: ApiSearchShow) =>
-                `${show.title}`
-              }
+              itemToStringLabel={(show: ApiSearchShow) => `${show.title}`}
               onItemHighlighted={(show) => show && setShow(show)}
-
             >
               <ComboboxInput
                 placeholder="Name of the movie or tv show you want to write about."
@@ -102,7 +101,7 @@ export default function PostForm({
                     ? "loading..."
                     : query.isError
                       ? "something went wrong, please try again later."
-                        : "empty"}
+                      : "empty"}
                 </ComboboxEmpty>
                 <ComboboxList>
                   {(group: { value: string; items: string[] }) => (
@@ -153,11 +152,10 @@ export default function PostForm({
 
 async function getSearchResult(query: string, limit: number) {
   try {
-
     const result = (
       await api.get<ApiSearchResponse>(`/search?query=${query}&limit=${limit}`)
     ).data;
-  
+
     return [
       {
         value: "Movies",
@@ -169,6 +167,6 @@ async function getSearchResult(query: string, limit: number) {
       },
     ];
   } catch (error) {
-    if (isAxiosError(error)) return null
+    if (isAxiosError(error)) return null;
   }
 }

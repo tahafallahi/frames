@@ -1,11 +1,12 @@
 import Details from "./details";
-import { Button } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { MediaType, type Show } from "@/types/show";
 import { Link } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useUser } from "@/contexts/user-context";
 import AddFavoriteButton from "./add-favorite-button";
+import { cn } from "@/lib/utils";
 
 type ButtonKey = "favorite" | "writePost";
 
@@ -77,10 +78,18 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
         {buttons && (
           <div className="flex flex-col gap-1">
             {buttons?.includes("writePost") && (
-              <Button className="min-h-13 font-bold min-w-0">
+              <Link
+                to="/create"
+                className={cn(
+                  buttonVariants({
+                    variant: "default",
+                    className: "min-h-13 font-bold min-w-0",
+                  }),
+                )}
+              >
                 Write About This{" "}
                 {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
-              </Button>
+              </Link>
             )}
             {user && buttons?.includes("favorite") && (
               <AddFavoriteButton

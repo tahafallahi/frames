@@ -6,13 +6,16 @@ import Skeleton from "@/components/skeleton/skeleton";
 import { api } from "@/lib/api";
 import type { SelectedFilters } from "@/types/filter";
 import type { Post } from "@/types/post";
-import type { Show } from "@/types/show";
+import { MediaType, type Show } from "@/types/show";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router";
 
 export default function Show() {
-  const { showId, mediaType } = useParams();
+  const { showId, mediaType: mediaTypeString } = useParams();
+  //This is for uniformity with other queries calls so userquery can cashe the result
+  const mediaType =
+    mediaTypeString === "movie" ? MediaType.MOVIE : MediaType.TV_SHOW;
   const [sort, setSort] = useState<"TOP" | "HOT" | "NEW">("TOP");
   const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -35,10 +38,18 @@ export default function Show() {
       ).data,
   });
 
+
   const showQuery = useQuery({
-    queryKey: ["show", showId, mediaType],
+    queryKey: ["show", Number(showId), mediaType],
     queryFn: async () => {
-      return (await api.get<Show>("/shows/" + mediaType + "/" + showId)).data;
+      return (
+        await api.get<Show>(
+          "/shows/" +
+            (mediaType === MediaType.MOVIE ? "movie" : "tv") +
+            "/" +
+            showId,
+        )
+      ).data;
     },
   });
 

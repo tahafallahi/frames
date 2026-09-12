@@ -73,7 +73,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 5 * 10 * 1000 } },
+});
 
 document.documentElement.classList.add("dark");
 
