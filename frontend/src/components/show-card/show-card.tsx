@@ -1,12 +1,11 @@
 import Details from "./details";
 import { Button } from "../ui/button";
-import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
+import { MediaType, type Show } from "@/types/show";
 import { Link } from "react-router";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { api } from "@/lib/api";
 import { useUser } from "@/contexts/user-context";
+import AddFavoriteButton from "./add-favorite-button";
 
 type ButtonKey = "favorite" | "writePost";
 
@@ -15,64 +14,11 @@ interface Props {
   buttons?: ButtonKey[];
   title?: boolean;
   overview?: boolean;
-  noBorder?: boolean;
 }
 
 export default function ShowCard({ show, buttons, overview, title }: Props) {
   const [fullOverviewExpanded, setFullOverviewExpanded] = useState(false);
-  const [user] = useUser();
-  
-  const [isFavorite, setIsFavorite] = useState(
-    true
-  );
-
-  const addFavoriteMutation = useMutation({
-    mutationFn: async ({
-      showId,
-      mediaType,
-    }: {
-      showId: number;
-      mediaType: MediaType;
-    }) =>
-      (
-        await api.post<Show>("/user/favorites", {
-          showId,
-          mediaType,
-        })
-      ).data,
-  });
-
-  const removeFavoriteMutation = useMutation({
-    mutationFn: async ({
-      showId,
-      mediaType,
-    }: {
-      showId: number;
-      mediaType: MediaType;
-    }) =>
-      (
-        await api.post<Show>("/user/favorites-remove", {
-          showId,
-          mediaType,
-        })
-      ).data,
-  });
-
-  function handleAddFavorite() {
-    if (isFavorite) {
-      removeFavoriteMutation.mutate({
-        showId: show.tmdbId,
-        mediaType: show.mediaType,
-      });
-      setIsFavorite(!isFavorite);
-    } else {
-      addFavoriteMutation.mutate({
-        showId: show.tmdbId,
-        mediaType: show.mediaType,
-      });
-      setIsFavorite(!isFavorite);
-    }
-  }
+  const [user, setUser] = useUser();
 
   // function handleWritePost() {}
 
@@ -136,26 +82,15 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
                 {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
               </Button>
             )}
-            {buttons?.includes("favorite") && isFavorite ? (
-              <Button
-                className="h-13 font-bold"
+            {user && buttons?.includes("favorite") && (
+              <AddFavoriteButton
+                user={user}
+                setUser={setUser}
+                show={show}
                 variant={
                   buttons?.includes("writePost") ? "secondary" : "default"
                 }
-                onClick={handleAddFavorite}
-              >
-                Remove from Favorites
-              </Button>
-            ) : (
-              <Button
-                className="h-13 font-bold"
-                variant={
-                  buttons?.includes("writePost") ? "secondary" : "default"
-                }
-                onClick={handleAddFavorite}
-              >
-                Add to Your Favorites
-              </Button>
+              />
             )}
           </div>
         )}

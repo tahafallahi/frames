@@ -11,7 +11,7 @@ export interface User {
   followingsCount: number;
   followings: User[];
   postsCount: number;
-  favorites?: Show[];
+  favorites: Show[];
   createdAt: Date;
   updatedAt: Date;
 }
