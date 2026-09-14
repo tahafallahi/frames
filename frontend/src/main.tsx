@@ -18,7 +18,7 @@ import Show from "./pages/show/show";
 import Trending from "./pages/trending/trending";
 import FollowingsFeed from "./pages/followings-feed/followings-feed";
 import CreatePost from "./pages/create-post/create-post";
-import { Toaster } from "./components/ui/toast";
+import { toast, Toaster } from "./components/ui/toast";
 
 const router = createBrowserRouter([
   {
@@ -74,7 +74,17 @@ const router = createBrowserRouter([
 ]);
 
 const queryClient = new QueryClient({
-  defaultOptions: { queries: { staleTime: 5 * 10 * 1000 } },
+  defaultOptions: {
+    queries: { staleTime: 5 * 10 * 1000 },
+    mutations: {
+      onError: () => {
+        toast.add({
+          type: "error",
+          description: `Something went wrong, please try again later.`,
+        });
+      },
+    },
+  },
 });
 
 document.documentElement.classList.add("dark");

@@ -2,7 +2,9 @@ import db from "database/db";
 import { ValidationError } from "error/AppErrors";
 
 import type { Request, Response } from "express";
+import { body, matchedData, validationResult } from "express-validator";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import type { ShowIdentifier } from "types/show";
 
 export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =
@@ -78,7 +80,38 @@ export async function getComments(
 
   if (!postId) throw new ValidationError("PostId parameter must exist");
 
-  const comments = await db.getComments(postId)
+  const comments = await db.getComments(postId);
 
   return res.send(comments);
 }
+
+export const createPost = [
+  body("title").trim().notEmpty().isString().isLength({ max: 300 }),
+  body("content").trim().isString().isLength({ max: 10000 }),
+  body("showIdentifier").notEmpty(),
+
+  async (req: Request, res: Response) => {
+
+    if (!validationResult(req).isEmpty())
+      throw new ValidationError(
+        "Post object payload invalid body",
+        validationResult(req).array(),
+      );
+
+    const {
+      title,
+      content,
+      showIdentifier,
+    }: { title: string; content: string; showIdentifier: ShowIdentifier } =
+      matchedData(req);
+
+    const show = await db.getOrCreateShow(
+      showIdentifier.tmdbId,
+      showIdentifier.mediaType,
+    );
+
+    const post = await db.createPost(title, content, show.id, req.user!.id);
+
+    return res.json(post);
+  },
+];

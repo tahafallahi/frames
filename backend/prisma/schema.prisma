@@ -80,7 +80,7 @@ model Post {
   updatedAt DateTime @updatedAt
   
   authorId String?
-  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull) 
 
   showId String
   show Show @relation(fields: [showId], references: [id], onDelete: Restrict)

@@ -36,12 +36,7 @@ export default function AddFavoriteButton({
     onSuccess: () => {
       setUser({ ...user, favorites: [...user.favorites, show] });
     },
-    onError: () => {
-      toast.add({
-        type: "error",
-        description: `Something went wrong, please try again later.`,
-      });
-    },
+
   });
 
   const removeFavoriteMutation = useMutation({
@@ -62,12 +57,6 @@ export default function AddFavoriteButton({
       setUser({
         ...user,
         favorites: [...user.favorites.filter((f) => f.id !== show.id)],
-      });
-    },
-    onError: () => {
-      toast.add({
-        type: "error",
-        description: `Something went wrong, please try again later.`,
       });
     },
   });

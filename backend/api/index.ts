@@ -37,6 +37,7 @@ app.set("query parser", (str: string) => qs.parse(str));
 
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use(express.urlencoded({extended: true}))
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,

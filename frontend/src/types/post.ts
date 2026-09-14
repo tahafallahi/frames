@@ -1,4 +1,4 @@
-import type { MediaType } from "./show";
+import type { MediaType, ShowIdentifier } from "./show";
 
 export interface Post {
   id: string;
@@ -33,6 +33,6 @@ export interface ApiSearchPost {
 
 export interface PostForm {
   title: string;
-  showTitle: string;
   content: string;
+  showIdentifier: ShowIdentifier;
 }

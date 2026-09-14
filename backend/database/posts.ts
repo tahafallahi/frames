@@ -4,6 +4,8 @@ import { NotFoundError } from "error/AppErrors";
 
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
 import type { MediaType } from "generated/prisma/enums";
+import type { ShowIdentifier } from "types/show";
+import type { Show, Tag, User } from "generated/prisma/client";
 
 export async function getPost(postId: string) {
   const result = await prisma.post.findUnique({
@@ -76,10 +78,10 @@ export async function getPosts(
           tags: { some: { name: { in: filters.tagFilter } } },
         }),
         ...(filters.mediaFilter && {
-          show: { mediaType: { in: filters.mediaFilter  } },
+          show: { mediaType: { in: filters.mediaFilter } },
         }),
         ...(filters.userFilter && {
-          authorId: { in: filters.userFilter},
+          authorId: { in: filters.userFilter },
         }),
         ...(filters.showFilter && {
           show: {
@@ -102,4 +104,26 @@ export async function getPosts(
   }));
 
   return posts;
+}
+
+export async function createPost(
+  title: string,
+  content: string,
+  showId: string,
+  userId: string,
+  picturePath?: string,
+  tags?: Tag[],
+) {
+  const post = await prisma.post.create({
+    data: {
+      title,
+      content,
+      picturePath,
+      showId,
+      authorId: userId,
+      tags: { connect: tags },
+    },
+  });
+
+  return post;
 }

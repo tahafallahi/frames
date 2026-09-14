@@ -1,8 +1,15 @@
+import type { MediaType } from "generated/prisma/enums";
+
+export interface ShowIdentifier {
+  tmdbId: number;
+  mediaType: MediaType;
+}
+
 export interface ApiSearchShow {
   tmdbId: number;
   title: string;
   posterPath: string;
-  mediaType: "MOVIE" | "TV_SHOW";
+  mediaType: MediaType;
   releaseDate: string;
 }
 
@@ -12,9 +19,10 @@ export interface Show {
   title: string;
   overview: string;
   posterPath: string | null;
-  mediaType: "MOVIE" | "TV_SHOW";
+  mediaType: MediaType;
   genres: string[]
   releaseYear: number;
   postsCount?: number;
   favoritesCount?: number;
 }
+
