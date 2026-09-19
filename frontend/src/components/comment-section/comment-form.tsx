@@ -19,15 +19,18 @@ interface Props {
   post: Post;
   newComments: Comment[];
   setNewComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  isOpen: boolean,
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 export default function CommentForm({
   post,
   newComments,
   setNewComments,
+  isOpen,
+  setIsOpen
 }: Props) {
   const [user] = useUser();
-  const [isOpen, setIsOpen] = useState(false);
 
   const {
     register,

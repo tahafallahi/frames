@@ -17,6 +17,7 @@ export default function CommentSection({
   post: Post;
 }) {
   const [newComments, setNewComments] = useState<CommentType[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
@@ -27,15 +28,18 @@ export default function CommentSection({
         <CommentForm
           newComments={newComments}
           setNewComments={setNewComments}
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
           post={post}
         />
+        
         <motion.div
           layout
           transition={{ duration: 0.1 }}
           className="flex flex-col gap-3"
         >
           {!!newComments.length &&
-            newComments.map((c) => <Comment highlight comment={c}></Comment>)}
+            newComments.map((c, i) => <Comment highlight comment={c} key={i}></Comment>)}
 
           {comments.map((c, i) => recursiveReplies(c, i))}
         </motion.div>
