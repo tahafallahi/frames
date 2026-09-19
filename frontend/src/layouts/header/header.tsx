@@ -7,7 +7,7 @@ export default function Header({ variant }: { variant?: "compact" }) {
   const [user, , userQuery] = useUser();
 
   return (
-    <header className="sticky z-1 top-0 bg-background w-full h-18 flex justify-between items-center  px-10 border-b border-border">
+    <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center  px-10 border-b border-border">
       <h1 className="text-primary text-[36px] font-bold">
         <Link to="/">Frames</Link>
       </h1>

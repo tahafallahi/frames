@@ -69,10 +69,11 @@ export default function ViewPost() {
             </div>
           }
         >
-          {commentsQuery.isSuccess && (
+          {post && commentsQuery.isSuccess && (
             <CommentSection
               comments={commentsQuery.data.data}
-              commentsCount={post!.commentsCount}
+              commentsCount={post.commentsCount}
+              post={post}
             />
           )}
         </QueryWrapper>
