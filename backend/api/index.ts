@@ -11,6 +11,7 @@ import qs from "qs";
 
 import searchRouter from "../routers/search";
 import postsRouter from "../routers/posts";
+import commentsRouter from "../routers/comment"
 import tagsRouter from "../routers/tags";
 import authRouter from "../routers/auth";
 import userRouter from "../routers/user";
@@ -60,6 +61,7 @@ app.use(passport.session());
 
 router.use("/search", searchRouter);
 router.use("/posts", postsRouter);
+router.use("/comments", commentsRouter);
 router.use("/tags", tagsRouter);
 router.use("/auth", authRouter);
 router.use("/user", userRouter);

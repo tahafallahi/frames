@@ -1,16 +1,18 @@
+import { useState, type ReactElement } from "react";
+import { useUser } from "@/contexts/user-context";
+import { useForm } from "react-hook-form";
 import { AnimatePresence, motion } from "motion/react";
+import { toast } from "../ui/toast";
 
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
 import { FieldGroup, Field, FieldLabel } from "../ui/field";
 import Comment from "./comment";
 
-import type { Comment as CommentType } from "@/types/comment";
-import { useRef, useState, type ReactElement } from "react";
-import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
-import { useUser } from "@/contexts/user-context";
-import { useForm } from "react-hook-form";
 import type { Post } from "@/types/post";
-import { toast } from "../ui/toast";
+import type { CommentForm, Comment as CommentType } from "@/types/comment";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 
 const MotionFieldLabel = motion.create(FieldLabel);
 
@@ -25,6 +27,7 @@ export default function CommentSection({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [user] = useUser();
+  const [newComments, setNewComments] = useState<CommentType[]>([]);
 
   const {
     register,
@@ -32,12 +35,27 @@ export default function CommentSection({
     clearErrors,
     reset,
     formState: { errors },
-  } = useForm<{ content: string }>({defaultValues:{content: ""}});
+  } = useForm<{ content: string }>({ defaultValues: { content: "" } });
 
-  function handleCommentSubmit(data: object) {
+  function closeAndResetComments() {
+    reset();
+    clearErrors();
+    setIsOpen(false);
+  }
+
+  const commentMutation = useMutation({
+    mutationFn: async (data: CommentForm) =>
+      (await api.post<CommentType>("/comments", data)).data,
+    onSuccess: (data) => {
+      setNewComments([data, ...newComments]);
+      closeAndResetComments();
+    },
+  });
+
+  function handleCommentSubmit(data: { content: string }) {
     if (user) {
-      const output = { ...data, userId: user.id, postId: post.id };
-      console.log(output);
+      const output = { ...data, postId: post.id };
+      commentMutation.mutate(output);
     } else {
       toast.add({ type: "error", description: "Log in first." });
     }
@@ -46,7 +64,9 @@ export default function CommentSection({
   return (
     <>
       <div className="flex flex-col gap-3 w-175 ">
-        <h5 className="text-xl font-bold">{commentsCount} Comments</h5>
+        <h5 className="text-xl font-bold">
+          {commentsCount + newComments.length} Comments
+        </h5>
         {user ? (
           <form
             className="flex flex-col gap-2"
@@ -64,7 +84,11 @@ export default function CommentSection({
                 </MotionFieldLabel>
                 <Textarea
                   {...register("content", {
-                    required: "Comment can't be empty.",
+                    required: "Comment can't be empty",
+                    maxLength: {
+                      value: 5000,
+                      message: "Comment must 5000 characters or less",
+                    },
                   })}
                   className="py-4 "
                   onFocus={() => setIsOpen(true)}
@@ -83,11 +107,7 @@ export default function CommentSection({
                   <div className="flex justify-end gap-4 ">
                     <Button
                       variant="destructive"
-                      onClick={() => {
-                        reset();
-                        clearErrors();
-                        setIsOpen(false);
-                      }}
+                      onClick={closeAndResetComments}
                     >
                       Cancel
                     </Button>
@@ -105,6 +125,9 @@ export default function CommentSection({
           transition={{ duration: 0.1 }}
           className="flex flex-col gap-3"
         >
+          {!!newComments.length &&
+            newComments.map((c) => <Comment highlight comment={c}></Comment>)}
+
           {comments.map((c, i) => recursiveReplies(c, i))}
         </motion.div>
       </div>

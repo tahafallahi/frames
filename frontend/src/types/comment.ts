@@ -10,3 +10,8 @@ export interface Comment {
   repliesCount: number;
   likesCount: number;
 }
+
+export interface CommentForm {
+  content: string;
+  postId: string;
+}

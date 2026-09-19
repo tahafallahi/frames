@@ -1,11 +1,12 @@
+import { cn } from "@/lib/utils";
 import type { Comment } from "@/types/comment";
 import { thousandToK } from "@/utils/general";
 import { MessageCircle, Reply, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Link } from "react-router";
 
-export default function Comment({ comment }: { comment: Comment }) {
+export default function Comment({ comment, highlight }: { comment: Comment, highlight?: boolean }) {
   return (
-    <div className="px-5 py-3 flex gap-5 border-l border-primary bg-popover" >
+    <div className={cn("px-5 py-3 flex gap-5 border-l border-primary bg-popover", highlight && "border-1")} >
       <div className="shrink-0">
         <img
           src={comment.author.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
