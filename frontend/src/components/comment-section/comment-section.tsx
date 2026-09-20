@@ -17,7 +17,8 @@ export default function CommentSection({
   post: Post;
 }) {
   const [newComments, setNewComments] = useState<CommentType[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [formIsOpen, setFormIsOpen] = useState(false);
+  const [openReplyFrom, setOpenReplyForm] = useState<CommentType | null>(null);
 
   return (
     <>
@@ -28,34 +29,65 @@ export default function CommentSection({
         <CommentForm
           newComments={newComments}
           setNewComments={setNewComments}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
+          isOpen={formIsOpen}
+          setIsOpen={setFormIsOpen}
           post={post}
         />
-        
-        <motion.div
-          layout
-          transition={{ duration: 0.1 }}
+
+        <div
           className="flex flex-col gap-3"
         >
           {!!newComments.length &&
-            newComments.map((c, i) => <Comment highlight comment={c} key={i}></Comment>)}
+            newComments.map((c, i) => (
+              <Comment
+                highlight
+                comment={c}
+                key={i}
+                post={post}
+                openReplyForm={openReplyFrom}
+                setOpenReplyForm={setOpenReplyForm}
+              ></Comment>
+            ))}
 
-          {comments.map((c, i) => recursiveReplies(c, i))}
-        </motion.div>
+          {comments.map((c, i) =>
+            recursiveReplies(c, i, post, openReplyFrom, setOpenReplyForm),
+          )}
+        </div>
       </div>
     </>
   );
 }
 
-function recursiveReplies(comment: CommentType, key: number): ReactElement {
-  if (comment.repliesCount < 1) return <Comment key={key} comment={comment} />;
+function recursiveReplies(
+  comment: CommentType,
+  key: number,
+  post: Post,
+  openReplyFrom: CommentType | null,
+  setOpenReplyForm: React.Dispatch<React.SetStateAction<CommentType | null>>,
+): ReactElement {
+  if (comment.repliesCount < 1)
+    return (
+      <Comment
+        key={key}
+        comment={comment}
+        post={post}
+        openReplyForm={openReplyFrom}
+        setOpenReplyForm={setOpenReplyForm}
+      />
+    );
 
   return (
     <div key={key}>
-      <Comment comment={comment} />
+      <Comment
+        comment={comment}
+        post={post}
+        openReplyForm={openReplyFrom}
+        setOpenReplyForm={setOpenReplyForm}
+      />
       <div className="pl-10 flex flex-col gap-3">
-        {comment.replies.map((r, i) => recursiveReplies(r, i))}
+        {comment.replies.map((r, i) =>
+          recursiveReplies(r, i, post, openReplyFrom, setOpenReplyForm),
+        )}
       </div>
     </div>
   );

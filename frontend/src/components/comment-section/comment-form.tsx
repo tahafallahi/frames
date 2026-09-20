@@ -9,7 +9,6 @@ import type { Comment, CommentForm } from "@/types/comment";
 import { useUser } from "@/contexts/user-context";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "../ui/toast";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { api } from "@/lib/api";
 
@@ -21,6 +20,8 @@ interface Props {
   setNewComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   isOpen: boolean,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  parentComment?: Comment,
+  noAnimate?: boolean,
 }
 
 export default function CommentForm({
@@ -28,7 +29,9 @@ export default function CommentForm({
   newComments,
   setNewComments,
   isOpen,
-  setIsOpen
+  setIsOpen,
+  parentComment,
+  noAnimate
 }: Props) {
   const [user] = useUser();
 
@@ -55,9 +58,12 @@ export default function CommentForm({
     },
   });
 
+  console.log(parentComment);
+  
+
   function handleCommentSubmit(data: { content: string }) {
     if (user) {
-      const output = { ...data, postId: post.id };
+      const output = { ...data, postId: post.id, ...(parentComment && {parentId: parentComment.id}) };
       commentMutation.mutate(output);
     } else {
       toast.add({ type: "error", description: "Log in first." });
@@ -75,7 +81,7 @@ export default function CommentForm({
             <MotionFieldLabel
               htmlFor="title"
               className="absolute top-0 max-w-fit text-sm text-muted-foreground px-2 bg-background"
-              initial={{ x: 8, y: 14 }}
+              initial={noAnimate ? false : { x: 8, y: 14 }}
               animate={isOpen ? { x: 16, y: -12 } : { x: 8, y: 14 }}
             >
               Leave a comment
@@ -93,10 +99,10 @@ export default function CommentForm({
             />
           </Field>
         </FieldGroup>
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="popLayout" >
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, y: -50 }}
+              initial={noAnimate ? false : { opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -50 }}
               className={"z-0 "}
