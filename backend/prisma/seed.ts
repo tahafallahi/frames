@@ -21,7 +21,7 @@
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
 import { prisma } from "../lib/prisma";
-import { MediaType } from "generated/prisma/enums";
+import { MediaType, LikeType } from "generated/prisma/enums";
 import db from "database/db";
 
 // Deterministic-ish output so re-running gives similar "flavor" of data
@@ -535,7 +535,7 @@ async function seedLikes(
       if (seenPostLikes.has(key)) continue;
       seenPostLikes.add(key);
       await prisma.like.create({
-        data: { userId: liker.id, postId: post.id },
+        data: { userId: liker.id, postId: post.id, type: LikeType.LIKE },
       });
     }
   }
@@ -547,7 +547,7 @@ async function seedLikes(
       if (seenCommentLikes.has(key)) continue;
       seenCommentLikes.add(key);
       await prisma.like.create({
-        data: { userId: liker.id, commentId: comment.id },
+        data: { userId: liker.id, commentId: comment.id, type: LikeType.LIKE },
       });
     }
   }

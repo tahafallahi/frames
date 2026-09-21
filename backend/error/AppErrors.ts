@@ -16,6 +16,12 @@ export class NotFoundError extends AppError {
   }
 }
 
+export class ResourceAlreadyExistsError extends AppError {
+  constructor(resource = "Resource") {
+    super(`${resource} already exists.`, 409)
+  }
+}
+
 export class ValidationError extends AppError {
   details: unknown;
 

@@ -18,11 +18,11 @@ export default function ViewPost() {
   const postQuery = useQuery({
     queryKey: ["post", postId],
     queryFn: async () => {
-      return await api.get<Post>("/posts/" + postId);
+      return (await api.get<Post>("/posts/" + postId)).data;
     },
   });
 
-  const post = postQuery.data?.data;
+  const post = postQuery.data;
 
   const showQuery = useQuery({
     queryKey: ["show", post?.show.id],
@@ -43,6 +43,7 @@ export default function ViewPost() {
     },
     enabled: postQuery.isSuccess,
   });
+
 
   return (
     <>

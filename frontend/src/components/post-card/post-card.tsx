@@ -1,10 +1,10 @@
-import { thousandToK } from "@/utils/general";
-import { MessageCircle, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
-import { Badge } from "../ui/badge";
-
-import type { Post } from "@/types/post";
 import { Link } from "react-router";
+
+import { Badge } from "../ui/badge";
+import PostButtons from "./post-buttons";
+
 import { MediaType } from "@/types/show";
+import type { Post } from "@/types/post";
 
 export default function PostCard({
   post,
@@ -39,21 +39,7 @@ export default function PostCard({
             </div>
           ) : null}
           <div className="flex items-center justify-between text-muted-foreground">
-            <div className="flex  gap-8">
-              <div className="flex gap-2 content-center">
-                <ThumbsUp className="text rotate-y-180 w-5 -translate-y-0.5" />
-                <p>{thousandToK(post.likesCount)}</p>
-                <ThumbsDown className="rotate-y-180 w-5 translate-y-0.5" />
-              </div>
-              <div className="flex gap-2 ">
-                <MessageCircle className="w-5" />
-                <p>{thousandToK(post.commentsCount)}</p>
-              </div>
-              <div className="flex gap-2 ">
-                <Share2Icon className="w-5" />
-                <p>share</p>
-              </div>
-            </div>
+            <PostButtons post={post} />
             <div className="flex content-center gap-2">
               {post.tags.map((t, i) => (
                 <Badge variant={"outline"} key={i}>
@@ -71,29 +57,17 @@ export default function PostCard({
         <div className="flex flex-col gap-2">
           <div>
             <h4 className="text-2xl font-bold">{post.title}</h4>
-            <Link to={`/profile/${post.author.id}`} >
-              <p className="text-sm hover:text-primary w-fit">@{post.author.username}</p>
+            <Link to={`/profile/${post.author.id}`}>
+              <p className="text-sm hover:text-primary w-fit">
+                @{post.author.username}
+              </p>
             </Link>
           </div>
           <p className="text-muted-foreground">{post.content}</p>
         </div>
         {post.picturePath ? <img src={post.picturePath} alt="" /> : null}
         <div className="flex items-center justify-between text-muted-foreground">
-          <div className="flex  gap-8">
-            <div className="flex gap-2 content-center">
-              <ThumbsUp className="text rotate-y-180 w-5 -translate-y-0.5" />
-              <p>{thousandToK(post.likesCount)}</p>
-              <ThumbsDown className="rotate-y-180 w-5 translate-y-0.5" />
-            </div>
-            <div className="flex gap-2 ">
-              <MessageCircle className="w-5" />
-              <p>{thousandToK(post.commentsCount)}</p>
-            </div>
-            <div className="flex gap-2 ">
-              <Share2Icon className="w-5" />
-              <p>share</p>
-            </div>
-          </div>
+          <PostButtons post={post} />
           <div className="flex content-center gap-2">
             {post.tags.map((t, i) => (
               <Badge variant={"outline"} key={i}>

@@ -3,7 +3,9 @@ import { ValidationError } from "error/AppErrors";
 
 import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
+import { LikeType } from "generated/prisma/enums";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import { ReactionAction, ReactionType } from "types/likes";
 import type { ShowIdentifier } from "types/show";
 
 export async function getPosts(req: Request, res: Response) {
@@ -91,7 +93,6 @@ export const createPost = [
   body("showIdentifier").notEmpty(),
 
   async (req: Request, res: Response) => {
-
     if (!validationResult(req).isEmpty())
       throw new ValidationError(
         "Post object payload invalid body",
@@ -115,3 +116,42 @@ export const createPost = [
     return res.json(post);
   },
 ];
+
+export const updateReaction = [
+  body("type").notEmpty().isIn([ReactionType.LIKE, ReactionType.DISLIKE]),
+  body("action").notEmpty().isIn([ReactionAction.ADD, ReactionAction.REMOVE]),
+
+  async (req: Request<{ postId: string }>, res: Response) => {
+    if (!validationResult(req).isEmpty())
+      throw new ValidationError(
+        "Likes payload invalid body",
+        validationResult(req).array(),
+      );
+
+    const { type, action } = matchedData(req);
+    const { postId } = req.params;
+
+    if (type === ReactionType.LIKE) {
+      if (action === ReactionAction.ADD) {
+        await db.addLikeToPost(req.user!.id, postId);
+        return res.status(204).end();
+      } else if (action === ReactionAction.REMOVE) {
+        await db.removeLikeFromPost(req.user!.id, postId)
+        return res.status(204).end();
+      }
+    }
+  },
+];
+
+export async function getReaction(
+  req: Request<{ postId: string }>,
+  res: Response,
+) {
+  const { postId } = req.params;
+  const result: { type?: LikeType | null } = {type: null};
+  const like = await db.getPostLike(req.user!.id, postId);
+
+  if (like) result.type = LikeType.LIKE;
+
+  return res.json(result);
+}

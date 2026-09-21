@@ -12,6 +12,11 @@ enum MediaType {
   TV_SHOW
 }
 
+enum LikeType {
+  LIKE
+  DISLIKE
+}
+
 model Session {
   id        String   @id
   sid       String   @unique
@@ -134,6 +139,7 @@ model Trending {
 
 model Like {
   id String @id @default(uuid())
+  type LikeType
 
   userId String?
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
