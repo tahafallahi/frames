@@ -24,8 +24,9 @@ export default function ViewPost() {
 
   const post = postQuery.data;
 
+
   const showQuery = useQuery({
-    queryKey: ["show", post?.show.id],
+    queryKey: ["show", post?.show.tmdbId],
     queryFn: async () => {
       return (
         await api.get<Show>(

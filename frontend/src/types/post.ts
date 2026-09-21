@@ -13,7 +13,6 @@ export interface Post {
     profilePath: string;
   };
   show: {
-    id: string;
     tmdbId: number;
     title: string;
     releaseYear: number;

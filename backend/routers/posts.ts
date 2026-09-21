@@ -7,10 +7,10 @@ const router = Router();
 router.get("/", getPosts)
 router.get("/:postId", getPost)
 router.get("/:postId/comments", getComments)
-router.get("/:postId/likes", requireLogin, getReaction)
+router.get("/:postId/reaction", requireLogin, getReaction)
 
 router.post("/", requireLogin, createPost)
-router.post("/:postId/likes", requireLogin, updateReaction)
+router.post("/:postId/reaction", requireLogin, updateReaction)
 
 
 export default router;

@@ -5,7 +5,7 @@ import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
 import { LikeType } from "generated/prisma/enums";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
-import { ReactionAction, ReactionType } from "types/likes";
+import { ReactionAction, ReactionType } from "types/reaction";
 import type { ShowIdentifier } from "types/show";
 
 export async function getPosts(req: Request, res: Response) {
@@ -131,15 +131,8 @@ export const updateReaction = [
     const { type, action } = matchedData(req);
     const { postId } = req.params;
 
-    if (type === ReactionType.LIKE) {
-      if (action === ReactionAction.ADD) {
-        await db.addLikeToPost(req.user!.id, postId);
-        return res.status(204).end();
-      } else if (action === ReactionAction.REMOVE) {
-        await db.removeLikeFromPost(req.user!.id, postId)
-        return res.status(204).end();
-      }
-    }
+    await db.updatePostReaction(req.user!.id, postId, { type, action });
+    return res.status(204).end()
   },
 ];
 
@@ -148,10 +141,10 @@ export async function getReaction(
   res: Response,
 ) {
   const { postId } = req.params;
-  const result: { type?: LikeType | null } = {type: null};
-  const like = await db.getPostLike(req.user!.id, postId);
+  const result: { type?: LikeType | null } = { type: null };
+  const reaction = await db.getPostReaction(req.user!.id, postId);
 
-  if (like) result.type = LikeType.LIKE;
+  if (reaction) result.type = reaction.type;
 
   return res.json(result);
 }

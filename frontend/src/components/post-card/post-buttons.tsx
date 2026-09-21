@@ -11,7 +11,7 @@ import {
   ReactionType,
   type Reaction,
   type ReactionPayload,
-} from "@/types/like";
+} from "@/types/reaction";
 import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 
@@ -20,37 +20,42 @@ interface Props {
 }
 
 export default function PostButtons({ post }: Props) {
-  const likeMut = useMutation({
+  const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
-      await api.post(`posts/${post.id}/likes`, data),
+      await api.post(`posts/${post.id}/reaction`, data),
 
     onMutate: async (variables, context) => {
-      await context.client.cancelQueries({ queryKey: ["like"] });
+      await context.client.cancelQueries({ queryKey: ["like", post.id] });
       await context.client.cancelQueries({ queryKey: ["post", post.id] });
 
-      const prevLike = context.client.getQueryData<Reaction>(["like"]);
+      const prevLike = context.client.getQueryData<Reaction>(["like", post.id]);
       const prevPost = context.client.getQueryData(["post", post.id]);
 
-      const wasLiked = !!prevLike?.type;
-      
+      const wasReacted = !!prevLike?.type;
+
       context.client.setQueryData(["post", post.id], (prev: Post): Post => {
         return {
           ...prev,
-          likesCount: wasLiked ? prev.likesCount - 1 : prev.likesCount + 1,
+          likesCount:
+            variables.type === ReactionType.LIKE
+              ? wasReacted
+                ? prev.likesCount - 1
+                : prev.likesCount + 1
+              : wasReacted
+                ? prev.likesCount + 1
+                : prev.likesCount - 1,
         };
       });
 
-      context.client.setQueryData(["like"], (prev: Reaction) => ({
-        type: wasLiked ? null : ReactionType.LIKE,
+      context.client.setQueryData(["like", post.id], () => ({
+        type: wasReacted ? null : ReactionType.LIKE,
       }));
 
-
-      return {prevLike, prevPost};
+      return { prevLike, prevPost };
     },
 
-
     onError: (error, variables, onMutateResult, context) => {
-      context.client.setQueryData(["like"], onMutateResult?.prevLike);
+      context.client.setQueryData(["like", post.id], onMutateResult?.prevLike);
       context.client.setQueryData(["post", post.id], onMutateResult?.prevPost);
       toast.add({
         type: "error",
@@ -59,15 +64,16 @@ export default function PostButtons({ post }: Props) {
     },
 
     onSettled: async (data, error, variables, onMutateResult, context) => {
-      await context.client.invalidateQueries({ queryKey: ["like"] });
+      await context.client.invalidateQueries({ queryKey: ["like", post.id] });
       await context.client.invalidateQueries({ queryKey: ["post", post.id] });
+      await context.client.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
   const likeQuery = useQuery({
-    queryKey: ["like"],
+    queryKey: ["like", post.id],
     queryFn: async () =>
-      (await api.get<Reaction>(`posts/${post.id}/likes`)).data,
+      (await api.get<Reaction>(`posts/${post.id}/reaction`)).data,
   });
 
   const reaction = likeQuery.data;
@@ -78,12 +84,12 @@ export default function PostButtons({ post }: Props) {
         <Button
           onClick={() => {
             if (!reaction?.type) {
-              likeMut.mutate({
+              reactionMutation.mutate({
                 type: ReactionType.LIKE,
                 action: ReactionAction.ADD,
               });
             } else if (reaction.type === ReactionType.LIKE) {
-              likeMut.mutate({
+              reactionMutation.mutate({
                 type: ReactionType.LIKE,
                 action: ReactionAction.REMOVE,
               });
@@ -99,7 +105,27 @@ export default function PostButtons({ post }: Props) {
           <ThumbsUp className="rotate-y-180 -translate-y-0.5 size-full" />
         </Button>
         <p>{thousandToK(post.likesCount)}</p>
-        <Button variant="ghost" size="icon-xs" className="hover:text-primary">
+        <Button
+          onClick={() => {
+            if (!reaction?.type) {
+              reactionMutation.mutate({
+                type: ReactionType.DISLIKE,
+                action: ReactionAction.ADD,
+              });
+            } else if (reaction.type === ReactionType.DISLIKE) {
+              reactionMutation.mutate({
+                type: ReactionType.DISLIKE,
+                action: ReactionAction.REMOVE,
+              });
+            }
+          }}
+          variant="ghost"
+          size="icon-xs"
+          className={cn(
+            likeQuery.data?.type === ReactionType.DISLIKE && "text-primary",
+            "hover:text-primary",
+          )}
+        >
           <ThumbsDown className="rotate-y-180 translate-y-1 size-full" />
         </Button>
       </div>
