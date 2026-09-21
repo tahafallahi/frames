@@ -1,5 +1,4 @@
 import { useState, type ReactElement } from "react";
-import { motion } from "motion/react";
 
 import Comment from "./comment";
 import CommentForm from "./comment-form";
@@ -18,7 +17,7 @@ export default function CommentSection({
 }) {
   const [newComments, setNewComments] = useState<CommentType[]>([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
-  const [openReplyFrom, setOpenReplyForm] = useState<CommentType | null>(null);
+  const [openReplyForm, setOpenReplyForm] = useState<CommentType | null>(null);
 
   return (
     <>
@@ -44,13 +43,13 @@ export default function CommentSection({
                 comment={c}
                 key={i}
                 post={post}
-                openReplyForm={openReplyFrom}
+                openReplyForm={openReplyForm}
                 setOpenReplyForm={setOpenReplyForm}
               ></Comment>
             ))}
 
           {comments.map((c, i) =>
-            recursiveReplies(c, i, post, openReplyFrom, setOpenReplyForm),
+            recursiveReplies(c, i, post, openReplyForm, setOpenReplyForm),
           )}
         </div>
       </div>

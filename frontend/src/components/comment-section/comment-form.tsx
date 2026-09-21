@@ -19,7 +19,7 @@ interface Props {
   newComments: Comment[];
   setNewComments: React.Dispatch<React.SetStateAction<Comment[]>>;
   isOpen: boolean,
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>> | ((open: boolean) => void),
   parentComment?: Comment,
   noAnimate?: boolean,
 }

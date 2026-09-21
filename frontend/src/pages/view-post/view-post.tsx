@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router";
+import { useParams } from "react-router";
 import { api } from "@/lib/api";
 
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";

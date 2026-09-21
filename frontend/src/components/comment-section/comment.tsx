@@ -30,8 +30,8 @@ export default function Comment({
   const isOpen = openReplyForm?.id === comment.id;
 
   function setIsOpen(open: boolean) {
-    if (open) setOpenReplyForm(comment)
-    if (!open) setOpenReplyForm(null)
+    if (open) setOpenReplyForm(comment);
+    if (!open) setOpenReplyForm(null);
   }
 
   return (
@@ -39,7 +39,7 @@ export default function Comment({
       <div
         className={cn(
           "px-5 py-3 flex gap-5 border-l border-primary bg-popover",
-          highlight && "border-1",
+          highlight && "border",
         )}
       >
         <div className="shrink-0">
@@ -94,6 +94,21 @@ export default function Comment({
           parentComment={comment}
           noAnimate
         />
+      )}
+
+      {!!newReplies.length && (
+        <div className="pl-10">
+          {newReplies.map((c, i) => (
+            <Comment
+              highlight
+              comment={c}
+              key={i}
+              post={post}
+              openReplyForm={openReplyForm}
+              setOpenReplyForm={setOpenReplyForm}
+            ></Comment>
+          ))}
+        </div>
       )}
     </>
   );

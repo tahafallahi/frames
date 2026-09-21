@@ -8,6 +8,7 @@ export function buildCommentTree(inComments: OutputComment[]) {
   const commentsWithReplies: CommentWtihReplies[] = [];
 
   comments.forEach((c) => {
+    if (c.parentId) return;
     const result = recursiveCommentTree(c, comments);
     if (result) commentsWithReplies.push(result);
   });
@@ -19,8 +20,6 @@ function recursiveCommentTree(
   comment: CommentWtihReplies,
   comments: CommentWtihReplies[],
 ) {
-  if (comment.parentId) return null;
-
   comments.forEach((c) => {
     if (c.parentId == comment.id) {
       comment.replies.push(c);
