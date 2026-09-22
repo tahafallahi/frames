@@ -66,7 +66,6 @@ export default function PostButtons({ post }: Props) {
     onSettled: async (data, error, variables, onMutateResult, context) => {
       await context.client.invalidateQueries({ queryKey: ["like", post.id] });
       await context.client.invalidateQueries({ queryKey: ["post", post.id] });
-      await context.client.invalidateQueries({ queryKey: ["posts"] });
     },
   });
 
@@ -82,7 +81,7 @@ export default function PostButtons({ post }: Props) {
     <div className="flex  gap-8">
       <div className="flex gap-2 content-center">
         <Button
-          onClick={() => {
+          onClick={async () => {
             if (!reaction?.type) {
               reactionMutation.mutate({
                 type: ReactionType.LIKE,
@@ -92,6 +91,15 @@ export default function PostButtons({ post }: Props) {
               reactionMutation.mutate({
                 type: ReactionType.LIKE,
                 action: ReactionAction.REMOVE,
+              });
+            } else if (reaction.type === ReactionType.DISLIKE) {
+              await reactionMutation.mutateAsync({
+                type: ReactionType.DISLIKE,
+                action: ReactionAction.REMOVE,
+              });
+              await reactionMutation.mutateAsync({
+                type: ReactionType.LIKE,
+                action: ReactionAction.ADD,
               });
             }
           }}
@@ -106,7 +114,7 @@ export default function PostButtons({ post }: Props) {
         </Button>
         <p>{thousandToK(post.likesCount)}</p>
         <Button
-          onClick={() => {
+          onClick={async () => {
             if (!reaction?.type) {
               reactionMutation.mutate({
                 type: ReactionType.DISLIKE,
@@ -116,6 +124,15 @@ export default function PostButtons({ post }: Props) {
               reactionMutation.mutate({
                 type: ReactionType.DISLIKE,
                 action: ReactionAction.REMOVE,
+              });
+            } else if (reaction.type === ReactionType.LIKE) {
+              await reactionMutation.mutateAsync({
+                type: ReactionType.LIKE,
+                action: ReactionAction.REMOVE,
+              });
+              await reactionMutation.mutateAsync({
+                type: ReactionType.DISLIKE,
+                action: ReactionAction.ADD,
               });
             }
           }}

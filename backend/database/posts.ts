@@ -4,7 +4,6 @@ import { NotFoundError } from "error/AppErrors";
 
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
 import type { MediaType } from "generated/prisma/enums";
-import type { ShowIdentifier } from "types/show";
 import type { Show, Tag, User } from "generated/prisma/client";
 import { ReactionType } from "types/reaction";
 
@@ -125,6 +124,7 @@ export async function getPosts(
       commentsCount: _count.comments,
     };
   });
+
 
   return posts;
 }

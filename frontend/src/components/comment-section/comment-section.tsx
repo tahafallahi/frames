@@ -23,7 +23,7 @@ export default function CommentSection({
     <>
       <div className="flex flex-col gap-3 w-175 ">
         <h5 className="text-xl font-bold">
-          {commentsCount + newComments.length} Comments
+          {commentsCount} Comments
         </h5>
         <CommentForm
           newComments={newComments}
@@ -76,7 +76,7 @@ function recursiveReplies(
     );
 
   return (
-    <div key={key}>
+    <div key={key} className="flex flex-col gap-3">
       <Comment
         comment={comment}
         post={post}

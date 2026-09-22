@@ -30,6 +30,7 @@ export default function Feed() {
           },
         })
       ).data,
+      staleTime: 0,
   });
 
   const tagsResponse = useQuery({

@@ -6,7 +6,7 @@ import { body, matchedData, validationResult } from "express-validator";
 export const createComment = [
   body("content").notEmpty().isLength({ max: 5000 }),
   body("postId").notEmpty().isString(),
-  body("parentId").notEmpty().isString(),
+  body("parentId"),
 
   async (req: Request, res: Response) => {
     if (!validationResult(req).isEmpty())

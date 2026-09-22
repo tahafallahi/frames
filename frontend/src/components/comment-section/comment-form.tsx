@@ -56,10 +56,9 @@ export default function CommentForm({
       setNewComments([data, ...newComments]);
       closeAndResetComments();
     },
+    onSettled: (data, error, variables, onMutateResult, context) => context.client.invalidateQueries({queryKey: ["post", post.id]})
   });
 
-  console.log(parentComment);
-  
 
   function handleCommentSubmit(data: { content: string }) {
     if (user) {
