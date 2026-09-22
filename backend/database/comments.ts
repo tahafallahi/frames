@@ -1,6 +1,7 @@
 import { NotFoundError } from "error/AppErrors";
 import { prisma } from "lib/prisma";
 import { buildCommentTree } from "services/comment-tree";
+import { ReactionType } from "types/reaction";
 
 export async function getComments(postId: string) {
   const result = await prisma.comment.findMany({
@@ -14,17 +15,33 @@ export async function getComments(postId: string) {
       _count: {
         select: {
           replies: true,
-          likes: true,
         },
       },
     },
     where: { postId: postId },
   });
 
+  const commentIds = result.map((c) => c.id);
+
+  const reactionCount = await prisma.like.groupBy({
+    by: ["type", "commentId"],
+    where: { commentId: { in: commentIds } },
+    _count: true
+  });
+
+  const countsByComments = new Map<string, {likesCount: number}>()
+
+  for (const rc of reactionCount) {
+    const entry = countsByComments.get(rc.commentId!) ?? {likesCount: 0}
+    if (rc.type === ReactionType.LIKE) entry.likesCount += rc._count
+    if (rc.type === ReactionType.DISLIKE) entry.likesCount -= rc._count
+    countsByComments.set(rc.commentId!, entry)
+  }
+
   const comments = result.map(({ _count, ...rest }) => ({
     ...rest,
     repliesCount: _count.replies,
-    likesCount: _count.likes,
+    likesCount: countsByComments.get(rest.id)?.likesCount ?? 0
   }));
 
   const commentsWithReplies = buildCommentTree(comments);
@@ -52,21 +69,14 @@ export async function createComment({
       parentId: true,
       createdAt: true,
       updatedAt: true,
-      _count: {
-        select: {
-          replies: true,
-          likes: true,
-        },
-      },
     },
   });
 
-  const { _count, ...rest } = result;
 
   const comment = {
-    ...rest,
-    repliesCount: _count.replies,
-    likesCount: _count.likes,
+    ...result,
+    repliesCount: 0,
+    likesCount: 0,
   };
 
   return comment;
