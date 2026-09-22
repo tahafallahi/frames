@@ -40,7 +40,7 @@ export default function ViewPost() {
   const commentsQuery = useQuery({
     queryKey: ["comments", post?.id],
     queryFn: async () => {
-      return await api.get<Comment[]>("/posts/" + post?.id + "/comments");
+      return (await api.get<Comment[]>("/posts/" + post?.id + "/comments")).data;
     },
     enabled: postQuery.isSuccess,
   });
@@ -73,7 +73,7 @@ export default function ViewPost() {
         >
           {post && commentsQuery.isSuccess && (
             <CommentSection
-              comments={commentsQuery.data.data}
+              comments={commentsQuery.data}
               commentsCount={post.commentsCount}
               post={post}
             />

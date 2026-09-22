@@ -1,35 +1,52 @@
-import { MessageCircle, Share2Icon, ThumbsDown, ThumbsUp } from "lucide-react";
+import { MessageCircle, Reply, ThumbsDown, ThumbsUp } from "lucide-react";
 
-import { thousandToK } from "@/utils/general";
-
-import type { Post } from "@/types/post";
+import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { thousandToK } from "@/utils/general";
+import type { Comment } from "@/types/comment";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
 import {
   ReactionAction,
   ReactionType,
   type Reaction,
   type ReactionPayload,
 } from "@/types/reaction";
-import { cn } from "@/lib/utils";
+import { api } from "@/lib/api";
+import type { Post } from "@/types/post";
 import { toast } from "../ui/toast";
 
 interface Props {
   post: Post;
+  comment: Comment;
+  isOpen: boolean;
+  setOpenReplyForm: React.Dispatch<React.SetStateAction<Comment | null>>;
 }
 
-export default function PostButtons({ post }: Props) {
+export default function CommentButtons({
+  post,
+  comment,
+  isOpen,
+  setOpenReplyForm,
+}: Props) {
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
-      await api.post(`posts/${post.id}/reaction`, data),
+      await api.post(`posts/${post.id}/comments/${comment.id}/reaction`, data),
 
     onMutate: async (variables, context) => {
-      await context.client.cancelQueries({ queryKey: ["like", post.id] });
-      await context.client.cancelQueries({ queryKey: ["post", post.id] });
+      await context.client.cancelQueries({
+        queryKey: ["comment-like", post.id, comment.id],
+      });
 
-      const prevLike = context.client.getQueryData<Reaction>(["like", post.id]);
-      const prevPost = context.client.getQueryData(["post", post.id]);
+      const prevLike = context.client.getQueryData<Reaction>([
+        "comment-like",
+        post.id,
+        comment.id,
+      ]);
+
+      const prevComments = context.client.getQueryData<Comment[]>([
+        "comments",
+        post.id,
+      ]);
 
       const prevState = prevLike?.type;
       const newState = variables.type;
@@ -58,23 +75,38 @@ export default function PostButtons({ post }: Props) {
         }
       }
 
-      context.client.setQueryData(["post", post.id], (prev: Post): Post => {
-        return {
-          ...prev,
-          likesCount: prev.likesCount + likesCountChange,
-        };
-      });
+      context.client.setQueryData(
+        ["comments", post.id],
+        (prev: Comment[]): Comment[] => {
+          return prev.map((c) => {
+            if (c.id === comment.id) {
+              return { ...c, likesCount: c.likesCount + likesCountChange };
+            } else {
+              return c;
+            }
+          });
+        },
+      );
 
-      context.client.setQueryData(["like", post.id], () => ({
-        type: newState,
-      }));
+      context.client.setQueryData(
+        ["comment-like", post.id, comment.id],
+        () => ({
+          type: newState,
+        }),
+      );
 
-      return { prevLike, prevPost };
+      return { prevLike, prevComments };
     },
 
     onError: (error, variables, onMutateResult, context) => {
-      context.client.setQueryData(["like", post.id], onMutateResult?.prevLike);
-      context.client.setQueryData(["post", post.id], onMutateResult?.prevPost);
+      context.client.setQueryData(
+        ["comment-like", post.id, comment.id],
+        onMutateResult?.prevLike,
+      );
+      context.client.setQueryData(
+        ["comments", post.id],
+        onMutateResult?.prevComments,
+      );
       toast.add({
         type: "error",
         description: "Something went wrong, please try again later.",
@@ -82,15 +114,23 @@ export default function PostButtons({ post }: Props) {
     },
 
     onSettled: async (data, error, variables, onMutateResult, context) => {
-      await context.client.invalidateQueries({ queryKey: ["like", post.id] });
-      await context.client.invalidateQueries({ queryKey: ["post", post.id] });
+      await context.client.invalidateQueries({
+        queryKey: ["comment-like", post.id, comment.id],
+      });
+      await context.client.invalidateQueries({
+        queryKey: ["comments", post.id],
+      });
     },
   });
 
   const likeQuery = useQuery({
-    queryKey: ["like", post.id],
+    queryKey: ["comment-like", post.id, comment.id],
     queryFn: async () =>
-      (await api.get<Reaction>(`posts/${post.id}/reaction`)).data,
+      (
+        await api.get<Reaction>(
+          `posts/${post.id}/comments/${comment.id}/reaction`,
+        )
+      ).data,
   });
 
   const reaction = likeQuery.data;
@@ -121,7 +161,7 @@ export default function PostButtons({ post }: Props) {
         >
           <ThumbsUp className="rotate-y-180 -translate-y-0.5 size-full" />
         </Button>
-        <p>{thousandToK(post.likesCount)}</p>
+        <p>{thousandToK(comment.likesCount)}</p>
         <Button
           onClick={() => {
             if (reaction?.type !== ReactionType.DISLIKE) {
@@ -147,16 +187,21 @@ export default function PostButtons({ post }: Props) {
         </Button>
       </div>
       <div className="flex gap-2 ">
-        <Button variant="ghost" size="icon-xs" className="hover:text-primary">
-          <MessageCircle className="size-full" />
-        </Button>
-        <p>{thousandToK(post.commentsCount)}</p>
+        <MessageCircle className="w-5" />
+        <p>{thousandToK(comment.repliesCount)}</p>
       </div>
-      <div className="flex gap-2 ">
-        <Button variant="ghost" size="icon-xs" className="hover:text-primary">
-          <Share2Icon className="size-full" />
+      <div className="flex gap-2 items-center">
+        <Reply className="w-5" />
+        <Button
+          variant="ghost"
+          className={cn(
+            "p-0 h-fit hover:text-primary",
+            isOpen && "text-primary",
+          )}
+          onClick={() => setOpenReplyForm(comment)}
+        >
+          reply
         </Button>
-        <p>share</p>
       </div>
     </div>
   );

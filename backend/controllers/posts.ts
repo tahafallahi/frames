@@ -3,9 +3,10 @@ import { ValidationError } from "error/AppErrors";
 
 import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
+import type { Like } from "generated/prisma/client";
 import { LikeType } from "generated/prisma/enums";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
-import { ReactionAction, ReactionType } from "types/reaction";
+import { ReactionAction, ReactionType, type Reaction } from "types/reaction";
 import type { ShowIdentifier } from "types/show";
 
 export async function getPosts(req: Request, res: Response) {
@@ -121,7 +122,7 @@ export const updateReaction = [
   body("type").notEmpty().isIn([ReactionType.LIKE, ReactionType.DISLIKE]),
   body("action").notEmpty().isIn([ReactionAction.ADD, ReactionAction.REMOVE]),
 
-  async (req: Request<{ postId: string }>, res: Response) => {
+  async (req: Request<{ postId: string, commentId?: string }>, res: Response) => {
     if (!validationResult(req).isEmpty())
       throw new ValidationError(
         "Likes payload invalid body",
@@ -129,22 +130,30 @@ export const updateReaction = [
       );
 
     const { type, action } = matchedData(req);
-    const { postId } = req.params;
+    const { postId, commentId } = req.params;
 
-    await db.updatePostReaction(req.user!.id, postId, { type, action });
+    if (!commentId) {
+      await db.updatePostReaction(req.user!.id, postId, { type, action });
+    } else {
+      await db.updateCommentReaction(req.user!.id, commentId, { type, action });
+    }
     return res.status(204).end()
   },
 ];
 
 export async function getReaction(
-  req: Request<{ postId: string }>,
+  req: Request<{ postId: string, commentId?: string }>,
   res: Response,
 ) {
-  const { postId } = req.params;
+  const { postId, commentId } = req.params;
   const result: { type?: LikeType | null } = { type: null };
-  const reaction = await db.getPostReaction(req.user!.id, postId);
-
+  let reaction: Like | null;
+  if (!commentId) {
+    reaction = await db.getPostReaction(req.user!.id, postId);
+  } else {
+    reaction = await db.getCommentReaction(req.user!.id, commentId)
+  }
   if (reaction) result.type = reaction.type;
-
   return res.json(result);
+
 }
