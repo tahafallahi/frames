@@ -16,7 +16,7 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface ApiSearchUser {
+export interface SimpleUser {
   id: string;
   username: string;
   profilePath: string;

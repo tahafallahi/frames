@@ -50,7 +50,27 @@ export async function dismissEveryFollow(userId: string) {
     where: { followeeId: userId },
   });
 
-  console.log(result)
+  console.log(result);
 
-  return result
+  return result;
+}
+
+export async function getFollowings(userId: string) {
+  const FRelations = await prisma.follows.findMany({
+    where: { followerId: userId },
+    orderBy: { createdAt: "desc" },
+  });
+
+
+  const users = await Promise.all(
+    FRelations.map(async (r) => {
+      const user = await prisma.user.findUnique({
+        where: { id: r.followeeId },
+        select: { id: true, username: true, profilePath: true },
+      });
+      return user
+    }),
+  );
+
+  return users
 }

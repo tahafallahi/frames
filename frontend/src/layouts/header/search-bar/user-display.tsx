@@ -1,11 +1,11 @@
 import ProfileCard from "@/components/profile-card/profile-card";
 import SlimCard from "@/components/slim-card/slim-card";
-import type { ApiSearchUser } from "@/types/user";
+import type { SimpleUser } from "@/types/user";
 import type React from "react";
 import { Link } from "react-router";
 
 interface Props {
-  users: ApiSearchUser[] | undefined;
+  users: SimpleUser[] | undefined;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

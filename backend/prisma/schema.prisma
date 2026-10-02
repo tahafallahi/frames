@@ -59,6 +59,8 @@ model Follows {
   followeeId String
   followee User @relation("Followee",fields: [followeeId], references: [id], onDelete: Cascade)
 
+  createdAt DateTime @default(now())
+
   @@id([followerId, followeeId])
   @@index([followeeId])
 }

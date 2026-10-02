@@ -26,7 +26,7 @@ export default function FollowingsFeed() {
           return (
             await api.get<Post[]>("/posts", {
               params: {
-                userFilter: user.followings ? user.followings : [],
+                userFilter: user.followings.map(r => r.followeeId),
                 page: 1,
                 sort: qSort,
               },
@@ -77,7 +77,7 @@ export default function FollowingsFeed() {
           title="Your Followings' posts"
         />
       </div>
-      <div>
+      <div className="flex flex-col gap-8">
         {user && <FollowingColumn followings={user?.followings} />}
         <Filter
           query={tagQuery}

@@ -1,5 +1,6 @@
-import type { ApiSearchUser, User } from "@/types/user";
+import type { SimpleUser, User } from "@/types/user";
 import { thousandToK } from "@/utils/general";
+import { Link } from "react-router";
 
 export default function ProfileCard({
   user,
@@ -10,7 +11,7 @@ export default function ProfileCard({
       variant: "full" | "detailed";
     }
   | {
-      user: ApiSearchUser | User;
+      user: SimpleUser | User;
       variant: "compact";
     }) {
   if (variant === "detailed") {
@@ -58,18 +59,20 @@ export default function ProfileCard({
     );
   } else if (variant === "compact") {
     return (
-      <div className="flex gap-3 items-center">
-        <div className="shrink-0">
-          <img
-            className="rounded-full w-8 "
-            src={user.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
-            alt="User's profile picture"
-          />
+      <Link to={`/profile/${user.id}`} className="hover:ring-2 ring-primary ring-offset-4 ring-offset-background">
+        <div className="flex gap-3 items-center">
+          <div className="shrink-0">
+            <img
+              className="rounded-full w-8 "
+              src={user.profilePath ?? import.meta.env.VITE_PROFILE_PLACEHOLDER}
+              alt="User's profile picture"
+            />
+          </div>
+          <div className="flex flex-col">
+            <p className="text-sm wrap-anywhere">{user.username}</p>
+          </div>
         </div>
-        <div className="flex flex-col">
-          <p className="text-sm wrap-anywhere">{user.username}</p>
-        </div>
-      </div>
+      </Link>
     );
   }
 }

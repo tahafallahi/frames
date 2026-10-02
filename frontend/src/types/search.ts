@@ -1,9 +1,9 @@
 import type { ApiSearchPost } from "./post";
 import type { ApiSearchShow } from "./show";
-import type { ApiSearchUser } from "./user";
+import type { SimpleUser } from "./user";
 
 export interface ApiSearchResponse {
-  users: ApiSearchUser[];
+  users: SimpleUser[];
   posts: ApiSearchPost[];
   movies: ApiSearchShow[];
   tvs: ApiSearchShow[];
