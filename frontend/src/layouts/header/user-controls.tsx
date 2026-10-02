@@ -24,7 +24,9 @@ export default function UserControls({
   user: User | null;
   query: UseQueryResult;
 }) {
-  const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains("dark"));
+  const [isDarkMode, setIsDarkMode] = useState(
+    document.documentElement.classList.contains("dark"),
+  );
   return (
     <QueryWrapper
       query={query}
@@ -55,16 +57,24 @@ export default function UserControls({
 
           <Button
             onClick={() => {
-              document.documentElement.classList.toggle("dark");
-              setIsDarkMode(document.documentElement.classList.contains("dark"))
+              if (document.documentElement.classList.contains("dark")) {
+                document.documentElement.classList.remove("dark");
+                localStorage.setItem("color-mode", "light");
+                setIsDarkMode(false);
+              } else {
+                document.documentElement.classList.add("dark");
+                localStorage.setItem("color-mode", "dark");
+                setIsDarkMode(true);
+              }
             }}
             variant="ghost"
             size="icon-xs"
-          > 
-          {
-             isDarkMode?   
-            <Sun className="size-full" /> : <Moon className="size-full"/>
-          }
+          >
+            {isDarkMode ? (
+              <Sun className="size-full" />
+            ) : (
+              <Moon className="size-full" />
+            )}
           </Button>
 
           <Popover>
