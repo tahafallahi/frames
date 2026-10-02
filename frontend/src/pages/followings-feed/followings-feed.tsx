@@ -10,7 +10,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 
 export default function FollowingsFeed() {
-  const [user, setUser] = useUser();
+  const [user] = useUser();
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     Content: [],
     Tags: [],

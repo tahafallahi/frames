@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { User } from "@/types/user";
 import { Spinner } from "../ui/spinner";
+import BarButton from "../bar-button/bar-button";
 
 export default function AddFavoriteButton({
   user,
@@ -74,22 +75,20 @@ export default function AddFavoriteButton({
     }
   }
   return isFavorite ? (
-    <Button
-      className="h-13 font-bold"
+    <BarButton
       variant={variant}
       onClick={handleAddFavorite}
     >
       Remove from Favorites
       {removeFavoriteMutation.isPending && <Spinner data-icon="inline-end" />}
-    </Button>
+    </BarButton>
   ) : (
-    <Button
-      className="h-13 font-bold"
+    <BarButton
       variant={variant}
       onClick={handleAddFavorite}
     >
       Add to Your Favorites
       {addFavoriteMutation.isPending && <Spinner data-icon="inline-end" />}
-    </Button>
+    </BarButton>
   );
 }

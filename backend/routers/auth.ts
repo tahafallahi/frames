@@ -1,5 +1,6 @@
 import { signupUser } from "controllers/auth";
 import { Router, type Request, type Response } from "express";
+import { requireLogin } from "middlewares/require-login";
 import passport from "passport";
 
 const router = Router();
@@ -12,6 +13,19 @@ router.get(
     res.redirect("http://localhost:5173/");
   },
 );
+router.post("/logout", requireLogin, (req: Request, res: Response) => {
+  req.session.destroy((err) => {
+    if (err) res.status(500).json({ message: "Could not log out" });
+
+    res.clearCookie("connect.sid", {
+      secure: false,
+      sameSite: "lax",
+      httpOnly: true,
+    });
+
+    return res.status(200).json({ message: "Logged out" });
+  });
+});
 
 router.post(
   "/login",

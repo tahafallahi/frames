@@ -4,19 +4,17 @@ import { Bell, Moon, Sun } from "lucide-react";
 import {
   Popover,
   PopoverContent,
-  PopoverTitle,
-  PopoverHeader,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import ProfileCard from "@/components/profile-card/profile-card";
 
 import type { User } from "@/types/user";
 import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Skeleton from "@/components/skeleton/skeleton";
 import { useState } from "react";
-import NotificationsTray from "./notifications-tray";
+import NotificationsTray from "./trays/notifications-tray";
+import ProfileTray from "./trays/profile-tray";
 
 export default function UserControls({
   user,
@@ -70,6 +68,7 @@ export default function UserControls({
             }}
             variant="ghost"
             size="icon-xs"
+            aria-label="Toggle color mode"
           >
             {isDarkMode ? (
               <Sun className="size-full" />
@@ -84,28 +83,31 @@ export default function UserControls({
                 <Button
                   variant={"ghost"}
                   size={"icon-xs"}
-                  aria-label="Notifications"
+                  aria-label="Notifications button"
                 >
                   <Bell className="size-full" />
                 </Button>
               }
             ></PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
-             <NotificationsTray />
+              <NotificationsTray />
             </PopoverContent>
           </Popover>
 
           <Popover>
             <PopoverTrigger
               render={
-                <Button variant={"ghost"} className="p-0" aria-label="Profile">
+                <Button
+                  variant={"ghost"}
+                  className="p-0"
+                  aria-label="Profile button"
+                >
                   <img
                     className="rounded-full w-8"
                     src={
                       user.profilePath ??
                       "https://placehold.co/50x50/lightblue/black/?text=profile"
                     }
-                    alt=""
                   />
                 </Button>
               }
@@ -113,15 +115,7 @@ export default function UserControls({
               Open Popover
             </PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
-              <PopoverHeader>
-                <ProfileCard user={user} variant={"full"} />
-              </PopoverHeader>
-              <div className="flex flex-col gap-2">
-                <Link to={"/profile/" + user.id}>Profile</Link>
-                <Button className="font-bold bg-destructive hover:bg-destructive/80">
-                  Log out
-                </Button>
-              </div>
+              <ProfileTray user={user} />
             </PopoverContent>
           </Popover>
         </div>

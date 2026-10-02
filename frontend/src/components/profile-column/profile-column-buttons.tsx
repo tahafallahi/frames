@@ -1,9 +1,8 @@
-import { Button } from "../ui/button";
-
 import type { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { Spinner } from "../ui/spinner";
+import BarButton from "../bar-button/bar-button";
 
 interface Props {
   pageUser: User;
@@ -33,15 +32,15 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
           <p>Change bio</p>
         </div>
       ) : isFollowed ? (
-        <Button className="h-13 font-bold" onClick={() => unfollowMut.mutate()}>
+        <BarButton onClick={() => unfollowMut.mutate()}>
           Unfollow
           {unfollowMut.isPending && <Spinner data-icon="inline-end" />}
-        </Button>
+        </BarButton>
       ) : (
-        <Button className="h-13 font-bold" onClick={() => followMut.mutate()}>
+        <BarButton onClick={() => followMut.mutate()}>
           Follow
           {followMut.isPending && <Spinner data-icon="inline-end" />}
-        </Button>
+        </BarButton>
       )}
     </>
   );
