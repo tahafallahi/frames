@@ -9,7 +9,7 @@ export interface User {
   likesCount: number;
   follwersCount: number ;
   followingsCount: number;
-  followings: User[];
+  followings: FRelation[];
   postsCount: number;
   favorites: Show[];
   createdAt: Date;
@@ -20,4 +20,9 @@ export interface ApiSearchUser {
   id: string;
   username: string;
   profilePath: string;
+}
+
+export interface FRelation {
+  followerId: string;
+  followeeId: string;
 }

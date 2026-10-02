@@ -92,3 +92,21 @@ export const removeFavorite = [
     res.status(204).end();
   },
 ];
+
+export async function followUser(req: Request<{followeeUserId: string}>, res: Response) {
+  const user = req.user
+  const {followeeUserId} = req.params
+
+  const result = db.followUser(user!.id, followeeUserId)
+
+  return res.status(204).end()
+}
+
+export async function unfollowUser(req: Request<{followeeUserId: string}>, res: Response) {
+  const user = req.user
+  const {followeeUserId} = req.params
+
+  const result = db.unfollowUser(user!.id, followeeUserId)
+
+  return res.status(204).end()
+}

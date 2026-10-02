@@ -4,6 +4,7 @@ import * as dbComments from "./comments";
 import * as dbPosts from "./posts";
 import * as dbUsers from "./users";
 import * as dbLikes from "./likes";
+import * as dbFollows from "./follows"
 
 export default {
   ...dbGet,
@@ -12,4 +13,5 @@ export default {
   ...dbPosts,
   ...dbUsers,
   ...dbLikes,
+  ...dbFollows,
 };

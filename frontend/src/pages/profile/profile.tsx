@@ -14,7 +14,7 @@ export default function Profile() {
   const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
 
   const postsQuery = useQuery({
-    queryKey: ["posts", qSort],
+    queryKey: ["user-posts", userId, qSort],
     queryFn: async () =>
       (
         await api.get<Post[]>(

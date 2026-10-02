@@ -12,11 +12,11 @@ export async function getUser(userId: string) {
       createdAt: true,
       updatedAt: true,
       favorites: true,
-      following: true,
+      followings: true,
       _count: {
         select: {
           followers: true,
-          following: true,
+          followings: true,
           likes: true,
           posts: true,
         },
@@ -31,7 +31,7 @@ export async function getUser(userId: string) {
 
   const user: Express.User = {
     ...rest,
-    followingsCount: _count.following,
+    followingsCount: _count.followings,
     follwersCount: _count.followers,
     likesCount: _count.likes,
     postsCount: _count.posts,

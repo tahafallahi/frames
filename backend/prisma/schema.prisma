@@ -44,7 +44,7 @@ model User {
   federatedUsers FederatedUser?
   posts Post[]
   comments Comment[]
-  following Follows[] @relation("Follower")
+  followings Follows[] @relation("Follower")
   followers Follows[] @relation("Followee")
   favorites Show[] 
   likes Like[]

@@ -3,15 +3,15 @@ import type { User } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 import ProfileCard from "../profile-card/profile-card";
 import QueryWrapper from "../query-wrapper/query-wrapper";
-import { useUser } from "@/contexts/user-context";
 import FavoriteShows from "../favorite-shows/favorite-shows";
-import { Button } from "../ui/button";
 import Skeleton from "../skeleton/skeleton";
+import ProfileColumnButtons from "./profile-column-buttons";
+import { useUser } from "@/contexts/user-context";
 
 export default function ProfileColumn({ userId }: { userId: string }) {
-  const [user] = useUser();
+  const [user] = useUser()
 
-  const userQuery = useQuery({
+  const pageUserQuery = useQuery({
     queryKey: ["user", userId],
     queryFn: async () => (await api.get<User>("/user/" + userId)).data,
   });
@@ -22,8 +22,8 @@ export default function ProfileColumn({ userId }: { userId: string }) {
         <h3 className="text-2xl">Profile</h3>
         <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
           <QueryWrapper
-            query={userQuery}
-            isEmpty={!!(userQuery.data && !Object.keys(userQuery.data))}
+            query={pageUserQuery}
+            isEmpty={!!(pageUserQuery.data && !Object.keys(pageUserQuery.data))}
             loadingPlaceHolder={
               <div>
                 <div className="flex gap-4">
@@ -43,22 +43,16 @@ export default function ProfileColumn({ userId }: { userId: string }) {
               </div>
             }
           >
-            {userQuery.data && (
-              <ProfileCard user={userQuery.data} variant="detailed" />
+            {pageUserQuery.data && (
+              <ProfileCard user={pageUserQuery.data} variant="detailed" />
             )}
 
-            {user && userQuery.data && user.id === userQuery.data.id ? (
-              <div className="flex flex-col gap-2 px-5 py-2 border-l">
-                <p>Change profile picture</p>
-                <p>Change username</p>
-                <p>Change bio</p>
-              </div>
-            ) : (
-              <Button>Follow</Button>
+            {user && pageUserQuery.data && (
+              <ProfileColumnButtons pageUser={pageUserQuery.data} user={user} />
             )}
 
-            {!!userQuery.data?.favorites?.length && (
-              <FavoriteShows shows={userQuery.data.favorites} />
+            {!!pageUserQuery.data?.favorites?.length && (
+              <FavoriteShows shows={pageUserQuery.data.favorites} />
             )}
           </QueryWrapper>
         </div>
