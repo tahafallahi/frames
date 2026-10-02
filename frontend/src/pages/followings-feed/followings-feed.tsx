@@ -19,14 +19,14 @@ export default function FollowingsFeed() {
   const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
 
   const postQuery = useQuery({
-    queryKey: ["followings"],
+    queryKey: ["followings", qSort],
     queryFn: async () => {
       if (user) {
         if (user.followings) {
           return (
             await api.get<Post[]>("/posts", {
               params: {
-                userFilter: user.followings.map(r => r.followeeId),
+                userFilter: user.followings.map((r) => r.followeeId),
                 page: 1,
                 sort: qSort,
               },
@@ -36,6 +36,7 @@ export default function FollowingsFeed() {
       }
       return [];
     },
+    staleTime: 0,
   });
 
   const tagQuery = useQuery({
