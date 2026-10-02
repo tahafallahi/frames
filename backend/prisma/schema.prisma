@@ -54,6 +54,8 @@ model Follows {
   followerId String
   follower User @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
 
+  notify Boolean @default(true) 
+
   followeeId String
   followee User @relation("Followee",fields: [followeeId], references: [id], onDelete: Cascade)
 

@@ -16,6 +16,7 @@ import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Skeleton from "@/components/skeleton/skeleton";
 import { useState } from "react";
+import NotificationsTray from "./notifications-tray";
 
 export default function UserControls({
   user,
@@ -90,24 +91,7 @@ export default function UserControls({
               }
             ></PopoverTrigger>
             <PopoverContent className="p-5 ring-1" align="end" sideOffset={36}>
-              <PopoverHeader>
-                <PopoverTitle>You have x notifications</PopoverTitle>
-              </PopoverHeader>
-              <div className="flex justify-end">
-                <Button
-                  variant={"ghost"}
-                  className="p-0 hover:text-destructive"
-                >
-                  dismiss all
-                </Button>
-              </div>
-              {/* <div className="flex flex-col gap-2">
-                    {user.notifications.map((n, i) => (
-                      <SlimCard key={i} className="border-l-3">
-                        <p>{n}</p>
-                      </SlimCard>
-                    ))}
-                  </div> */}
+             <NotificationsTray />
             </PopoverContent>
           </Popover>
 

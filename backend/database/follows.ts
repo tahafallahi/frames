@@ -15,7 +15,7 @@ export async function followUser(userId: string, followeeUserId: string) {
     data: { followerId: userId, followeeId: followeeUserId },
   });
 
-  return fRelation
+  return fRelation;
 }
 
 export async function unfollowUser(userId: string, followeeUserId: string) {
@@ -25,8 +25,7 @@ export async function unfollowUser(userId: string, followeeUserId: string) {
     },
   });
 
-  if (!existingFRelation)
-    throw new NotFoundError("Follow relation");
+  if (!existingFRelation) throw new NotFoundError("Follow relation");
 
   const fRelation = await prisma.follows.delete({
     where: {
@@ -34,5 +33,24 @@ export async function unfollowUser(userId: string, followeeUserId: string) {
     },
   });
 
-  return fRelation
+  return fRelation;
+}
+
+export async function getNewFollows(userId: string) {
+  const newFollows = await prisma.follows.findMany({
+    where: { AND: { followeeId: userId, notify: true } },
+  });
+
+  return newFollows;
+}
+
+export async function dismissEveryFollow(userId: string) {
+  const result = await prisma.follows.updateManyAndReturn({
+    data: { notify: false },
+    where: { followeeId: userId },
+  });
+
+  console.log(result)
+
+  return result
 }

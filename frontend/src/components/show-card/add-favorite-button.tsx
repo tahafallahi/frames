@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import type { User } from "@/types/user";
 import { Spinner } from "../ui/spinner";
-import { toast } from "../ui/toast";
 
 export default function AddFavoriteButton({
   user,

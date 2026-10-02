@@ -97,7 +97,7 @@ export async function followUser(req: Request<{followeeUserId: string}>, res: Re
   const user = req.user
   const {followeeUserId} = req.params
 
-  const result = db.followUser(user!.id, followeeUserId)
+  const result = await db.followUser(user!.id, followeeUserId)
 
   return res.status(204).end()
 }
@@ -106,7 +106,29 @@ export async function unfollowUser(req: Request<{followeeUserId: string}>, res: 
   const user = req.user
   const {followeeUserId} = req.params
 
-  const result = db.unfollowUser(user!.id, followeeUserId)
+  const result = await db.unfollowUser(user!.id, followeeUserId)
+
+  return res.status(204).end()
+}
+
+export async function getNewFollows(req: Request, res: Response) {
+  const user = req.user
+
+  const reuslt = await db.getNewFollows(user!.id)
+
+  const newFollows = await Promise.all(reuslt.map(async (f) => {
+    const user = await db.getUser(f.followerId)
+    return {username: user.username, id: user.id}
+  }))
+
+  return res.json(newFollows)
+}
+
+export async function dismissEveryFollow(req: Request, res: Response) {
+  const user = req.user
+  console.log('here')
+  
+  await db.dismissEveryFollow(user!.id);
 
   return res.status(204).end()
 }

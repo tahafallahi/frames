@@ -2,18 +2,22 @@ import {
   addFavorite,
   followUser,
   getLoggedInUser,
+  getNewFollows,
   getUser,
   removeFavorite,
   unfollowUser,
+  dismissEveryFollow
 } from "controllers/user";
 import { Router } from "express";
 import { requireLogin } from "middlewares/require-login";
 
 const router = Router();
 
+router.get("/follow-notifications", requireLogin, getNewFollows)
 router.get("/:userId", getUser);
 router.get("/", requireLogin, getLoggedInUser);
 
+router.delete("/follow-notifications", requireLogin, dismissEveryFollow)
 router.post("/:followeeUserId/follow", requireLogin, followUser);
 router.delete("/:followeeUserId/follow", requireLogin, unfollowUser);
 router.post("/favorites", requireLogin, addFavorite);
