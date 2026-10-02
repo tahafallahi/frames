@@ -15,8 +15,8 @@ export default function PostCard({
 }) {
   if (variant === "compact") {
     return (
-      <Link to={"/posts/" + post.id}>
-        <div className="w-175 px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
+      <div className="w-175 px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
+        <Link to={"/posts/" + post.id}>
           <div className="flex justify-between text-muted-foreground text-sm">
             <p>
               {post.show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}:{" "}
@@ -38,18 +38,18 @@ export default function PostCard({
               <img src={post.picturePath} alt="" className="w-fill" />
             </div>
           ) : null}
-          <div className="flex items-center justify-between text-muted-foreground">
-            <PostButtons post={post} />
-            <div className="flex content-center gap-2">
-              {post.tags.map((t, i) => (
-                <Badge variant={"outline"} key={i}>
-                  {t.name}
-                </Badge>
-              ))}
-            </div>
+        </Link>
+        <div className="flex items-center justify-between text-muted-foreground">
+          <PostButtons post={post} />
+          <div className="flex content-center gap-2">
+            {post.tags.map((t, i) => (
+              <Badge variant={"outline"} key={i}>
+                {t.name}
+              </Badge>
+            ))}
           </div>
         </div>
-      </Link>
+      </div>
     );
   } else if (variant === "full") {
     return (

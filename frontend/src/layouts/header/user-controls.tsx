@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Bell } from "lucide-react";
+import { Bell, Moon, Sun } from "lucide-react";
 
 import {
   Popover,
@@ -15,6 +15,7 @@ import type { User } from "@/types/user";
 import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Skeleton from "@/components/skeleton/skeleton";
+import { useState } from "react";
 
 export default function UserControls({
   user,
@@ -23,6 +24,7 @@ export default function UserControls({
   user: User | null;
   query: UseQueryResult;
 }) {
+  const [isDarkMode, setIsDarkMode] = useState(document.documentElement.classList.contains("dark"));
   return (
     <QueryWrapper
       query={query}
@@ -51,15 +53,29 @@ export default function UserControls({
             <Link to="/create">Create</Link>
           </h2>
 
+          <Button
+            onClick={() => {
+              document.documentElement.classList.toggle("dark");
+              setIsDarkMode(document.documentElement.classList.contains("dark"))
+            }}
+            variant="ghost"
+            size="icon-xs"
+          > 
+          {
+             isDarkMode?   
+            <Sun className="size-full" /> : <Moon className="size-full"/>
+          }
+          </Button>
+
           <Popover>
             <PopoverTrigger
               render={
                 <Button
                   variant={"ghost"}
-                  size={"icon-lg"}
+                  size={"icon-xs"}
                   aria-label="Notifications"
                 >
-                  <Bell className="size-6" />
+                  <Bell className="size-full" />
                 </Button>
               }
             ></PopoverTrigger>

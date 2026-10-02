@@ -8,15 +8,14 @@ export default function Skeleton({
   className?: string;
   variant?: "line";
 }) {
-
   let variantClassName = "";
 
-  if (variant === "line") variantClassName = "h-5"
+  if (variant === "line") variantClassName = "h-5";
 
   return (
     <motion.div
       className={twMerge(
-        "h-20 bg-linear-to-r from-white/23 via-white/17 to-white/23 rounded-[10px] bg-size-[200%_100%]",
+        "h-20 bg-linear-to-r dark:from-white/23  dark:via-white/17 dark:to-white/23  from-black/23  via-black/17 to-black/23 rounded-[10px] bg-size-[200%_100%]",
         variantClassName,
         className,
       )}

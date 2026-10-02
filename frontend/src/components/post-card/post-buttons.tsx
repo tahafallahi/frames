@@ -75,6 +75,7 @@ export default function PostButtons({ post }: Props) {
     onError: (error, variables, onMutateResult, context) => {
       context.client.setQueryData(["like", post.id], onMutateResult?.prevLike);
       context.client.setQueryData(["post", post.id], onMutateResult?.prevPost);
+      console.log(error)
       toast.add({
         type: "error",
         description: "Something went wrong, please try again later.",

@@ -198,7 +198,9 @@ export default function CommentButtons({
             "p-0 h-fit hover:text-primary",
             isOpen && "text-primary",
           )}
-          onClick={() => setOpenReplyForm(comment)}
+          onClick={() => {
+          setOpenReplyForm( isOpen? null : comment);
+          }}
         >
           reply
         </Button>
