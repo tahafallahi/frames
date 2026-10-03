@@ -89,11 +89,3 @@ export async function updateCommentReaction(
     return result;
   }
 }
-
-export async function getCommentReaction(userId: string, commentId: string) {
-  const reaction = await prisma.like.findUnique({
-    where: { userId_commentId: { userId, commentId } },
-  });
-
-  return reaction;
-}

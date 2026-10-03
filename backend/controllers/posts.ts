@@ -76,32 +76,16 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
   return res.json(post);
 }
 
-export async function getReaction(
-  req: Request<{ postId: string, commentId?: string }>,
-  res: Response,
-) {
-  const { postId, commentId } = req.params;
-  const result: { type?: LikeType | null } = { type: null };
-  let reaction: Like | null;
-  if (!commentId) {
-    reaction = await db.getPostReaction(req.user!.id, postId);
-  } else {
-    reaction = await db.getCommentReaction(req.user!.id, commentId)
-  }
-  if (reaction) result.type = reaction.type;
-  return res.json(result);
-
-}
-
 export async function getComments(
   req: Request<{ postId: string }>,
   res: Response,
 ) {
   const { postId } = req.params;
+  const user = req.user
 
   if (!postId) throw new ValidationError("PostId parameter must exist");
 
-  const comments = await db.getComments(postId);
+  const comments = await db.getComments(user?.id, postId);
 
   return res.send(comments);
 }

@@ -3,7 +3,7 @@ import { prisma } from "lib/prisma";
 import { buildCommentTree } from "services/comment-tree";
 import { ReactionType } from "types/reaction";
 
-export async function getComments(postId: string) {
+export async function getComments(userId: string | undefined, postId: string) {
   const result = await prisma.comment.findMany({
     select: {
       id: true,
@@ -26,23 +26,35 @@ export async function getComments(postId: string) {
   const reactionCount = await prisma.like.groupBy({
     by: ["type", "commentId"],
     where: { commentId: { in: commentIds } },
-    _count: true
+    _count: true,
   });
 
-  const countsByComments = new Map<string, {likesCount: number}>()
+  const countsByComments = new Map<string, { likesCount: number }>();
 
   for (const rc of reactionCount) {
-    const entry = countsByComments.get(rc.commentId!) ?? {likesCount: 0}
-    if (rc.type === ReactionType.LIKE) entry.likesCount += rc._count
-    if (rc.type === ReactionType.DISLIKE) entry.likesCount -= rc._count
-    countsByComments.set(rc.commentId!, entry)
+    const entry = countsByComments.get(rc.commentId!) ?? { likesCount: 0 };
+    if (rc.type === ReactionType.LIKE) entry.likesCount += rc._count;
+    if (rc.type === ReactionType.DISLIKE) entry.likesCount -= rc._count;
+    countsByComments.set(rc.commentId!, entry);
   }
 
-  const comments = result.map(({ _count, ...rest }) => ({
-    ...rest,
-    repliesCount: _count.replies,
-    likesCount: countsByComments.get(rest.id)?.likesCount ?? 0
-  }));
+  const comments = await Promise.all(
+    result.map(async (comment) => {
+      const reaction = userId
+        ? await prisma.like.findUnique({
+            where: { userId_commentId: { userId, commentId: comment.id } },
+          })
+        : null;
+
+      const { _count, ...rest } = comment;
+      return {
+        ...rest,
+        repliesCount: _count.replies,
+        likesCount: countsByComments.get(rest.id)?.likesCount ?? 0,
+        reaction: { type: reaction?.type ?? null },
+      };
+    }),
+  );
 
   const commentsWithReplies = buildCommentTree(comments);
 
@@ -71,7 +83,6 @@ export async function createComment({
       updatedAt: true,
     },
   });
-
 
   const comment = {
     ...result,

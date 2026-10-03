@@ -8,16 +8,15 @@ import ShowCard from "@/components/show-card/show-card";
 import CommentSection from "@/components/comment-section/comment-section";
 
 import { MediaType, type Show } from "@/types/show";
-import type { Comment } from "@/types/comment";
 import Skeleton from "@/components/skeleton/skeleton";
-import { postQuery } from "@/lib/queryKey";
+import {commentsQueryOpts, postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 
 export default function ViewPost() {
-  const [user] = useUser()
+  const [user] = useUser();
   const { postId } = useParams();
 
-  const query = useQuery(postQuery(user?.id, postId));
+  const query = useQuery(postQueryOpts(user?.id, postId));
   const post = query.data;
 
   const showQuery = useQuery({
@@ -32,14 +31,7 @@ export default function ViewPost() {
     enabled: query.isSuccess,
   });
 
-  const commentsQuery = useQuery({
-    queryKey: ["comments", post?.id],
-    queryFn: async () => {
-      return (await api.get<Comment[]>("/posts/" + post?.id + "/comments")).data;
-    },
-    enabled: query.isSuccess,
-  });
-
+  const commentsQuery = useQuery(commentsQueryOpts(user?.id, postId));
 
   return (
     <>
@@ -54,7 +46,10 @@ export default function ViewPost() {
         <QueryWrapper
           query={commentsQuery}
           isEmpty={
-            !!(commentsQuery.data && !Object.keys(commentsQuery.data).length)
+            !!(
+              commentsQuery.data &&
+              !Object.keys(commentsQuery.data).length
+            )
           }
           loadingPlaceHolder={
             <div className="flex flex-col gap-4">
@@ -90,10 +85,7 @@ export default function ViewPost() {
             </div>
           }
         >
-          {showQuery.isSuccess && (
-            
-              <ShowCard show={showQuery.data} title/>
-          )}
+          {showQuery.isSuccess && <ShowCard show={showQuery.data} title />}
         </QueryWrapper>
       </div>
     </>

@@ -4,16 +4,19 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { thousandToK } from "@/utils/general";
 import type { Comment } from "@/types/comment";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   ReactionAction,
   ReactionType,
-  type Reaction,
   type ReactionPayload,
 } from "@/types/reaction";
 import { api } from "@/lib/api";
 import type { Post } from "@/types/post";
 import { toast } from "../ui/toast";
+import { commentsQueryOpts } from "@/lib/queryOptions";
+import { useUser } from "@/contexts/user-context";
+import { isAxiosError } from "axios";
+import { useNavigate } from "react-router";
 
 interface Props {
   post: Post;
@@ -28,27 +31,24 @@ export default function CommentButtons({
   isOpen,
   setOpenReplyForm,
 }: Props) {
+  const [user] = useUser();
+  const reaction = comment.reaction;
+  const navigate = useNavigate();
+
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
       await api.post(`posts/${post.id}/comments/${comment.id}/reaction`, data),
 
     onMutate: async (variables, context) => {
       await context.client.cancelQueries({
-        queryKey: ["comment-like", post.id, comment.id],
+        queryKey: commentsQueryOpts(user?.id, post.id).queryKey,
       });
 
-      const prevLike = context.client.getQueryData<Reaction>([
-        "comment-like",
-        post.id,
-        comment.id,
-      ]);
+      const prevComments = context.client.getQueryData<Comment[]>(
+        commentsQueryOpts(user?.id, post.id).queryKey,
+      );
 
-      const prevComments = context.client.getQueryData<Comment[]>([
-        "comments",
-        post.id,
-      ]);
-
-      const prevState = prevLike?.type;
+      const prevState = reaction.type;
       const newState = variables.type;
 
       let likesCountChange = 0;
@@ -76,11 +76,16 @@ export default function CommentButtons({
       }
 
       context.client.setQueryData(
-        ["comments", post.id],
-        (prev: Comment[]): Comment[] => {
+        commentsQueryOpts(user?.id, post.id).queryKey,
+        (prev) => {
+          if (!prev) return prev;
           return prev.map((c) => {
             if (c.id === comment.id) {
-              return { ...c, likesCount: c.likesCount + likesCountChange };
+              return {
+                ...c,
+                likesCount: c.likesCount + likesCountChange,
+                reaction: { type: newState },
+              };
             } else {
               return c;
             }
@@ -88,52 +93,36 @@ export default function CommentButtons({
         },
       );
 
-      context.client.setQueryData(
-        ["comment-like", post.id, comment.id],
-        () => ({
-          type: newState,
-        }),
-      );
-
-      return { prevLike, prevComments };
+      return { prevComments };
     },
 
-    onError: (error, variables, onMutateResult, context) => {
+    onError: async (error, _variables, onMutateResult, context) => {
       context.client.setQueryData(
-        ["comment-like", post.id, comment.id],
-        onMutateResult?.prevLike,
-      );
-      context.client.setQueryData(
-        ["comments", post.id],
+        commentsQueryOpts(user?.id, post.id).queryKey,
         onMutateResult?.prevComments,
       );
+
+      if (isAxiosError(error) && error.status === 401) {
+        await navigate("/login");
+        toast.add({
+          type: "error",
+          description: "Log in first.",
+        });
+        return;
+      }
+
       toast.add({
         type: "error",
         description: "Something went wrong, please try again later.",
       });
     },
 
-    onSettled: async (data, error, variables, onMutateResult, context) => {
+    onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
       await context.client.invalidateQueries({
-        queryKey: ["comment-like", post.id, comment.id],
-      });
-      await context.client.invalidateQueries({
-        queryKey: ["comments", post.id],
+        queryKey: commentsQueryOpts(user?.id, post.id).queryKey,
       });
     },
   });
-
-  const likeQuery = useQuery({
-    queryKey: ["comment-like", post.id, comment.id],
-    queryFn: async () =>
-      (
-        await api.get<Reaction>(
-          `posts/${post.id}/comments/${comment.id}/reaction`,
-        )
-      ).data,
-  });
-
-  const reaction = likeQuery.data;
 
   return (
     <div className="flex  gap-8">
@@ -155,7 +144,7 @@ export default function CommentButtons({
           variant="ghost"
           size="icon-xs"
           className={cn(
-            likeQuery.data?.type === ReactionType.LIKE && "text-primary",
+            reaction.type === ReactionType.LIKE && "text-primary",
             "hover:text-primary",
           )}
         >
@@ -179,7 +168,7 @@ export default function CommentButtons({
           variant="ghost"
           size="icon-xs"
           className={cn(
-            likeQuery.data?.type === ReactionType.DISLIKE && "text-primary",
+            reaction.type === ReactionType.DISLIKE && "text-primary",
             "hover:text-primary",
           )}
         >
@@ -199,7 +188,7 @@ export default function CommentButtons({
             isOpen && "text-primary",
           )}
           onClick={() => {
-          setOpenReplyForm( isOpen? null : comment);
+            setOpenReplyForm(isOpen ? null : comment);
           }}
         >
           reply

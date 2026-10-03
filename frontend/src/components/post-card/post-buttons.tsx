@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link, useNavigate } from "react-router";
-import { postQuery } from "@/lib/queryKey";
+import {  postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
 
@@ -42,10 +42,10 @@ export default function PostButtons({ post }: Props) {
 
     onMutate: async (variables, context) => {
       await context.client.cancelQueries({
-        queryKey: postQuery(user?.id, post.id).queryKey,
+        queryKey: postQueryOpts(user?.id, post.id).queryKey,
       });
       const prevPost = context.client.getQueryData(
-        postQuery(user?.id, post.id).queryKey,
+        postQueryOpts(user?.id, post.id).queryKey,
       );
 
       const prevState = reaction.type;
@@ -76,7 +76,7 @@ export default function PostButtons({ post }: Props) {
       }
 
       context.client.setQueryData(
-        postQuery(user?.id, post.id).queryKey,
+        postQueryOpts(user?.id, post.id).queryKey,
         (prev) => {
           if (!prev) return prev;
           return {
@@ -92,7 +92,7 @@ export default function PostButtons({ post }: Props) {
 
     onError: async (error, _variables, onMutateResult, context) => {
       context.client.setQueryData(
-        postQuery(user?.id, post.id).queryKey,
+        postQueryOpts(user?.id, post.id).queryKey,
         onMutateResult?.prevPost,
       );
 
@@ -113,7 +113,7 @@ export default function PostButtons({ post }: Props) {
 
     onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
       await context.client.invalidateQueries({
-        queryKey: postQuery(user?.id, post.id).queryKey,
+        queryKey: postQueryOpts(user?.id, post.id).queryKey,
       });
     },
   });
