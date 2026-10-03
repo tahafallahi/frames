@@ -29,7 +29,10 @@ export default function LoginForm() {
         }
       }
     },
-    onSuccess: () => navigate("/"),
+    onSuccess: async (_data,_variables, _onMutateResult, context) => {
+      await context.client.invalidateQueries({queryKey: ["user"]})
+      await navigate("/");
+    },
   });
 
   return (

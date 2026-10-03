@@ -24,21 +24,24 @@ import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link } from "react-router";
+import { useUser } from "@/contexts/user-context";
 
 interface Props {
   post: Post;
 }
 
 export default function PostButtons({ post }: Props) {
+  const [user] = useUser()
+
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
       await api.post(`posts/${post.id}/reaction`, data),
 
     onMutate: async (variables, context) => {
-      await context.client.cancelQueries({ queryKey: ["like", post.id] });
+      await context.client.cancelQueries({ queryKey: ["like", post.id, user?.id] });
       await context.client.cancelQueries({ queryKey: ["post", post.id] });
 
-      const prevLike = context.client.getQueryData<Reaction>(["like", post.id]);
+      const prevLike = context.client.getQueryData<Reaction>(["like", post.id, user?.id]);
       const prevPost = context.client.getQueryData(["post", post.id]);
 
       const prevState = prevLike?.type;
@@ -75,7 +78,7 @@ export default function PostButtons({ post }: Props) {
         };
       });
 
-      context.client.setQueryData(["like", post.id], () => ({
+      context.client.setQueryData(["like", post.id, user?.id], () => ({
         type: newState,
       }));
 
@@ -83,7 +86,7 @@ export default function PostButtons({ post }: Props) {
     },
 
     onError: (error, variables, onMutateResult, context) => {
-      context.client.setQueryData(["like", post.id], onMutateResult?.prevLike);
+      context.client.setQueryData(["like", post.id, user?.id], onMutateResult?.prevLike);
       context.client.setQueryData(["post", post.id], onMutateResult?.prevPost);
       console.log(error);
       toast.add({
@@ -93,15 +96,16 @@ export default function PostButtons({ post }: Props) {
     },
 
     onSettled: async (data, error, variables, onMutateResult, context) => {
-      await context.client.invalidateQueries({ queryKey: ["like", post.id] });
+      await context.client.invalidateQueries({ queryKey: ["like", post.id, user?.id] });
       await context.client.invalidateQueries({ queryKey: ["post", post.id] });
     },
   });
 
   const likeQuery = useQuery({
-    queryKey: ["like", post.id],
+    queryKey: ["like", post.id, user?.id],
     queryFn: async () =>
       (await api.get<Reaction>(`posts/${post.id}/reaction`)).data,
+    enabled: !!user
   });
 
   const reaction = likeQuery.data;
