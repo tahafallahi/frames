@@ -7,7 +7,7 @@ import type { MediaType } from "generated/prisma/enums";
 import type { Show, Tag, User } from "generated/prisma/client";
 import { ReactionType } from "types/reaction";
 
-export async function getPost(postId: string) {
+export async function getPost(userId: string | null, postId: string) {
   const [result, likesCount, dislikesCount] = await prisma.$transaction([
     prisma.post.findUnique({
       where: { id: postId },
@@ -34,6 +34,12 @@ export async function getPost(postId: string) {
     prisma.like.count({ where: { postId, type: ReactionType.DISLIKE } }),
   ]);
 
+  const reaction = userId
+    ? await prisma.like.findUnique({
+        where: { userId_postId: { userId, postId } },
+      })
+    : null;
+
   if (!result) throw new NotFoundError(`Post with id ${postId}`);
 
   const { _count, ...rest } = result;
@@ -41,6 +47,7 @@ export async function getPost(postId: string) {
     ...rest,
     likesCount: likesCount - dislikesCount,
     commentsCount: _count.comments,
+    reaction: { type: reaction?.type ?? null },
   };
 
   return post;
@@ -124,7 +131,6 @@ export async function getPosts(
       commentsCount: _count.comments,
     };
   });
-
 
   return posts;
 }

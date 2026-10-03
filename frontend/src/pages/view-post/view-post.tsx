@@ -7,23 +7,18 @@ import PostCard from "@/components/post-card/post-card";
 import ShowCard from "@/components/show-card/show-card";
 import CommentSection from "@/components/comment-section/comment-section";
 
-import type { Post } from "@/types/post";
 import { MediaType, type Show } from "@/types/show";
 import type { Comment } from "@/types/comment";
 import Skeleton from "@/components/skeleton/skeleton";
+import { postQuery } from "@/lib/queryKey";
+import { useUser } from "@/contexts/user-context";
 
 export default function ViewPost() {
+  const [user] = useUser()
   const { postId } = useParams();
 
-  const postQuery = useQuery({
-    queryKey: ["post", postId],
-    queryFn: async () => {
-      return (await api.get<Post>("/posts/" + postId)).data;
-    },
-  });
-
-  const post = postQuery.data;
-
+  const query = useQuery(postQuery(user?.id, postId));
+  const post = query.data;
 
   const showQuery = useQuery({
     queryKey: ["show", post?.show.tmdbId],
@@ -34,7 +29,7 @@ export default function ViewPost() {
         )
       ).data;
     },
-    enabled: postQuery.isSuccess,
+    enabled: query.isSuccess,
   });
 
   const commentsQuery = useQuery({
@@ -42,7 +37,7 @@ export default function ViewPost() {
     queryFn: async () => {
       return (await api.get<Comment[]>("/posts/" + post?.id + "/comments")).data;
     },
-    enabled: postQuery.isSuccess,
+    enabled: query.isSuccess,
   });
 
 
@@ -50,8 +45,8 @@ export default function ViewPost() {
     <>
       <div className="flex flex-col gap-10">
         <QueryWrapper
-          query={postQuery}
-          isEmpty={!!(postQuery.data && !Object.keys(postQuery.data).length)}
+          query={query}
+          isEmpty={!!(query.data && !Object.keys(query.data).length)}
           loadingPlaceHolder={<Skeleton className="h-100" />}
         >
           {post && <PostCard variant={"full"} post={post}></PostCard>}

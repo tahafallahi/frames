@@ -1,3 +1,4 @@
+import type { Reaction } from "./reaction";
 import type { MediaType, ShowIdentifier } from "./show";
 
 export interface Post {
@@ -20,6 +21,7 @@ export interface Post {
   };
   likesCount: number;
   commentsCount: number;
+  reaction: Reaction
 }
 
 export interface ApiSearchPost {

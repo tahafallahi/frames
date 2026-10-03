@@ -70,9 +70,27 @@ export async function getPosts(req: Request, res: Response) {
 
 export async function getPost(req: Request<{ postId: string }>, res: Response) {
   const { postId } = req.params;
-  const post = await db.getPost(postId);
+  const user = req.user
+  const post = await db.getPost(user?.id ?? null, postId);
 
   return res.json(post);
+}
+
+export async function getReaction(
+  req: Request<{ postId: string, commentId?: string }>,
+  res: Response,
+) {
+  const { postId, commentId } = req.params;
+  const result: { type?: LikeType | null } = { type: null };
+  let reaction: Like | null;
+  if (!commentId) {
+    reaction = await db.getPostReaction(req.user!.id, postId);
+  } else {
+    reaction = await db.getCommentReaction(req.user!.id, commentId)
+  }
+  if (reaction) result.type = reaction.type;
+  return res.json(result);
+
 }
 
 export async function getComments(
@@ -140,20 +158,3 @@ export const updateReaction = [
     return res.status(204).end()
   },
 ];
-
-export async function getReaction(
-  req: Request<{ postId: string, commentId?: string }>,
-  res: Response,
-) {
-  const { postId, commentId } = req.params;
-  const result: { type?: LikeType | null } = { type: null };
-  let reaction: Like | null;
-  if (!commentId) {
-    reaction = await db.getPostReaction(req.user!.id, postId);
-  } else {
-    reaction = await db.getCommentReaction(req.user!.id, commentId)
-  }
-  if (reaction) result.type = reaction.type;
-  return res.json(result);
-
-}

@@ -12,39 +12,43 @@ import xLogo from "../../assets/x-logo.svg";
 
 import type { Post } from "@/types/post";
 import { Button } from "../ui/button";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import {
   ReactionAction,
   ReactionType,
-  type Reaction,
   type ReactionPayload,
 } from "@/types/reaction";
 import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { postQuery } from "@/lib/queryKey";
 import { useUser } from "@/contexts/user-context";
+import { isAxiosError } from "axios";
 
 interface Props {
   post: Post;
 }
 
 export default function PostButtons({ post }: Props) {
-  const [user] = useUser()
+  const [user] = useUser();
+  const navigate = useNavigate();
+  const reaction = post.reaction;
 
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
       await api.post(`posts/${post.id}/reaction`, data),
 
     onMutate: async (variables, context) => {
-      await context.client.cancelQueries({ queryKey: ["like", post.id, user?.id] });
-      await context.client.cancelQueries({ queryKey: ["post", post.id] });
+      await context.client.cancelQueries({
+        queryKey: postQuery(user?.id, post.id).queryKey,
+      });
+      const prevPost = context.client.getQueryData(
+        postQuery(user?.id, post.id).queryKey,
+      );
 
-      const prevLike = context.client.getQueryData<Reaction>(["like", post.id, user?.id]);
-      const prevPost = context.client.getQueryData(["post", post.id]);
-
-      const prevState = prevLike?.type;
+      const prevState = reaction.type;
       const newState = variables.type;
 
       let likesCountChange = 0;
@@ -71,44 +75,48 @@ export default function PostButtons({ post }: Props) {
         }
       }
 
-      context.client.setQueryData(["post", post.id], (prev: Post): Post => {
-        return {
-          ...prev,
-          likesCount: prev.likesCount + likesCountChange,
-        };
-      });
+      context.client.setQueryData(
+        postQuery(user?.id, post.id).queryKey,
+        (prev) => {
+          if (!prev) return prev;
+          return {
+            ...prev,
+            likesCount: prev.likesCount + likesCountChange,
+            reaction: { type: newState },
+          };
+        },
+      );
 
-      context.client.setQueryData(["like", post.id, user?.id], () => ({
-        type: newState,
-      }));
-
-      return { prevLike, prevPost };
+      return { prevPost };
     },
 
-    onError: (error, variables, onMutateResult, context) => {
-      context.client.setQueryData(["like", post.id, user?.id], onMutateResult?.prevLike);
-      context.client.setQueryData(["post", post.id], onMutateResult?.prevPost);
-      console.log(error);
+    onError: async (error, _variables, onMutateResult, context) => {
+      context.client.setQueryData(
+        postQuery(user?.id, post.id).queryKey,
+        onMutateResult?.prevPost,
+      );
+
+      if (isAxiosError(error) && error.status === 401) {
+        await navigate("/login");
+        toast.add({
+          type: "error",
+          description: "Log in first.",
+        });
+        return;
+      }
+
       toast.add({
         type: "error",
         description: "Something went wrong, please try again later.",
       });
     },
 
-    onSettled: async (data, error, variables, onMutateResult, context) => {
-      await context.client.invalidateQueries({ queryKey: ["like", post.id, user?.id] });
-      await context.client.invalidateQueries({ queryKey: ["post", post.id] });
+    onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
+      await context.client.invalidateQueries({
+        queryKey: postQuery(user?.id, post.id).queryKey,
+      });
     },
   });
-
-  const likeQuery = useQuery({
-    queryKey: ["like", post.id, user?.id],
-    queryFn: async () =>
-      (await api.get<Reaction>(`posts/${post.id}/reaction`)).data,
-    enabled: !!user
-  });
-
-  const reaction = likeQuery.data;
 
   return (
     <div className="flex  gap-8">
@@ -130,7 +138,7 @@ export default function PostButtons({ post }: Props) {
           variant="ghost"
           size="icon-xs"
           className={cn(
-            likeQuery.data?.type === ReactionType.LIKE && "text-primary",
+            reaction.type === ReactionType.LIKE && "text-primary",
             "hover:text-primary",
           )}
         >
@@ -154,7 +162,7 @@ export default function PostButtons({ post }: Props) {
           variant="ghost"
           size="icon-xs"
           className={cn(
-            likeQuery.data?.type === ReactionType.DISLIKE && "text-primary",
+            reaction.type === ReactionType.DISLIKE && "text-primary",
             "hover:text-primary",
           )}
         >
@@ -197,7 +205,6 @@ export default function PostButtons({ post }: Props) {
               <Link
                 to={`https://t.me/share/url/?url=${encodeURIComponent(`${import.meta.env.VITE_URL}/posts/${post.id}`)}&text=${encodeURIComponent(post.title)}`}
                 target="_blank"
-
                 className="hover:ring-2 ring-primary h-8"
               >
                 <img src={telegramLogo} className="size-full" />
