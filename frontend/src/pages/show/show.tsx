@@ -3,7 +3,9 @@ import PostsColumn from "@/components/posts-column/posts-column";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import ShowCard from "@/components/show-card/show-card";
 import Skeleton from "@/components/skeleton/skeleton";
+import { useFeedSort } from "@/contexts/feed-sort-context";
 import { api } from "@/lib/api";
+import { FeedSortDict } from "@/types/contexts";
 import type { SelectedFilters } from "@/types/filter";
 import type { Post } from "@/types/post";
 import { MediaType, type Show } from "@/types/show";
@@ -16,20 +18,19 @@ export default function Show() {
   //This is for uniformity with other queries calls so userquery can cashe the result
   const mediaType =
     mediaTypeString === "movie" ? MediaType.MOVIE : MediaType.TV_SHOW;
-  const [sort, setSort] = useState<"TOP" | "HOT" | "NEW">("TOP");
-  const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
+  const [sort, setSort] = useFeedSort();
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     Content: [],
     Tags: [],
   });
 
   const postsQuery = useQuery({
-    queryKey: ["posts", qSort, showId, selectedFilters],
+    queryKey: ["posts", sort, showId, selectedFilters],
     queryFn: async () =>
       (
         await api.get<Post[]>(`/posts`, {
           params: {
-            sort: qSort,
+            sort: FeedSortDict[sort].value,
             page: 1,
             showFilter: [showId],
             tagFilter: selectedFilters.Tags,

@@ -1,7 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import ShowCard from "../show-card/show-card";
 import { Link } from "react-router";
 import type {
   InfiniteData,
