@@ -8,22 +8,23 @@ import Filter from "@/components/filter/filter";
 import type { Post } from "@/types/post";
 import type { SelectedFilters } from "@/types/filter";
 import { MediaType } from "@/types/show";
+import { useFeedSort } from "@/contexts/feed-sort-context";
+import { FeedSortDict } from "@/types/contexts";
 
 export default function Feed() {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     Content: [],
     Tags: [],
   });
-  const [sort, setSort] = useState<"TOP" | "HOT" | "NEW">("TOP");
-  const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
+  const [sort, setSort] = useFeedSort();
 
   const postsResponse = useQuery({
-    queryKey: ["posts", qSort, selectedFilters],
+    queryKey: ["posts", sort, selectedFilters],
     queryFn: async () =>
       (
         await api.get<Post[]>("/posts", {
           params: {
-            sort: qSort,
+            sort: FeedSortDict[sort].value,
             page: 1,
             mediaFilter: selectedFilters.Content.map((f => f === "Movie"? MediaType.MOVIE: MediaType.TV_SHOW)),
             tagFilter: selectedFilters.Tags,

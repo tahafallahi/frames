@@ -19,6 +19,7 @@ import Trending from "./pages/trending/trending";
 import FollowingsFeed from "./pages/followings-feed/followings-feed";
 import CreatePost from "./pages/create-post/create-post";
 import { toast, Toaster } from "./components/ui/toast";
+import FeedSortProvider from "./providers/feed-sort-provider";
 
 const router = createBrowserRouter([
   {
@@ -87,13 +88,14 @@ const queryClient = new QueryClient({
   },
 });
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <UserProvider>
-        <RouterProvider router={router}></RouterProvider>
-        <Toaster timeout={import.meta.env.VITE_TOASTER_TIMEOUT} />
+        <FeedSortProvider>
+          <RouterProvider router={router}></RouterProvider>
+          <Toaster timeout={import.meta.env.VITE_TOASTER_TIMEOUT} />
+        </FeedSortProvider>
       </UserProvider>
     </QueryClientProvider>
   </StrictMode>,

@@ -7,12 +7,12 @@ import {
   PopoverContent,
   PopoverHeader,
 } from "@/components/ui/popover";
-import { capitilize } from "@/utils/general";
 import { Button } from "../ui/button";
 import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import PostCard from "../post-card/post-card";
 import Skeleton from "../skeleton/skeleton";
+import { FeedSortDict, FeedSortEnum } from "@/types/contexts";
 
 export default function PostsColumn({
   query,
@@ -22,14 +22,14 @@ export default function PostsColumn({
 }: {
   query: UseQueryResult<Post[]>;
   title: string;
-  sort: "TOP" | "HOT" | "NEW";
-  setSort: React.Dispatch<React.SetStateAction<"TOP" | "HOT" | "NEW">>;
+  sort: FeedSortEnum;
+  setSort: React.Dispatch<React.SetStateAction<FeedSortEnum>>;
 }) {
   return (
     <div className="flex flex-col gap-4w">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
-          <p>{capitilize(sort.toLocaleLowerCase())}</p>
+          <p>{FeedSortDict[sort].label}</p>
           <Popover>
             <PopoverTrigger
               render={
@@ -47,24 +47,24 @@ export default function PostsColumn({
                 Sort By:
                 <hr className="my-1 border-border" />
               </PopoverHeader>
-              {["Top", "Hot", "New"].map((i) => (
+              {Object.values(FeedSortDict).map((item) => (
                 <>
-                  {i.toLowerCase() === sort.toLowerCase() ? (
+                  {item.key === sort.toString() ? (
                     <Button
                       variant={"ghost"}
                       className="p-0 h-fit text-primary hover:text-primary"
                     >
-                      {i}
+                      {item.label}
                     </Button>
                   ) : (
                     <Button
                       variant={"ghost"}
                       className=" p-0 h-fit"
                       onClick={() =>
-                        setSort(i.toUpperCase() as "TOP" | "HOT" | "NEW")
+                        setSort(FeedSortEnum[item.key])
                       }
                     >
-                      {i}
+                      {item.label}
                     </Button>
                   )}
                 </>

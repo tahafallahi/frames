@@ -1,8 +1,10 @@
 import Filter from "@/components/filter/filter";
 import FollowingColumn from "@/components/following-column/following-column";
 import PostsColumn from "@/components/posts-column/posts-column";
+import { useFeedSort } from "@/contexts/feed-sort-context";
 import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
+import { FeedSortDict } from "@/types/contexts";
 import type { SelectedFilters } from "@/types/filter";
 import type { Post } from "@/types/post";
 import { useQuery } from "@tanstack/react-query";
@@ -15,11 +17,10 @@ export default function FollowingsFeed() {
     Content: [],
     Tags: [],
   });
-  const [sort, setSort] = useState<"TOP" | "HOT" | "NEW">("TOP");
-  const qSort = { TOP: "likes", HOT: "comments", NEW: "time" }[sort];
+  const [sort, setSort] = useFeedSort();
 
   const postQuery = useQuery({
-    queryKey: ["followings", qSort],
+    queryKey: ["followings", sort],
     queryFn: async () => {
       if (user) {
         if (user.followings) {
@@ -28,7 +29,7 @@ export default function FollowingsFeed() {
               params: {
                 userFilter: user.followings.map((r) => r.followeeId),
                 page: 1,
-                sort: qSort,
+                sort: FeedSortDict[sort].value,
               },
             })
           ).data;
