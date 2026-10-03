@@ -1,15 +1,17 @@
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import Filter from "@/components/filter/filter";
 import FollowingColumn from "@/components/following-column/following-column";
 import PostsColumn from "@/components/posts-column/posts-column";
-import { useFeedSort } from "@/contexts/feed-sort-context";
-import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
+import { useUser } from "@/contexts/user-context";
+import LoginProtection from "../login-protection/login-protection";
+
 import { FeedSortDict } from "@/types/contexts";
+import { useFeedSort } from "@/contexts/feed-sort-context";
 import type { SelectedFilters } from "@/types/filter";
 import type { Post } from "@/types/post";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link } from "react-router";
 
 export default function FollowingsFeed() {
   const [user] = useUser();
@@ -61,13 +63,7 @@ export default function FollowingsFeed() {
       ]
     : [];
 
-  if (user && Object.keys(user).length < 1)
-    return (
-      <div>
-        You are not logged in.{" "}
-        <Link to="login">Please log in first, to see this page.</Link>
-      </div>
-    );
+  if (!user) return <LoginProtection />
 
   return (
     <>

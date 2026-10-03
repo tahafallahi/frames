@@ -22,7 +22,7 @@ import {
 
 import type { ApiSearchResponse } from "@/types/search";
 import { type ApiSearchShow } from "@/types/show";
-import type { PostForm as PostFormType } from "@/types/post";
+import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
 
 const DEBOUNCE_DELAY = 500;
@@ -32,7 +32,7 @@ const LIMIT = 10;
 interface Props {
   handleFormSubmit: (form: PostFormType) => void;
   setShow: (show: ApiSearchShow | null) => void;
-  mutation: UseMutationResult
+  mutation: UseMutationResult<Post, Error, PostForm, unknown>
 }
 
 export default function PostForm({ handleFormSubmit, setShow, mutation }: Props) {

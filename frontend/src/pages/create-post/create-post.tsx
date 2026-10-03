@@ -3,8 +3,9 @@ import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import ShowCard from "@/components/show-card/show-card";
 import Skeleton from "@/components/skeleton/skeleton";
 import { toast } from "@/components/ui/toast";
+import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
-import type { PostForm as PostFormType} from "@/types/post";
+import type { Post, PostForm as PostFormType} from "@/types/post";
 import {
   MediaType,
   type ApiSearchShow,
@@ -14,10 +15,12 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import LoginProtection from "../login-protection/login-protection";
 
 const DEBOUNCE_DELAY = 300;
 
 export default function CreatePost() {
+  const [user] = useUser()
   const timeoutId = useRef<number>(null);
   const navigate = useNavigate()
 
@@ -42,16 +45,18 @@ export default function CreatePost() {
   });
 
   const sendPostMutation = useMutation({
-    mutationFn: async (form: PostFormType) => (await api.post("/posts", form)).data,
-    onSuccess: (data) => {
+    mutationFn: async (form: PostFormType) => (await api.post<Post>("/posts", form)).data,
+    onSuccess: async(data) => {
       toast.add({type: "success", description: "Post created."})
-      navigate("/posts/" + data.id)
+      await navigate("/posts/" + data.id)
     }
   });
 
   function handleFormSubmit(form: PostFormType) {
     sendPostMutation.mutate(form);
   }
+
+  if (!user) return <LoginProtection />
 
   return (
     <>

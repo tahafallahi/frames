@@ -32,10 +32,10 @@ export default function UserControls({
       emptyStateMessage={
         <div className=" mx-5 flex gap-8 shrink-0 justify-between items-center">
           <h2>
-            <Link to="login">Log In</Link>
+            <Link to="/login">Log In</Link>
           </h2>
           <h2>
-            <Link to="login">Sign Up</Link>
+            <Link to="/signup">Sign Up</Link>
           </h2>
         </div>
       }
