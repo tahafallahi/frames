@@ -5,7 +5,7 @@ import Skeleton from "@/components/skeleton/skeleton";
 import { toast } from "@/components/ui/toast";
 import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
-import type { Post, PostForm as PostFormType} from "@/types/post";
+import type { Post, PostForm as PostFormType } from "@/types/post";
 import {
   MediaType,
   type ApiSearchShow,
@@ -14,17 +14,31 @@ import {
 } from "@/types/show";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import LoginProtection from "../login-protection/login-protection";
 
 const DEBOUNCE_DELAY = 300;
 
 export default function CreatePost() {
-  const [user] = useUser()
+  const [user] = useUser();
   const timeoutId = useRef<number>(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [serachparams] = useSearchParams();
 
-  const [show, setShow] = useState<ShowIdentifier | null>(null);
+  const showIdentifier =
+    serachparams.size >= 2
+      ? {
+          tmdbId: Number(serachparams.get("showId")),
+          mediaType:
+            serachparams.get("type") === "movie"
+              ? MediaType.MOVIE
+              : MediaType.TV_SHOW,
+        }
+      : null;
+
+  const [show, setShow] = useState<ShowIdentifier | null>(
+    showIdentifier ?? null,
+  );
 
   function debounceSetShow(show: ApiSearchShow | null) {
     if (timeoutId.current) clearTimeout(timeoutId.current);
@@ -45,18 +59,19 @@ export default function CreatePost() {
   });
 
   const sendPostMutation = useMutation({
-    mutationFn: async (form: PostFormType) => (await api.post<Post>("/posts", form)).data,
-    onSuccess: async(data) => {
-      toast.add({type: "success", description: "Post created."})
-      await navigate("/posts/" + data.id)
-    }
+    mutationFn: async (form: PostFormType) =>
+      (await api.post<Post>("/posts", form)).data,
+    onSuccess: async (data) => {
+      toast.add({ type: "success", description: "Post created." });
+      await navigate("/posts/" + data.id);
+    },
   });
 
   function handleFormSubmit(form: PostFormType) {
     sendPostMutation.mutate(form);
   }
 
-  if (!user) return <LoginProtection />
+  if (!user) return <LoginProtection />;
 
   return (
     <>
@@ -65,6 +80,7 @@ export default function CreatePost() {
           handleFormSubmit={handleFormSubmit}
           setShow={debounceSetShow}
           mutation={sendPostMutation}
+          show={showQuery.data ?? null}
         />
       </div>
       <div>

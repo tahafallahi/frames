@@ -41,9 +41,13 @@ export default function SideBar({ selectedPage }: Props) {
       <div className="flex flex-col gap-1">
         {tabs.map((tab, i) => {
           return tab.requireLogin && !user ? (
-            <p key={i} className="opacity-50 pointer-events-none" aria-disabled>
-              <h3>{tab.label}</h3>
-            </p>
+            <h3
+              key={i}
+              className="opacity-50 pointer-events-none"
+              aria-disabled
+            >
+              {tab.label}
+            </h3>
           ) : (
             <Link to={tab.path} key={i} className="hover:text-primary">
               {tab.key === selectedPage ? (

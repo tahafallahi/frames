@@ -21,7 +21,12 @@ import {
 } from "../ui/combobox";
 
 import type { ApiSearchResponse } from "@/types/search";
-import { type ApiSearchShow } from "@/types/show";
+import {
+  MediaType,
+  type ApiSearchShow,
+  type Show,
+  type ShowIdentifier,
+} from "@/types/show";
 import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
 
@@ -32,10 +37,16 @@ const LIMIT = 10;
 interface Props {
   handleFormSubmit: (form: PostFormType) => void;
   setShow: (show: ApiSearchShow | null) => void;
-  mutation: UseMutationResult<Post, Error, PostForm, unknown>
+  mutation: UseMutationResult<Post, Error, PostForm, unknown>;
+  show: Show | null;
 }
 
-export default function PostForm({ handleFormSubmit, setShow, mutation }: Props) {
+export default function PostForm({
+  handleFormSubmit,
+  setShow,
+  mutation,
+  show,
+}: Props) {
   const [input, setInput] = useState("");
   const timeoutId = useRef<number>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,7 +56,13 @@ export default function PostForm({ handleFormSubmit, setShow, mutation }: Props)
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<PostFormType>();
+  } = useForm<PostFormType>({
+    defaultValues: {
+      showIdentifier: show
+        ? { tmdbId: show.tmdbId, mediaType: show.mediaType === MediaType.MOVIE ? MediaType.MOVIE : MediaType.TV_SHOW }
+        : undefined,
+    },
+  });
 
   const query = useQuery({
     queryKey: ["formSearchResult", input],
@@ -95,6 +112,16 @@ export default function PostForm({ handleFormSubmit, setShow, mutation }: Props)
               rules={{ required: "Please select a movie or TV show." }}
               render={({ field }) => (
                 <Combobox
+                  key={show?.tmdbId ?? "none"}
+                  defaultValue={
+                    show && {
+                      tmdbId: show.tmdbId,
+                      title: show.title,
+                      posterPath: show.posterPath,
+                      releaseDate: show.releaseYear.toString(),
+                      mediaType: show.mediaType,
+                    }
+                  }
                   items={query.data && query.data}
                   onInputValueChange={(input) => {
                     handleInput(input);
@@ -172,7 +199,7 @@ export default function PostForm({ handleFormSubmit, setShow, mutation }: Props)
               Discard
             </Button>
             <Button type="submit" className="w-20 font-bold">
-              {mutation.isPending && <Spinner data-icon="incline-start"/>}
+              {mutation.isPending && <Spinner data-icon="incline-start" />}
               Post
             </Button>
           </div>
