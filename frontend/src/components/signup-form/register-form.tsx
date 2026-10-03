@@ -1,159 +1,177 @@
-import { useRef, useState } from "react";
-import { Button } from "../ui/button";
-import { api } from "@/lib/api";
 import { useMutation } from "@tanstack/react-query";
+import { isAxiosError } from "axios";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+
+import { api } from "@/lib/api";
 import { Spinner } from "../ui/spinner";
-import { isAxiosError, type AxiosResponse } from "axios";
-import { Link, useNavigate } from "react-router";
+import { Field, FieldGroup, FieldLabel } from "../ui/field";
+import { Input } from "../ui/input";
+import BarButton from "../bar-button/bar-button";
+import BarLink from "../bar-link/bar-link";
+import type { Post } from "@/types/post";
+
+interface SignupFormValues {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 export default function SignupForm() {
-  const [formError, setFormError] = useState("");
   const navigate = useNavigate();
 
-  const passwordRef = useRef<HTMLInputElement>(null);
-
-  function handleUsernameInput(event: React.InputEvent<HTMLInputElement>) {
-    const element = event.currentTarget;
-
-    if (element.value.length > 32 || element.value.length < 3) {
-      element.setCustomValidity(
-        "Username must be between 3 and 32 characters.",
-      );
-    } else {
-      element.setCustomValidity("");
-    }
-  }
-
-  function handlePasswordInput(event: React.InputEvent<HTMLInputElement>) {
-    const element = event.currentTarget;
-
-    if (element.value.length < 8) {
-      element.setCustomValidity("Password must have more than 8 characters.");
-    } else if (element.value.length > 100) {
-      element.setCustomValidity("Password must have less 100 characters.");
-    } else {
-      element.setCustomValidity("");
-    }
-  }
-
-  function handlePasswordConfirmationInput(
-    event: React.InputEvent<HTMLInputElement>,
-  ) {
-    const element = event.currentTarget;
-
-    if (element.value !== passwordRef.current?.value) {
-      element.setCustomValidity("Passwords don't match.");
-    } else {
-      element.setCustomValidity("");
-    }
-  }
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    setError,
+    formState: { errors },
+  } = useForm<SignupFormValues>();
 
   const formMutation = useMutation({
-    mutationFn: async (event: React.SubmitEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      setFormError("");
-      return (
-        await api.post<AxiosResponse>(
-          "/auth/signup",
-          Object.fromEntries(new FormData(event.target)),
-        )
-      ).data;
-    },
+    mutationFn: async (values: SignupFormValues) =>
+      (await api.post<Post>("/auth/signup", values)).data,
     onError: (error) => {
-      if (isAxiosError(error)) {
-        if (error.status === 409) {
-          setFormError("Username or email already exist.");
-        }
+      if (isAxiosError(error) && error.status === 409) {
+        setError("root.server", {
+          message: "Username or email already exist.",
+        });
       }
     },
-    onSuccess: async () => {
+    onSuccess: async (_data, _variables, _onMutateResult, context) => {
       await navigate("/");
+      void context.client.invalidateQueries({ queryKey: ["user"] });
     },
   });
 
   return (
     <form
-      onSubmit={formMutation.mutate}
+      onSubmit={handleSubmit((values) => formMutation.mutate(values))}
+      noValidate
       className="w-125 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10"
     >
-      <div className="flex flex-col gap-4">
-        {formError ? <p className="text-destructive">{formError}</p> : null}
-        <div className=" flex flex-col gap-1">
-          <label htmlFor="username">Username</label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            onInput={handleUsernameInput}
-            className="pl-3 p-1 border-primary rounded-lg border"
-          />
-        </div>
-        <div className=" flex flex-col gap-1">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            className="pl-3 p-1 border-primary rounded-lg border"
-            required
-          />
-        </div>
-
-        <div className=" flex flex-col gap-1">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            ref={passwordRef}
-            onInput={handlePasswordInput}
-            className="pl-3 p-1 border-primary rounded-lg border"
-            required
-          />
-        </div>
-
-        <div className=" flex flex-col gap-1">
-          <label htmlFor="confirmPassword">Confirm Password</label>
-          <input
-            id="confirmPassword"
-            name="confirmPassword"
-            type="password"
-            onInput={handlePasswordConfirmationInput}
-            className="pl-3 p-1 border-primary rounded-lg border"
-            required
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col justify-end gap-2">
-          {formMutation.isPending ? (
-            <Button
-              className="h-10 font-bold bg-primary/60 hover:bg-primary/60"
-              type="submit"
-            >
-              <Spinner className="absolute size-5 -translate-x-11" />
-              Sign Up
-            </Button>
-          ) : (
-            <Button className="h-10 font-bold" type="submit">
-              Sign Up
-            </Button>
+      <FieldGroup>
+        <div className="flex flex-col gap-4">
+          {errors.root?.server && (
+            <p className="text-destructive">{errors.root.server.message}</p>
           )}
-          <Link
-            to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
-            className=" flex h-10 font-bold text-sm justify-center items-center  bg-secondary text-background rounded-sm "
-          >
-            <span>Or Sign Up With Google</span>
-          </Link>
+
+          <Field className="flex flex-col gap-1">
+            <FieldLabel htmlFor="username">Username</FieldLabel>
+            {errors.username && (
+              <p className="text-sm text-destructive">
+                {errors.username.message}
+              </p>
+            )}
+            <Input
+              type="text"
+              aria-invalid={!!errors.username}
+              className="pl-3 p-1 border-primary rounded-lg border"
+              {...register("username", {
+                required: "Username is required.",
+                minLength: {
+                  value: 3,
+                  message: "Username must be between 3 and 32 characters.",
+                },
+                maxLength: {
+                  value: 32,
+                  message: "Username must be between 3 and 32 characters.",
+                },
+              })}
+            />
+          </Field>
+
+          <Field className="flex flex-col gap-1">
+            <FieldLabel htmlFor="email">Email</FieldLabel>
+            {errors.email && (
+              <p className="text-sm text-destructive">{errors.email.message}</p>
+            )}
+            <Input
+              type="email"
+              aria-invalid={!!errors.email}
+              className="pl-3 p-1 border-primary rounded-lg border"
+              {...register("email", {
+                required: "Email is required.",
+                pattern: {
+                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                  message: "Please enter a valid email address.",
+                },
+              })}
+            />
+          </Field>
+
+          <Field className="flex flex-col gap-1">
+            <FieldLabel htmlFor="password">Password</FieldLabel>
+            {errors.password && (
+              <p className="text-sm text-destructive">
+                {errors.password.message}
+              </p>
+            )}
+            <Input
+              type="password"
+              aria-invalid={!!errors.password}
+              className="pl-3 p-1 border-primary rounded-lg border"
+              {...register("password", {
+                required: "Password is required.",
+                minLength: {
+                  value: 8,
+                  message: "Password must have at least 8 characters.",
+                },
+                maxLength: {
+                  value: 100,
+                  message: "Password must have less than 100 characters.",
+                },
+                deps: ["confirmPassword"], // re-validate confirmation when this changes
+              })}
+            />
+          </Field>
+
+          <Field className="flex flex-col gap-1">
+            <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
+            {errors.confirmPassword && (
+              <p className="text-sm text-destructive">
+                {errors.confirmPassword.message}
+              </p>
+            )}
+            <Input
+              type="password"
+              aria-invalid={!!errors.confirmPassword}
+              className="pl-3 p-1 border-primary rounded-lg border"
+              {...register("confirmPassword", {
+                required: "Please confirm your password.",
+                validate: (value) =>
+                  value === getValues("password") || "Passwords don't match.",
+              })}
+            />
+          </Field>
         </div>
-        <a
-          href="/login"
-          className="text-sm text-center underline underline-offset-4"
-        >
-          If you already an account, click here to log in.
-        </a>
-      </div>
+
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col justify-end gap-2">
+            {formMutation.isPending || formMutation.isSuccess ? (
+              <BarButton type="submit" disabled>
+                <Spinner className="absolute size-5 -translate-x-14" />
+                Sign Up...
+              </BarButton>
+            ) : (
+              <BarButton type="submit">Sign Up</BarButton>
+            )}
+            <BarLink
+              to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
+              variant="secondary"
+            >
+              <span>Or Sign Up With Google</span>
+            </BarLink>
+          </div>
+          <a
+            href="/login"
+            className="text-sm text-center underline underline-offset-4"
+          >
+            If you already have an account, click here to log in.
+          </a>
+        </div>
+      </FieldGroup>
     </form>
   );
 }

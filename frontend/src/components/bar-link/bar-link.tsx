@@ -5,6 +5,7 @@ import { Link } from "react-router";
 interface Props {
   children: React.ReactNode
   className?: string;
+  variant?: "default" | "outline" | "secondary" | "ghost" | "destructive" | "link" | null | undefined
   to: string;
 }
 
@@ -12,6 +13,7 @@ export default function BarLink({
   children,
   className,
   to,
+  variant,
   ...rest
 }: Props) {
   return (
@@ -20,7 +22,7 @@ export default function BarLink({
       {...rest}
       className={cn(
         buttonVariants({
-          variant: "default",
+          variant: variant ?? "default",
           className: "min-h-13 font-bold min-w-0",
         }),
         className,
