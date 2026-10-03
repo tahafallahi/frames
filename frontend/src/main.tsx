@@ -41,6 +41,7 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Feed />,
+        handle: {selectedPage: "feed"}
       },
       {
         path: "/posts/:postId",
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: <Profile />,
+        handle: {selectedPage: "profile"}
       },
       {
         path: "/show/:mediaType/:showId",
@@ -57,14 +59,17 @@ const router = createBrowserRouter([
       {
         path: "/trending/movie",
         element: <Trending mediaType={"MOVIE"} />,
+        handle: {selectedPage: "trending-movies"}
       },
       {
         path: "/trending/tv",
         element: <Trending mediaType={"TV_SHOW"} />,
+        handle: {selectedPage: "trending-tvs"}
       },
       {
         path: "/followings",
         element: <FollowingsFeed />,
+        handle: {selectedPage: "followings-feed"}
       },
       {
         path: "/create",
