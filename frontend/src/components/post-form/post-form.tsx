@@ -21,12 +21,7 @@ import {
 } from "../ui/combobox";
 
 import type { ApiSearchResponse } from "@/types/search";
-import {
-  MediaType,
-  type ApiSearchShow,
-  type Show,
-  type ShowIdentifier,
-} from "@/types/show";
+import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
 import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
 
@@ -59,7 +54,13 @@ export default function PostForm({
   } = useForm<PostFormType>({
     defaultValues: {
       showIdentifier: show
-        ? { tmdbId: show.tmdbId, mediaType: show.mediaType === MediaType.MOVIE ? MediaType.MOVIE : MediaType.TV_SHOW }
+        ? {
+            tmdbId: show.tmdbId,
+            mediaType:
+              show.mediaType === MediaType.MOVIE
+                ? MediaType.MOVIE
+                : MediaType.TV_SHOW,
+          }
         : undefined,
     },
   });

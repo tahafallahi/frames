@@ -79,7 +79,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
           <div className="flex flex-col gap-1">
             {buttons?.includes("writePost") && (
               <BarLink
-                to="/create"
+                to={`/create?showId=${show.tmdbId}&type=${show.mediaType === MediaType.MOVIE? "movie": "tv"}`}
               >
                 Write About This{" "}
                 {show.mediaType === MediaType.MOVIE ? "Movie" : "TV Show"}
