@@ -13,6 +13,7 @@ export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =
     req.query;
   let postsOrderBy: PostOrderByWithRelationInput = {};
+  const user = req.user
 
   if (sort !== "likes" && sort !== "comments" && sort !== "time") {
     return res.status(400).json({
@@ -63,7 +64,7 @@ export async function getPosts(req: Request, res: Response) {
     mediaFilter,
     userFilter,
     showFilter,
-  } as {});
+  } as {}, user?.id);
 
   res.json(posts);
 }

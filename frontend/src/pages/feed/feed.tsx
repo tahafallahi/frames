@@ -5,11 +5,10 @@ import { api } from "@/lib/api";
 import PostsColumn from "@/components/posts-column/posts-column";
 import Filter from "@/components/filter/filter";
 
-import type { Post } from "@/types/post";
 import type { SelectedFilters } from "@/types/filter";
-import { MediaType } from "@/types/show";
 import { useFeedSort } from "@/contexts/feed-sort-context";
-import { FeedSortDict } from "@/types/contexts";
+import { postsQueryOpts } from "@/lib/queryOptions";
+import { useUser } from "@/contexts/user-context";
 
 export default function Feed() {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
@@ -17,22 +16,9 @@ export default function Feed() {
     Tags: [],
   });
   const [sort, setSort] = useFeedSort();
+  const [user] = useUser()
 
-  const postsResponse = useQuery({
-    queryKey: ["posts", sort, selectedFilters],
-    queryFn: async () =>
-      (
-        await api.get<Post[]>("/posts", {
-          params: {
-            sort: FeedSortDict[sort].value,
-            page: 1,
-            mediaFilter: selectedFilters.Content.map((f => f === "Movie"? MediaType.MOVIE: MediaType.TV_SHOW)),
-            tagFilter: selectedFilters.Tags,
-          },
-        })
-      ).data,
-      staleTime: 0,
-  });
+  const postsResponse = useQuery(postsQueryOpts(user?.id, 1, sort, selectedFilters));
 
   const tagsResponse = useQuery({
     queryKey: ["tags"],

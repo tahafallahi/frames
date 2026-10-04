@@ -62,6 +62,7 @@ export async function getPosts(
     userFilter?: string[];
     showFilter?: string[];
   },
+  userId?: string,
 ) {
   const where = {
     AND: {
@@ -123,14 +124,23 @@ export async function getPosts(
     countsByPost.set(rc.postId!, entry);
   }
 
-  const posts = result.map(({ _count, ...post }) => {
-    const counts = countsByPost.get(post.id) ?? { likes: 0, dislikes: 0 };
-    return {
-      ...post,
-      likesCount: counts.likes - counts.dislikes,
-      commentsCount: _count.comments,
-    };
-  });
+  const posts = await Promise.all(
+    result.map(async ({ _count, ...post }) => {
+      const counts = countsByPost.get(post.id) ?? { likes: 0, dislikes: 0 };
+      const reaction =
+        userId ?
+        (await prisma.like.findUnique({
+          where: { userId_postId: { userId, postId: post.id } },
+        })): null;
+
+      return {
+        ...post,
+        likesCount: counts.likes - counts.dislikes,
+        commentsCount: _count.comments,
+        reaction: {type: reaction?.type ?? null}
+      };
+    }),
+  );
 
   return posts;
 }

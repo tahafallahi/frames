@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { thousandToK } from "@/utils/general";
 import type { Comment } from "@/types/comment";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   ReactionAction,
   ReactionType,
@@ -13,7 +13,7 @@ import {
 import { api } from "@/lib/api";
 import type { Post } from "@/types/post";
 import { toast } from "../ui/toast";
-import { commentQueryOpts, commentsQueryOpts } from "@/lib/queryOptions";
+import { commentsQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
 import { useNavigate } from "react-router";

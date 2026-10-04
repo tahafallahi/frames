@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "../ui/toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link, useNavigate } from "react-router";
-import {  postQueryOpts } from "@/lib/queryOptions";
+import { postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
 
@@ -44,11 +44,18 @@ export default function PostButtons({ post }: Props) {
       await context.client.cancelQueries({
         queryKey: postQueryOpts(user?.id, post.id).queryKey,
       });
+      await context.client.cancelQueries({
+        queryKey: ["user", user?.id, "posts"],
+      });
+
       const prevPost = context.client.getQueryData(
         postQueryOpts(user?.id, post.id).queryKey,
       );
+      const prevPostsQueries = context.client.getQueriesData({
+        queryKey: ["user", user?.id, "posts"],
+      });
 
-      const prevState = reaction.type;
+      const prevState = prevPost?.reaction.type;
       const newState = variables.type;
 
       let likesCountChange = 0;
@@ -87,13 +94,33 @@ export default function PostButtons({ post }: Props) {
         },
       );
 
-      return { prevPost };
+      context.client.setQueriesData(
+        { queryKey: ["user", user?.id, "posts"] },
+        (prev: Post[]) =>
+          prev.map((p: Post) => {
+            if (p.id === post.id) {
+              return {
+                ...p,
+                likesCount: p.likesCount + likesCountChange,
+                reaction: { type: newState },
+              };
+            } else {
+              return p;
+            }
+          }),
+      );
+
+      return { prevPost, prevPostsQueries };
     },
 
     onError: async (error, _variables, onMutateResult, context) => {
       context.client.setQueryData(
         postQueryOpts(user?.id, post.id).queryKey,
         onMutateResult?.prevPost,
+      );
+
+      onMutateResult?.prevPostsQueries.forEach(([key, value]) =>
+        context.client.setQueryData(key, value),
       );
 
       if (isAxiosError(error) && error.status === 401) {
@@ -112,9 +139,22 @@ export default function PostButtons({ post }: Props) {
     },
 
     onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
-      await context.client.invalidateQueries({
-        queryKey: postQueryOpts(user?.id, post.id).queryKey,
+      const updatedPost = await context.client.fetchQuery({
+        ...postQueryOpts(user?.id, post.id),
+        staleTime: 0,
       });
+
+      context.client.setQueriesData(
+        { queryKey: ["user", user?.id, "posts"] },
+        (prev: Post[]) =>
+          prev.map((p: Post) => {
+            if (p.id === updatedPost.id) {
+              return updatedPost;
+            } else {
+              return p;
+            }
+          }),
+      );
     },
   });
 
