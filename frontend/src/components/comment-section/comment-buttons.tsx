@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { thousandToK } from "@/utils/general";
 import type { Comment } from "@/types/comment";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   ReactionAction,
   ReactionType,
@@ -13,10 +13,11 @@ import {
 import { api } from "@/lib/api";
 import type { Post } from "@/types/post";
 import { toast } from "../ui/toast";
-import { commentsQueryOpts } from "@/lib/queryOptions";
+import { commentQueryOpts, commentsQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
 import { useNavigate } from "react-router";
+import { replaceCommentBranch } from "@/utils/replace-comment-branch";
 
 interface Props {
   post: Post;
@@ -93,7 +94,7 @@ export default function CommentButtons({
         },
       );
 
-      return { prevComments };
+      return { prevComments: prevComments ?? [] };
     },
 
     onError: async (error, _variables, onMutateResult, context) => {
@@ -117,10 +118,11 @@ export default function CommentButtons({
       });
     },
 
-    onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
-      await context.client.invalidateQueries({
-        queryKey: commentsQueryOpts(user?.id, post.id).queryKey,
-      });
+    onSuccess: async(_data, _variables, onMutateResult, context) => {
+      const updatedComment = (await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)).data
+      context.client.setQueryData(
+        commentsQueryOpts(user?.id, post.id).queryKey, replaceCommentBranch(onMutateResult?.prevComments, updatedComment)
+      );
     },
   });
 

@@ -20,3 +20,12 @@ export const commentsQueryOpts = (userId?: string, postId?: string) =>
     },
     enabled: !!postId
   });
+
+export const commentQueryOpts = (commentId: string, userId?: string, postId?: string) =>
+  queryOptions({
+    queryKey: ["user", userId, "post", postId, "comments", commentId],
+    queryFn: async () => {
+      return (await api.get<Comment>("/posts/" + postId + "/comments/" + commentId)).data;
+    },
+    enabled: !!commentId
+  });

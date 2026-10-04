@@ -76,6 +76,21 @@ export async function getPost(req: Request<{ postId: string }>, res: Response) {
   return res.json(post);
 }
 
+export async function getComment(
+  req: Request<{ postId: string, commentId: string }>,
+  res: Response,
+) {
+  const { postId, commentId } = req.params;
+  const user = req.user
+
+  if (!postId) throw new ValidationError("PostId parameter doesn't exist");
+
+  const comment = await db.getComment(user?.id, commentId);
+
+  return res.send(comment);
+}
+
+
 export async function getComments(
   req: Request<{ postId: string }>,
   res: Response,

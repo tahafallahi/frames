@@ -1,7 +1,55 @@
 import { NotFoundError } from "error/AppErrors";
+import { LikeType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
 import { buildCommentTree } from "services/comment-tree";
 import { ReactionType } from "types/reaction";
+
+export async function getComment(
+  userId: string | undefined,
+  commentId: string,
+) {
+  const [result, likesCount, dislikesCount] = await prisma.$transaction([
+    prisma.comment.findUnique({
+      select: {
+        id: true,
+        content: true,
+        author: { select: { id: true, username: true, profilePath: true } },
+        parentId: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            replies: true,
+          },
+        },
+      },
+      where: { id: commentId },
+    }),
+    prisma.like.count({ where: { AND: { commentId, type: LikeType.LIKE } } }),
+    prisma.like.count({
+      where: { AND: { commentId, type: LikeType.DISLIKE } },
+    }),
+  ]);
+
+  if (!result) throw new NotFoundError("Comment");
+
+  const reaction = userId
+    ? await prisma.like.findUnique({
+        where: { userId_commentId: { userId, commentId } },
+      })
+    : null;
+
+  const { _count, ...rest } = result;
+
+  const comment = {
+    ...rest,
+    repliesCount: _count.replies,
+    likesCount: likesCount - dislikesCount,
+    reaction: { type: reaction?.type ?? null },
+  };
+
+  return comment;
+}
 
 export async function getComments(userId: string | undefined, postId: string) {
   const result = await prisma.comment.findMany({
