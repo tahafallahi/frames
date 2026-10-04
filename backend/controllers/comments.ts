@@ -9,6 +9,7 @@ export const createComment = [
   body("parentId"),
 
   async (req: Request, res: Response) => {
+    const user = req.user
     if (!validationResult(req).isEmpty())
       throw new ValidationError(
         "Invalid comment structure",
@@ -17,7 +18,7 @@ export const createComment = [
 
     const { content, postId, parentId } = matchedData(req);
 
-    const post = await db.getPost(postId);
+    const post = await db.getPost(user?.id, postId);
     if (!post) throw new NotFoundError("Post with id " + postId)
 
     const comment = await db.createComment({content, postId, userId: req.user!.id, parentId})

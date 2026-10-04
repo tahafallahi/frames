@@ -136,6 +136,7 @@ export async function createComment({
     ...result,
     repliesCount: 0,
     likesCount: 0,
+    reaction: {type: null}
   };
 
   return comment;

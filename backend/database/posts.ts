@@ -7,7 +7,7 @@ import type { MediaType } from "generated/prisma/enums";
 import type { Show, Tag, User } from "generated/prisma/client";
 import { ReactionType } from "types/reaction";
 
-export async function getPost(userId: string | null, postId: string) {
+export async function getPost(userId: string | undefined, postId: string) {
   const [result, likesCount, dislikesCount] = await prisma.$transaction([
     prisma.post.findUnique({
       where: { id: postId },

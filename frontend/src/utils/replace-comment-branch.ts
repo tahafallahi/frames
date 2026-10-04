@@ -1,9 +1,9 @@
 import type { Comment } from "@/types/comment";
 
-export function replaceCommentBranch(comments: Comment[], newComment: Comment){
+export function replaceCommentBranch(comments: Comment[], updatedComment: Comment){
   const newComments: Comment[] = []
   for (const c of comments) {
-    newComments.push(recursiveReplacement(c, newComment ))
+    newComments.push(recursiveReplacement(c, updatedComment ))
   }
   return newComments
 }
@@ -11,14 +11,14 @@ export function replaceCommentBranch(comments: Comment[], newComment: Comment){
 
 function recursiveReplacement(
   comment: Comment,
-  newComment: Comment,
+  updatedComment: Comment,
 ): Comment {
   const newReplies: Comment[] = []
   if (comment.replies.length > 0) {
     for (const c of comment.replies){
-      newReplies.push(recursiveReplacement(c, newComment))
+      newReplies.push(recursiveReplacement(c, updatedComment))
     }
   }
 
-  return comment.id === newComment.id ?  {...newComment, replies: comment.replies}: comment;
+  return comment.id === updatedComment.id ?  {...updatedComment, replies: newReplies}: {...comment, replies: newReplies};
 }
