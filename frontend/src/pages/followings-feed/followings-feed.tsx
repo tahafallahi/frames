@@ -8,10 +8,9 @@ import { api } from "@/lib/api";
 import { useUser } from "@/contexts/user-context";
 import LoginProtection from "../login-protection/login-protection";
 
-import { FeedSortDict } from "@/types/contexts";
 import { useFeedSort } from "@/contexts/feed-sort-context";
 import type { SelectedFilters } from "@/types/filter";
-import type { Post } from "@/types/post";
+import { postsQueryOpts } from "@/lib/queryOptions";
 
 export default function FollowingsFeed() {
   const [user] = useUser();
@@ -20,27 +19,10 @@ export default function FollowingsFeed() {
     Tags: [],
   });
   const [sort, setSort] = useFeedSort();
+  const page = 1
+  const userFilter = user?.followings.map((r) => r.followeeId) ?? [];
 
-  const postQuery = useQuery({
-    queryKey: ["followings", sort],
-    queryFn: async () => {
-      if (user) {
-        if (user.followings) {
-          return (
-            await api.get<Post[]>("/posts", {
-              params: {
-                userFilter: user.followings.map((r) => r.followeeId),
-                page: 1,
-                sort: FeedSortDict[sort].value,
-              },
-            })
-          ).data;
-        }
-      }
-      return [];
-    },
-    staleTime: 0,
-  });
+  const postQuery = useQuery({...postsQueryOpts(user?.id, page, sort, selectedFilters, userFilter), enabled: !!userFilter.length});
 
   const tagQuery = useQuery({
     queryKey: ["tags"],

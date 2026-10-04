@@ -64,6 +64,8 @@ export async function getPosts(
   },
   userId?: string,
 ) {
+  
+
   const where = {
     AND: {
       ...(filters.tagFilter && {

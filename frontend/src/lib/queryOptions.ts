@@ -20,19 +20,21 @@ export const postsQueryOpts = (
   page: number,
   sort: FeedSortEnum,
   selectedFilters: SelectedFilters,
+  userFilter?: string[]
 ) =>
   queryOptions({
-    queryKey: ["user", userId, "posts", page, sort, selectedFilters],
+    queryKey: ["user", userId, "posts", page, sort, selectedFilters, userFilter],
     queryFn: async () => {
       return (
         await api.get<Post[]>("/posts", {
           params: {
             sort: FeedSortDict[sort].value,
-            page: 1,
+            page: page,
             mediaFilter: selectedFilters.Content.map((f) =>
               f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
             ),
             tagFilter: selectedFilters.Tags,
+            userFilter: userFilter
           },
         })
       ).data;
