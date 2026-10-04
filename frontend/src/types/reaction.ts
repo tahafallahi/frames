@@ -1,6 +1,6 @@
 export enum ReactionType {
   LIKE ="LIKE",
-  "DISLIKE" = "DISLIKE"
+  DISLIKE = "DISLIKE",
 }
 
 export enum ReactionAction {
@@ -9,7 +9,7 @@ export enum ReactionAction {
 }
 
 export interface Reaction {
-  type: ReactionType;
+  type: ReactionType | null;
 }
 
 export interface ReactionPayload {

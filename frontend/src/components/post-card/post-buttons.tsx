@@ -17,6 +17,7 @@ import { api } from "@/lib/api";
 import {
   ReactionAction,
   ReactionType,
+  type Reaction,
   type ReactionPayload,
 } from "@/types/reaction";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,7 @@ import { Link, useNavigate } from "react-router";
 import { postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
+import { useState } from "react";
 
 interface Props {
   post: Post;
@@ -34,7 +36,7 @@ interface Props {
 export default function PostButtons({ post }: Props) {
   const [user] = useUser();
   const navigate = useNavigate();
-  const reaction = post.reaction;
+  const [reaction, setReaction] = useState<Reaction>(post.reaction);
 
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
@@ -55,30 +57,36 @@ export default function PostButtons({ post }: Props) {
         queryKey: ["user", user?.id, "posts"],
       });
 
-      const prevState = prevPost?.reaction.type;
-      const newState = variables.type;
+      const prevState = reaction?.type;
+      const action = variables.type;
 
       let likesCountChange = 0;
 
       if (prevState) {
         if (prevState === ReactionType.LIKE) {
-          if (newState === ReactionType.LIKE) {
-            likesCountChange = 0;
-          } else if (newState === ReactionType.DISLIKE) {
+          if (action === ReactionType.LIKE) {
+            likesCountChange = -1;
+            setReaction({ type: null });
+          } else if (action === ReactionType.DISLIKE) {
             likesCountChange = -2;
+            setReaction({ type: ReactionType.DISLIKE });
           }
         } else if (prevState === ReactionType.DISLIKE) {
-          if (newState === ReactionType.DISLIKE) {
-            likesCountChange = 0;
-          } else if (newState === ReactionType.LIKE) {
+          if (action === ReactionType.DISLIKE) {
+            likesCountChange = 1;
+            setReaction({ type: null });
+          } else if (action === ReactionType.LIKE) {
             likesCountChange = 2;
+            setReaction({ type: ReactionType.LIKE });
           }
         }
       } else if (!prevState) {
-        if (newState === ReactionType.LIKE) {
+        if (action === ReactionType.LIKE) {
           likesCountChange = 1;
-        } else if (newState === ReactionType.DISLIKE) {
+          setReaction({ type: ReactionType.LIKE });
+        } else if (action === ReactionType.DISLIKE) {
           likesCountChange = -1;
+          setReaction({ type: ReactionType.DISLIKE });
         }
       }
 
@@ -89,7 +97,7 @@ export default function PostButtons({ post }: Props) {
           return {
             ...prev,
             likesCount: prev.likesCount + likesCountChange,
-            reaction: { type: newState },
+            reaction: { type: action },
           };
         },
       );
@@ -102,7 +110,7 @@ export default function PostButtons({ post }: Props) {
               return {
                 ...p,
                 likesCount: p.likesCount + likesCountChange,
-                reaction: { type: newState },
+                reaction: { type: action },
               };
             } else {
               return p;
@@ -114,28 +122,30 @@ export default function PostButtons({ post }: Props) {
     },
 
     onError: async (error, _variables, onMutateResult, context) => {
-      context.client.setQueryData(
-        postQueryOpts(user?.id, post.id).queryKey,
-        onMutateResult?.prevPost,
-      );
+      if (isAxiosError(error)) {
+        if (error.status === 401) {
+          await navigate("/login");
+          toast.add({
+            type: "error",
+            description: "Log in first.",
+          });
+        } else if (error.status === 409) {
+          return;
+        }
+      } else {
+        context.client.setQueryData(
+          postQueryOpts(user?.id, post.id).queryKey,
+          onMutateResult?.prevPost,
+        );
 
-      onMutateResult?.prevPostsQueries.forEach(([key, value]) =>
-        context.client.setQueryData(key, value),
-      );
-
-      if (isAxiosError(error) && error.status === 401) {
-        await navigate("/login");
+        onMutateResult?.prevPostsQueries.forEach(([key, value]) =>
+          context.client.setQueryData(key, value),
+        );
         toast.add({
           type: "error",
-          description: "Log in first.",
+          description: "Something went wrong, please try again later.",
         });
-        return;
       }
-
-      toast.add({
-        type: "error",
-        description: "Something went wrong, please try again later.",
-      });
     },
 
     onSettled: async (_data, _error, _variables, _onMutateResult, context) => {
@@ -163,7 +173,7 @@ export default function PostButtons({ post }: Props) {
       <div className="flex gap-2 content-center">
         <Button
           onClick={() => {
-            if (reaction?.type !== ReactionType.LIKE) {
+            if (reaction.type !== ReactionType.LIKE) {
               reactionMutation.mutate({
                 type: ReactionType.LIKE,
                 action: ReactionAction.ADD,

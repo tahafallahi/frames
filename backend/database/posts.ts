@@ -100,7 +100,7 @@ export async function getPosts(
           mediaType: true,
         },
       },
-      _count: { select: { comments: true } }, // drop likes from here too
+      _count: { select: { comments: true } },
     },
     where,
     skip: (Number(page) - 1) * configs.PAGE_LENGTH,

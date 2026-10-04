@@ -72,7 +72,7 @@ export async function getPosts(req: Request, res: Response) {
 export async function getPost(req: Request<{ postId: string }>, res: Response) {
   const { postId } = req.params;
   const user = req.user
-  const post = await db.getPost(user?.id ?? null, postId);
+  const post = await db.getPost(user?.id, postId);
 
   return res.json(post);
 }
