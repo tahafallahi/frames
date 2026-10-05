@@ -9,7 +9,7 @@ import CommentSection from "@/components/comment-section/comment-section";
 
 import { MediaType, type Show } from "@/types/show";
 import Skeleton from "@/components/skeleton/skeleton";
-import {commentsQueryOpts, postQueryOpts } from "@/lib/queryOptions";
+import { commentsQueryOpts, postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 
 export default function ViewPost() {
@@ -43,32 +43,14 @@ export default function ViewPost() {
         >
           {post && <PostCard variant={"full"} post={post}></PostCard>}
         </QueryWrapper>
-        <QueryWrapper
-          query={commentsQuery}
-          isEmpty={
-            !!(
-              commentsQuery.data &&
-              !Object.keys(commentsQuery.data).length
-            )
-          }
-          loadingPlaceHolder={
-            <div className="flex flex-col gap-4">
-              {Array(10)
-                .fill(null)
-                .map((s, i) => (
-                  <Skeleton key={i} />
-                ))}
-            </div>
-          }
-        >
-          {post && commentsQuery.isSuccess && (
-            <CommentSection
-              comments={commentsQuery.data}
-              commentsCount={post.commentsCount}
-              post={post}
-            />
-          )}
-        </QueryWrapper>
+
+        {post && (
+          <CommentSection
+            query={commentsQuery}
+            commentsCount={post.commentsCount}
+            post={post}
+          />
+        )}
       </div>
       <div>
         <QueryWrapper

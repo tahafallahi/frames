@@ -6,6 +6,7 @@ import { body, matchedData, validationResult } from "express-validator";
 import type { Like } from "generated/prisma/client";
 import { LikeType } from "generated/prisma/enums";
 import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import type { Tag } from "types/post";
 import { ReactionAction, ReactionType, type Reaction } from "types/reaction";
 import type { ShowIdentifier } from "types/show";
 
@@ -110,6 +111,7 @@ export const createPost = [
   body("title").trim().notEmpty().isString().isLength({ max: 300 }),
   body("content").trim().isString().isLength({ max: 10000 }),
   body("showIdentifier").notEmpty(),
+  body("tags").isArray(),
 
   async (req: Request, res: Response) => {
     if (!validationResult(req).isEmpty())
@@ -122,7 +124,8 @@ export const createPost = [
       title,
       content,
       showIdentifier,
-    }: { title: string; content: string; showIdentifier: ShowIdentifier } =
+      tags,
+    }: { title: string; content: string; showIdentifier: ShowIdentifier, tags: Tag[] } =
       matchedData(req);
 
     const show = await db.getOrCreateShow(
@@ -130,7 +133,7 @@ export const createPost = [
       showIdentifier.mediaType,
     );
 
-    const post = await db.createPost(title, content, show.id, req.user!.id);
+    const post = await db.createPost(title, content, show.id, req.user!.id, undefined, tags);
 
     return res.json(post);
   },

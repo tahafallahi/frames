@@ -64,8 +64,6 @@ export async function getPosts(
   },
   userId?: string,
 ) {
-  
-
   const where = {
     AND: {
       ...(filters.tagFilter && {
@@ -129,17 +127,17 @@ export async function getPosts(
   const posts = await Promise.all(
     result.map(async ({ _count, ...post }) => {
       const counts = countsByPost.get(post.id) ?? { likes: 0, dislikes: 0 };
-      const reaction =
-        userId ?
-        (await prisma.like.findUnique({
-          where: { userId_postId: { userId, postId: post.id } },
-        })): null;
+      const reaction = userId
+        ? await prisma.like.findUnique({
+            where: { userId_postId: { userId, postId: post.id } },
+          })
+        : null;
 
       return {
         ...post,
         likesCount: counts.likes - counts.dislikes,
         commentsCount: _count.comments,
-        reaction: {type: reaction?.type ?? null}
+        reaction: { type: reaction?.type ?? null },
       };
     }),
   );
@@ -153,8 +151,11 @@ export async function createPost(
   showId: string,
   userId: string,
   picturePath?: string,
-  tags?: Tag[],
+  tags?: string[],
 ) {
+
+  const dbTags = await prisma.tag.findMany({where: {name: {in: tags}}})
+
   const post = await prisma.post.create({
     data: {
       title,
@@ -162,7 +163,7 @@ export async function createPost(
       picturePath,
       showId,
       authorId: userId,
-      tags: { connect: tags },
+      tags: { connect: dbTags },
     },
   });
 

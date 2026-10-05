@@ -19,11 +19,13 @@ import {
   ComboboxLabel,
   ComboboxList,
 } from "../ui/combobox";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 import type { ApiSearchResponse } from "@/types/search";
 import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
 import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
+import { tagsQueryOpts } from "@/lib/queryOptions";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -72,6 +74,8 @@ export default function PostForm({
     enabled: input.length > 0,
   });
 
+  const tags = useQuery(tagsQueryOpts());
+
   function handleInput(i: string) {
     if (timeoutId.current) clearTimeout(timeoutId.current);
     if (i.length < 1) setShow(null);
@@ -100,6 +104,7 @@ export default function PostForm({
                   message: "Title should not be more than 300 characters long.",
                 },
               })}
+              aria-invalid={!!errors.title}
               type="text"
               placeholder="Title of your post."
             />
@@ -113,7 +118,6 @@ export default function PostForm({
               rules={{ required: "Please select a movie or TV show." }}
               render={({ field }) => (
                 <Combobox
-                  key={show?.tmdbId ?? "none"}
                   defaultValue={
                     show && {
                       tmdbId: show.tmdbId,
@@ -142,6 +146,7 @@ export default function PostForm({
                   <ComboboxInput
                     placeholder="Name of the movie or tv show you want to write about."
                     ref={inputRef}
+                    aria-invalid={!!errors.showIdentifier}
                     showClear
                   ></ComboboxInput>
                   <ComboboxContent
@@ -191,8 +196,36 @@ export default function PostForm({
                   message: "Body should not be more than 300 characters long.",
                 },
               })}
+              aria-invalid={!!errors.content}
               className="h-40"
               placeholder="Body of your post (optional)."
+            />
+          </Field>
+          <Field>
+            <FieldLabel>Tags</FieldLabel>
+            <p className="text-destructive">{errors.tags?.message}</p>
+            <Controller
+              name="tags"
+              control={control}
+              rules={{validate: (v) => !!v.length || "Pick at least one tag." }}
+              render={({ field }) => (
+                <ToggleGroup
+                  value={field.value}
+                  aria-invalid={!!errors.tags}
+                  onValueChange={field.onChange}
+                  multiple
+                >
+                  {tags.data?.map((t) => (
+                    <ToggleGroupItem
+                      value={t.name}
+                      key={t.id}
+                      className="h-auto rounded-full border border-border px-4 py-1.5 text-base data-pressed:border-primary data-pressed:bg-primary data-pressed:text-primary-foreground"
+                    >
+                      {t.name}
+                    </ToggleGroupItem>
+                  )) ?? "Loading tags..."}
+                </ToggleGroup>
+              )}
             />
           </Field>
           <div className="flex justify-end gap-4">

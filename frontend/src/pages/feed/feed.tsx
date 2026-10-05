@@ -1,13 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { api } from "@/lib/api";
 
 import PostsColumn from "@/components/posts-column/posts-column";
 import Filter from "@/components/filter/filter";
 
 import type { SelectedFilters } from "@/types/filter";
 import { useFeedSort } from "@/contexts/feed-sort-context";
-import { postsQueryOpts } from "@/lib/queryOptions";
+import { postsQueryOpts, tagsQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 
 export default function Feed() {
@@ -20,11 +19,7 @@ export default function Feed() {
 
   const postsResponse = useQuery(postsQueryOpts(user?.id, 1, sort, selectedFilters));
 
-  const tagsResponse = useQuery({
-    queryKey: ["tags"],
-    queryFn: async () =>
-      (await api.get<{ id: number; name: string }[]>(`/tags`)).data,
-  });
+  const tagsResponse = useQuery(tagsQueryOpts());
 
   const filter = tagsResponse.data
     ? [

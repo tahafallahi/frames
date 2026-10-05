@@ -36,4 +36,6 @@ export interface PostForm {
   title: string;
   content: string;
   showIdentifier: ShowIdentifier;
+  tags: string[]
 }
+

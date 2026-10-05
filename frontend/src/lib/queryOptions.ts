@@ -20,10 +20,18 @@ export const postsQueryOpts = (
   page: number,
   sort: FeedSortEnum,
   selectedFilters: SelectedFilters,
-  userFilter?: string[]
+  userFilter?: string[],
 ) =>
   queryOptions({
-    queryKey: ["user", userId, "posts", page, sort, selectedFilters, userFilter],
+    queryKey: [
+      "user",
+      userId,
+      "posts",
+      page,
+      sort,
+      selectedFilters,
+      userFilter,
+    ],
     queryFn: async () => {
       return (
         await api.get<Post[]>("/posts", {
@@ -34,7 +42,7 @@ export const postsQueryOpts = (
               f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
             ),
             tagFilter: selectedFilters.Tags,
-            userFilter: userFilter
+            userFilter: userFilter,
           },
         })
       ).data;
@@ -63,4 +71,11 @@ export const commentQueryOpts = (
       ).data;
     },
     enabled: !!commentId,
+  });
+
+export const tagsQueryOpts = () =>
+  queryOptions({
+    queryKey: ["tags"],
+    queryFn: async () =>
+      (await api.get<{ id: number; name: string }[]>(`/tags`)).data,
   });
