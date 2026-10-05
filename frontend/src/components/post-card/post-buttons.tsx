@@ -12,7 +12,7 @@ import xLogo from "../../assets/x-logo.svg";
 
 import type { Post } from "@/types/post";
 import { Button } from "../ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, type InfiniteData } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import {
   ReactionAction,
@@ -34,7 +34,7 @@ interface Props {
 export default function PostButtons({ post }: Props) {
   const [user] = useUser();
   const navigate = useNavigate();
-  const reaction = post.reaction
+  const reaction = post.reaction;
 
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
@@ -56,10 +56,10 @@ export default function PostButtons({ post }: Props) {
       });
 
       const prevState = reaction?.type;
-      const action = variables.type === prevState ? null: variables.type;
+      const action = variables.type === prevState ? null : variables.type;
 
-      const score = (t?: ReactionType | null) => t === ReactionType.LIKE ? 1 : t === ReactionType.DISLIKE ? -1 : 0
-
+      const score = (t?: ReactionType | null) =>
+        t === ReactionType.LIKE ? 1 : t === ReactionType.DISLIKE ? -1 : 0;
 
       context.client.setQueryData(
         postQueryOpts(user?.id, post.id).queryKey,
@@ -73,20 +73,25 @@ export default function PostButtons({ post }: Props) {
         },
       );
 
-      context.client.setQueriesData(
+      context.client.setQueriesData<InfiniteData<Post[], unknown>>(
         { queryKey: ["user", user?.id, "posts"] },
-        (prev: Post[]) =>
-          prev.map((p: Post) => {
-            if (p.id === post.id) {
-              return {
-                ...p,
-                likesCount: p.likesCount + score(action) - score(prevState),
-                reaction: { type: action },
-              };
-            } else {
-              return p;
-            }
-          }),
+        (prev) =>
+          prev && {
+            ...prev,
+            pages: prev.pages.map((page) =>
+              page.map((p: Post) => {
+                if (p.id === post.id) {
+                  return {
+                    ...p,
+                    likesCount: p.likesCount + score(action) - score(prevState),
+                    reaction: { type: action },
+                  };
+                } else {
+                  return p;
+                }
+              }),
+            ),
+          },
       );
 
       return { prevPost, prevPostsQueries };
@@ -125,16 +130,21 @@ export default function PostButtons({ post }: Props) {
         staleTime: 0,
       });
 
-      context.client.setQueriesData(
+      context.client.setQueriesData<InfiniteData<Post[], unknown>>(
         { queryKey: ["user", user?.id, "posts"] },
-        (prev: Post[]) =>
-          prev.map((p: Post) => {
-            if (p.id === updatedPost.id) {
-              return updatedPost;
-            } else {
-              return p;
-            }
-          }),
+        (prev) =>
+          prev && {
+            ...prev,
+            pages: prev.pages.map((page) =>
+              page.map((p: Post) => {
+                if (p.id === updatedPost.id) {
+                  return updatedPost;
+                } else {
+                  return p;
+                }
+              }),
+            ),
+          },
       );
     },
   });
