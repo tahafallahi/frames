@@ -1,4 +1,5 @@
 import { NotFoundError } from "error/AppErrors";
+import { LikeType } from "generated/prisma/enums";
 import { prisma } from "lib/prisma";
 
 export async function getUser(userId: string) {
@@ -17,7 +18,6 @@ export async function getUser(userId: string) {
         select: {
           followers: true,
           followings: true,
-          likes: true,
           posts: true,
         },
       },
@@ -29,11 +29,13 @@ export async function getUser(userId: string) {
 
   const { _count, ...rest } = result;
 
+  const likesCount = await prisma.like.count({where:{AND: {type: LikeType.LIKE, OR: [{post: {authorId: userId}}, {comment: {authorId: userId}}]}}})
+
   const user: Express.User = {
     ...rest,
     followingsCount: _count.followings,
     follwersCount: _count.followers,
-    likesCount: _count.likes,
+    likesCount: likesCount,
     postsCount: _count.posts,
   };
 
