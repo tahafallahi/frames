@@ -17,7 +17,6 @@ import { api } from "@/lib/api";
 import {
   ReactionAction,
   ReactionType,
-  type Reaction,
   type ReactionPayload,
 } from "@/types/reaction";
 import { cn } from "@/lib/utils";
@@ -27,7 +26,6 @@ import { Link, useNavigate } from "react-router";
 import { postQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
 import { isAxiosError } from "axios";
-import { useState } from "react";
 
 interface Props {
   post: Post;
@@ -36,7 +34,7 @@ interface Props {
 export default function PostButtons({ post }: Props) {
   const [user] = useUser();
   const navigate = useNavigate();
-  const [reaction, setReaction] = useState<Reaction>(post.reaction);
+  const reaction = post.reaction
 
   const reactionMutation = useMutation({
     mutationFn: async (data: ReactionPayload) =>
@@ -58,37 +56,10 @@ export default function PostButtons({ post }: Props) {
       });
 
       const prevState = reaction?.type;
-      const action = variables.type;
+      const action = variables.type === prevState ? null: variables.type;
 
-      let likesCountChange = 0;
+      const score = (t?: ReactionType | null) => t === ReactionType.LIKE ? 1 : t === ReactionType.DISLIKE ? -1 : 0
 
-      if (prevState) {
-        if (prevState === ReactionType.LIKE) {
-          if (action === ReactionType.LIKE) {
-            likesCountChange = -1;
-            setReaction({ type: null });
-          } else if (action === ReactionType.DISLIKE) {
-            likesCountChange = -2;
-            setReaction({ type: ReactionType.DISLIKE });
-          }
-        } else if (prevState === ReactionType.DISLIKE) {
-          if (action === ReactionType.DISLIKE) {
-            likesCountChange = 1;
-            setReaction({ type: null });
-          } else if (action === ReactionType.LIKE) {
-            likesCountChange = 2;
-            setReaction({ type: ReactionType.LIKE });
-          }
-        }
-      } else if (!prevState) {
-        if (action === ReactionType.LIKE) {
-          likesCountChange = 1;
-          setReaction({ type: ReactionType.LIKE });
-        } else if (action === ReactionType.DISLIKE) {
-          likesCountChange = -1;
-          setReaction({ type: ReactionType.DISLIKE });
-        }
-      }
 
       context.client.setQueryData(
         postQueryOpts(user?.id, post.id).queryKey,
@@ -96,7 +67,7 @@ export default function PostButtons({ post }: Props) {
           if (!prev) return prev;
           return {
             ...prev,
-            likesCount: prev.likesCount + likesCountChange,
+            likesCount: prev.likesCount + score(action) - score(prevState),
             reaction: { type: action },
           };
         },
@@ -109,7 +80,7 @@ export default function PostButtons({ post }: Props) {
             if (p.id === post.id) {
               return {
                 ...p,
-                likesCount: p.likesCount + likesCountChange,
+                likesCount: p.likesCount + score(action) - score(prevState),
                 reaction: { type: action },
               };
             } else {
