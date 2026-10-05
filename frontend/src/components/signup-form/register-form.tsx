@@ -40,7 +40,7 @@ export default function SignupForm() {
       }
     },
     onSuccess: async (_data, _variables, _onMutateResult, context) => {
-      await navigate("/");
+      await navigate(-1);
       void context.client.invalidateQueries({ queryKey: ["user"] });
     },
   });
