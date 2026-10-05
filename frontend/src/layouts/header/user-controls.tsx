@@ -31,6 +31,28 @@ export default function UserControls({
       query={query}
       emptyStateMessage={
         <div className=" mx-5 flex gap-8 shrink-0 justify-between items-center">
+            <Button
+            onClick={() => {
+              if (document.documentElement.classList.contains("dark")) {
+                document.documentElement.classList.remove("dark");
+                localStorage.setItem("color-mode", "light");
+                setIsDarkMode(false);
+              } else {
+                document.documentElement.classList.add("dark");
+                localStorage.setItem("color-mode", "dark");
+                setIsDarkMode(true);
+              }
+            }}
+            variant="ghost"
+            size="icon-xs"
+            aria-label="Toggle color mode"
+          >
+            {isDarkMode ? (
+              <Sun className="size-full" />
+            ) : (
+              <Moon className="size-full" />
+            )}
+          </Button>
           <h2>
             <Link to="/login">Log In</Link>
           </h2>
@@ -48,6 +70,7 @@ export default function UserControls({
         </div>
       }
     >
+      
       {user && (
         <div className="flex gap-6 shrink-0 justify-between items-center">
           <h2>

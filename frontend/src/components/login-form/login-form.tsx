@@ -126,7 +126,6 @@ export default function LoginForm() {
             <BarLink
               to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
               variant="secondary"
-              className=" flex text-sm justify-center items-center text-background rounded "
             >
               <span>Or Sign Up With Google</span>
             </BarLink>

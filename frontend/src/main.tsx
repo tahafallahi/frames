@@ -81,7 +81,7 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 5 * 10 * 1000 },
+    queries: { staleTime: 5 * 10 * 1000, refetchOnReconnect: "always"},
     mutations: {
       onError: () => {
         toast.add({

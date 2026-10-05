@@ -174,21 +174,11 @@ const SHOWS: ShowSeed[] = [
 ];
 
 const TAG_NAMES = [
-  "spoilers",
-  "review",
-  "fan-theory",
+  "spoiler",
   "discussion",
-  "recommendation",
-  "rewatch",
-  "season-finale",
-  "cinematography",
-  "soundtrack",
-  "hot-take",
-  "casting",
-  "easter-eggs",
-  "behind-the-scenes",
-  "prediction",
-  "comparison",
+  "opinion",
+  "review",
+  "news",
 ];
 
 const USER_SEEDS = [
