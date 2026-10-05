@@ -26,6 +26,7 @@ import { MediaType, type ApiSearchShow, type Show } from "@/types/show";
 import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
 import { tagsQueryOpts } from "@/lib/queryOptions";
+import { useNavigate } from "react-router";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -47,6 +48,7 @@ export default function PostForm({
   const [input, setInput] = useState("");
   const timeoutId = useRef<number>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
 
   const {
     register,
@@ -228,11 +230,11 @@ export default function PostForm({
               )}
             />
           </Field>
-          <div className="flex justify-end gap-4">
-            <Button className="w-20 font-bold" variant={"destructive"}>
+          <div className="flex justify-between gap-4">
+            <Button className="px-10 h-13 font-bold" variant={"destructive"} onClick={() => navigate(-1)}>
               Discard
             </Button>
-            <Button type="submit" className="w-20 font-bold">
+            <Button type="submit" className="px-10 h-13 font-bold">
               {mutation.isPending && <Spinner data-icon="incline-start" />}
               Post
             </Button>
