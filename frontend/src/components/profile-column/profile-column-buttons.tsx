@@ -16,11 +16,11 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
 
   const followMut = useMutation({
     mutationFn: async () => await api.post(`/user/${pageUser.id}/follow`),
-    onSuccess: (data, variables, onMutateResult, context) => context.client.invalidateQueries({queryKey: ["user"]})
+    onSuccess: (_data, _variables, _onMutateResult, context) => context.client.invalidateQueries({queryKey: ["user"]})
   });
   const unfollowMut = useMutation({
     mutationFn: async () => await api.delete(`/user/${pageUser.id}/follow`),
-    onSuccess: (data, variables, onMutateResult, context) => context.client.invalidateQueries({queryKey: ["user"]})
+    onSuccess: (_data, _variables, _onMutateResult, context) => context.client.invalidateQueries({queryKey: ["user"]})
   });
   
   return (

@@ -19,7 +19,7 @@ export const postsQueryOpts = (
   userId: string | undefined,
   page: number,
   sort: FeedSortEnum,
-  selectedFilters: SelectedFilters,
+  selectedFilters?: SelectedFilters,
   userFilter?: string[],
 ) =>
   queryOptions({
@@ -38,10 +38,10 @@ export const postsQueryOpts = (
           params: {
             sort: FeedSortDict[sort].value,
             page: page,
-            mediaFilter: selectedFilters.Content.map((f) =>
+            mediaFilter: selectedFilters?.Content.map((f) =>
               f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
             ),
-            tagFilter: selectedFilters.Tags,
+            tagFilter: selectedFilters?.Tags,
             userFilter: userFilter,
           },
         })
