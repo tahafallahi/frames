@@ -4,7 +4,9 @@ import type { Post } from "@/types/post";
 import type { Comment } from "@/types/comment";
 import type { SelectedFilters } from "@/types/filter";
 import { FeedSortDict, type FeedSortEnum } from "@/types/contexts";
-import { MediaType } from "@/types/show";
+import { MediaType, type Show } from "@/types/show";
+
+const STALE_TIME = 5 * 10 * 1000;
 
 export const postQueryOpts = (userId?: string, postId?: string) =>
   queryOptions({
@@ -20,6 +22,7 @@ export const postsQueryOpts = (
   page: number,
   sort: FeedSortEnum,
   selectedFilters?: SelectedFilters,
+  showId?: number[],
   userFilter?: string[],
 ) =>
   queryOptions({
@@ -30,6 +33,7 @@ export const postsQueryOpts = (
       page,
       sort,
       selectedFilters,
+      showId,
       userFilter,
     ],
     queryFn: async () => {
@@ -42,12 +46,12 @@ export const postsQueryOpts = (
               f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
             ),
             tagFilter: selectedFilters?.Tags,
+            showFilter: showId,
             userFilter: userFilter,
           },
         })
       ).data;
     },
-    staleTime: 0
   });
 
 export const commentsQueryOpts = (userId?: string, postId?: string) =>
@@ -79,4 +83,20 @@ export const tagsQueryOpts = () =>
     queryKey: ["tags"],
     queryFn: async () =>
       (await api.get<{ id: number; name: string }[]>(`/tags`)).data,
+    staleTime: STALE_TIME,
+  });
+
+export const showQueryOpts = (showId: number, mediaType: MediaType) =>
+  queryOptions({
+    queryKey: ["show", showId, mediaType],
+    queryFn: async () =>
+      (
+        await api.get<Show>(
+          "/shows/" +
+            (mediaType === MediaType.MOVIE ? "movie" : "tv") +
+            "/" +
+            showId,
+        )
+      ).data,
+    staleTime: STALE_TIME,
   });

@@ -56,6 +56,7 @@ export default function CreatePost() {
         )
       ).data,
     enabled: !!show,
+    staleTime: 5 * 10 * 1000
   });
 
   const sendPostMutation = useMutation({

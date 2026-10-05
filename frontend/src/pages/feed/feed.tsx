@@ -17,8 +17,6 @@ export default function Feed() {
   const [sort, setSort] = useFeedSort();
   const [user] = useUser()
 
-  const postsResponse = useQuery(postsQueryOpts(user?.id, 1, sort, selectedFilters));
-
   const tagsResponse = useQuery(tagsQueryOpts());
 
   const filter = tagsResponse.data
@@ -39,7 +37,7 @@ export default function Feed() {
   return (
     <>
       <PostsColumn
-        query={postsResponse}
+        queryOptions={postsQueryOpts(user?.id, 1, sort, selectedFilters)}
         title="All"
         sort={sort}
         setSort={setSort}

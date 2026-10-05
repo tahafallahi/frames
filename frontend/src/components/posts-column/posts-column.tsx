@@ -1,6 +1,5 @@
 import { ChevronDown } from "lucide-react";
 
-import type { Post } from "@/types/post";
 import {
   PopoverTrigger,
   Popover,
@@ -8,23 +7,28 @@ import {
   PopoverHeader,
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
-import type { UseQueryResult } from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import PostCard from "../post-card/post-card";
 import Skeleton from "../skeleton/skeleton";
 import { FeedSortDict, FeedSortEnum } from "@/types/contexts";
+import type { Post } from "@/types/post";
+import type { SelectedFilters } from "@/types/filter";
 
 export default function PostsColumn({
-  query,
+  queryOptions,
   title,
   sort,
   setSort,
 }: {
-  query: UseQueryResult<Post[]>;
-  title: string;
+  queryOptions: UseQueryOptions<Post[], Error, Post[], (string  | string[] | number | number[]  | SelectedFilters | undefined)[]>;
+  title?: string;
   sort: FeedSortEnum;
   setSort: React.Dispatch<React.SetStateAction<FeedSortEnum>>;
 }) {
+
+  const query = useQuery(queryOptions)
+
   return (
     <div className="flex flex-col gap-4w">
       <div className="flex justify-between text-2xl">
@@ -72,7 +76,7 @@ export default function PostsColumn({
             </PopoverContent>
           </Popover>
         </div>
-        <div className="font-bold">{title}</div>
+        <div className="font-bold">{title ?? (query.data?.length ?? "") + " Posts"}</div>
       </div>
       <QueryWrapper
         query={query}

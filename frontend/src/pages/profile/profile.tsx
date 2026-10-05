@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router";
 
 import PostsColumn from "@/components/posts-column/posts-column";
@@ -9,18 +8,13 @@ import { postsQueryOpts } from "@/lib/queryOptions";
 
 export default function Profile() {
   const { userId } = useParams();
-  const [sort, setSort] = useFeedSort();
-
-  const postsQuery = useQuery(postsQueryOpts(userId, 1, sort, undefined, [userId!]));
-
-  const posts = postsQuery.data;
+  const [sort, setSort] = useFeedSort(); 
 
   return (
     <>
       <div>
         <PostsColumn
-          query={postsQuery}
-          title={(posts?.length ?? "") + " Posts"}
+          queryOptions={postsQueryOpts(userId, 1, sort, undefined, [], [userId!])}
           sort={sort}
           setSort={setSort}
         />

@@ -4,10 +4,9 @@ import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import ShowCard from "@/components/show-card/show-card";
 import Skeleton from "@/components/skeleton/skeleton";
 import { useFeedSort } from "@/contexts/feed-sort-context";
-import { api } from "@/lib/api";
-import { FeedSortDict } from "@/types/contexts";
+import { useUser } from "@/contexts/user-context";
+import { postsQueryOpts, showQueryOpts, tagsQueryOpts } from "@/lib/queryOptions";
 import type { SelectedFilters } from "@/types/filter";
-import type { Post } from "@/types/post";
 import { MediaType, type Show } from "@/types/show";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,6 +14,7 @@ import { useParams } from "react-router";
 
 export default function Show() {
   const { showId, mediaType: mediaTypeString } = useParams();
+  const showFilter = [Number(showId!)]
   //This is for uniformity with other queries calls so userquery can cashe the result
   const mediaType =
     mediaTypeString === "movie" ? MediaType.MOVIE : MediaType.TV_SHOW;
@@ -23,42 +23,11 @@ export default function Show() {
     Content: [],
     Tags: [],
   });
+  const [user] = useUser()
 
-  const postsQuery = useQuery({
-    queryKey: ["posts", sort, showId, selectedFilters],
-    queryFn: async () =>
-      (
-        await api.get<Post[]>(`/posts`, {
-          params: {
-            sort: FeedSortDict[sort].value,
-            page: 1,
-            showFilter: [showId],
-            tagFilter: selectedFilters.Tags,
-          },
-        })
-      ).data,
-  });
+  const showQuery = useQuery(showQueryOpts(Number(showId), mediaType));
 
-
-  const showQuery = useQuery({
-    queryKey: ["show", Number(showId), mediaType],
-    queryFn: async () => {
-      return (
-        await api.get<Show>(
-          "/shows/" +
-            (mediaType === MediaType.MOVIE ? "movie" : "tv") +
-            "/" +
-            showId,
-        )
-      ).data;
-    },
-  });
-
-  const tagQuery = useQuery({
-    queryKey: ["tags"],
-    queryFn: async () =>
-      (await api.get<{ id: number; name: string }[]>(`/tags`)).data,
-  });
+  const tagQuery = useQuery(tagsQueryOpts());
 
   const filter = tagQuery.data
     ? [
@@ -75,7 +44,7 @@ export default function Show() {
     <>
       <div>
         <PostsColumn
-          query={postsQuery}
+          queryOptions={postsQueryOpts(user?.id, 1 ,sort, selectedFilters, showFilter)}
           title={showQuery.data?.title ?? ""}
           sort={sort}
           setSort={setSort}
