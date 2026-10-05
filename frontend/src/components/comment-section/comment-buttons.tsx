@@ -49,32 +49,11 @@ export default function CommentButtons({
         commentsQueryOpts(user?.id, post.id).queryKey,
       );
 
-      const prevState = reaction.type;
-      const newState = variables.type;
+      const prevState = reaction?.type;
+      const action = variables.type === prevState ? null : variables.type;
 
-      let likesCountChange = 0;
-
-      if (prevState) {
-        if (prevState === ReactionType.LIKE) {
-          if (newState === ReactionType.LIKE) {
-            likesCountChange = 0;
-          } else if (newState === ReactionType.DISLIKE) {
-            likesCountChange = -2;
-          }
-        } else if (prevState === ReactionType.DISLIKE) {
-          if (newState === ReactionType.DISLIKE) {
-            likesCountChange = 0;
-          } else if (newState === ReactionType.LIKE) {
-            likesCountChange = 2;
-          }
-        }
-      } else if (!prevState) {
-        if (newState === ReactionType.LIKE) {
-          likesCountChange = 1;
-        } else if (newState === ReactionType.DISLIKE) {
-          likesCountChange = -1;
-        }
-      }
+      const score = (t?: ReactionType | null) =>
+        t === ReactionType.LIKE ? 1 : t === ReactionType.DISLIKE ? -1 : 0;
 
       context.client.setQueryData(
         commentsQueryOpts(user?.id, post.id).queryKey,
@@ -84,8 +63,8 @@ export default function CommentButtons({
             if (c.id === comment.id) {
               return {
                 ...c,
-                likesCount: c.likesCount + likesCountChange,
-                reaction: { type: newState },
+                likesCount: c.likesCount + score(action) - score(prevState),
+                reaction: { type: action },
               };
             } else {
               return c;
@@ -118,10 +97,13 @@ export default function CommentButtons({
       });
     },
 
-    onSuccess: async(_data, _variables, onMutateResult, context) => {
-      const updatedComment = (await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)).data
+    onSuccess: async (_data, _variables, onMutateResult, context) => {
+      const updatedComment = (
+        await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)
+      ).data;
       context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey, replaceCommentBranch(onMutateResult?.prevComments, updatedComment)
+        commentsQueryOpts(user?.id, post.id).queryKey,
+        replaceCommentBranch(onMutateResult?.prevComments, updatedComment),
       );
     },
   });
