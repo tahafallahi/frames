@@ -14,7 +14,7 @@ export default function Profile() {
     <>
       <div>
         <PostsColumn
-          queryOptions={postsQueryOpts(userId, 1, sort, undefined, [], [userId!])}
+          queryOptions={postsQueryOpts(userId, sort, undefined, [], [userId!])}
           sort={sort}
           setSort={setSort}
         />

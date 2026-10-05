@@ -1,4 +1,4 @@
-import { queryOptions } from "@tanstack/react-query";
+import { infiniteQueryOptions, queryOptions } from "@tanstack/react-query";
 import { api } from "./api";
 import type { Post } from "@/types/post";
 import type { Comment } from "@/types/comment";
@@ -19,29 +19,29 @@ export const postQueryOpts = (userId?: string, postId?: string) =>
 
 export const postsQueryOpts = (
   userId: string | undefined,
-  page: number,
   sort: FeedSortEnum,
   selectedFilters?: SelectedFilters,
   showId?: number[],
   userFilter?: string[],
 ) =>
-  queryOptions({
+  infiniteQueryOptions({
     queryKey: [
       "user",
       userId,
       "posts",
-      page,
       sort,
       selectedFilters,
       showId,
       userFilter,
     ],
-    queryFn: async () => {
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => lastPage.length ?  lastPageParam + 1: undefined,
+    queryFn: async ({pageParam}: {pageParam: number}) => {
       return (
         await api.get<Post[]>("/posts", {
           params: {
             sort: FeedSortDict[sort].value,
-            page: page,
+            page: pageParam,
             mediaFilter: selectedFilters?.Content.map((f) =>
               f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
             ),

@@ -7,13 +7,18 @@ import {
   PopoverHeader,
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  type InfiniteData,
+  type UseInfiniteQueryOptions,
+} from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import PostCard from "../post-card/post-card";
 import Skeleton from "../skeleton/skeleton";
 import { FeedSortDict, FeedSortEnum } from "@/types/contexts";
 import type { Post } from "@/types/post";
 import type { SelectedFilters } from "@/types/filter";
+import { useEffect, useRef } from "react";
 
 export default function PostsColumn({
   queryOptions,
@@ -21,13 +26,39 @@ export default function PostsColumn({
   sort,
   setSort,
 }: {
-  queryOptions: UseQueryOptions<Post[], Error, Post[], (string  | string[] | number | number[]  | SelectedFilters | undefined)[]>;
+  queryOptions: UseInfiniteQueryOptions<
+    Post[],
+    Error,
+    InfiniteData<Post[], unknown>,
+    (
+      | string
+      | string[]
+      | FeedSortEnum
+      | number[]
+      | SelectedFilters
+      | undefined
+    )[],
+    number
+  >;
   title?: string;
   sort: FeedSortEnum;
   setSort: React.Dispatch<React.SetStateAction<FeedSortEnum>>;
 }) {
+  const query = useInfiniteQuery(queryOptions);
+  const loadMoreRef = useRef(null);
 
-  const query = useQuery(queryOptions)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) void query.fetchNextPage();
+        });
+      },
+      { rootMargin: "0px 0px 1500px 0px " },
+    );
+
+    observer.observe(loadMoreRef.current!);
+  }, []);
 
   return (
     <div className="flex flex-col gap-4w">
@@ -64,9 +95,7 @@ export default function PostsColumn({
                     <Button
                       variant={"ghost"}
                       className=" p-0 h-fit"
-                      onClick={() =>
-                        setSort(FeedSortEnum[item.key])
-                      }
+                      onClick={() => setSort(FeedSortEnum[item.key])}
                     >
                       {item.label}
                     </Button>
@@ -76,7 +105,9 @@ export default function PostsColumn({
             </PopoverContent>
           </Popover>
         </div>
-        <div className="font-bold">{title ?? (query.data?.length ?? "") + " Posts"}</div>
+        <div className="font-bold">
+          {title ?? (query.data?.pages.flat().length ?? "") + " Posts"}
+        </div>
       </div>
       <QueryWrapper
         query={query}
@@ -89,14 +120,24 @@ export default function PostsColumn({
               ))}
           </div>
         }
-        isEmpty={!query.data?.length}
+        isEmpty={!query.data?.pages.flat().length}
       >
         <div className="flex flex-col gap-12">
-          {query.data?.map((p, i) => (
+          {query.data?.pages.flat().map((p, i) => (
             <PostCard post={p} variant="compact" key={i} />
           ))}
         </div>
       </QueryWrapper>
+      <div ref={loadMoreRef}></div>
+      {query.isFetchingNextPage && (
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2 mt-2">
+          {Array(4)
+            .fill(null)
+            .map((x, i) => (
+              <Skeleton key={i} className="h-auto w-full aspect-2/3" />
+            ))}
+        </div>
+      )}
     </div>
   );
 }

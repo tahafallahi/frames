@@ -19,7 +19,6 @@ export default function FollowingsFeed() {
     Tags: [],
   });
   const [sort, setSort] = useFeedSort();
-  const page = 1
   const userFilter = user?.followings.map((r) => r.followeeId) ?? [];
 
   const tagQuery = useQuery({
@@ -49,7 +48,7 @@ export default function FollowingsFeed() {
     <>
       <div>
         <PostsColumn
-          queryOptions={{...postsQueryOpts(user?.id, page, sort, selectedFilters, [],userFilter), enabled: !!userFilter.length}}
+          queryOptions={{...postsQueryOpts(user?.id, sort, selectedFilters, [],userFilter), enabled: !!userFilter.length}}
           sort={sort}
           setSort={setSort}
           title="Your Followings' posts"

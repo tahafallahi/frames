@@ -37,7 +37,7 @@ export default function Feed() {
   return (
     <>
       <PostsColumn
-        queryOptions={postsQueryOpts(user?.id, 1, sort, selectedFilters)}
+        queryOptions={postsQueryOpts(user?.id, sort, selectedFilters)}
         title="All"
         sort={sort}
         setSort={setSort}
