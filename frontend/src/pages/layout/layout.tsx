@@ -1,9 +1,10 @@
 import Header from "@/layouts/header/header";
 import SideBar from "@/layouts/side-bar/side-bar";
 import ScrollToTop from "@/utils/scroll-to-top";
+
 import { Outlet, useMatches } from "react-router";
 
-export default function Layout() {
+export default function Layout({children}: {children?: React.ReactNode}) {
   const matches = useMatches()
   const handle = matches.at(-1)?.handle as {selectedPage: string} ?? ""
 
@@ -15,7 +16,7 @@ export default function Layout() {
         <SideBar selectedPage={handle.selectedPage} />
         <div className="pt-6" >
           <div className="grid grid-cols-[minmax(100px,700px)_minmax(100px,300px)] items-start justify-items gap-12">
-            <Outlet />
+            {children ??<Outlet />}
           </div>
         </div>
       </div>

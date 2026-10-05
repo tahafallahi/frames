@@ -20,8 +20,13 @@ import FollowingsFeed from "./pages/followings-feed/followings-feed";
 import CreatePost from "./pages/create-post/create-post";
 import { toast, Toaster } from "./components/ui/toast";
 import FeedSortProvider from "./providers/feed-sort-provider";
+import ErrorPage from "./pages/error-page/error";
 
 const router = createBrowserRouter([
+  { 
+    path: "/",
+    ErrorBoundary: ErrorPage
+  },
   {
     Component: AuthLayout,
     children: [
@@ -39,9 +44,9 @@ const router = createBrowserRouter([
     Component: Layout,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Feed />,
-        handle: {selectedPage: "feed"}
+        handle: { selectedPage: "feed" },
       },
       {
         path: "/posts/:postId",
@@ -50,7 +55,7 @@ const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: <Profile />,
-        handle: {selectedPage: "profile"}
+        handle: { selectedPage: "profile" },
       },
       {
         path: "/show/:mediaType/:showId",
@@ -59,17 +64,17 @@ const router = createBrowserRouter([
       {
         path: "/trending/movie",
         element: <Trending mediaType={"MOVIE"} />,
-        handle: {selectedPage: "trending-movies"}
+        handle: { selectedPage: "trending-movies" },
       },
       {
         path: "/trending/tv",
         element: <Trending mediaType={"TV_SHOW"} />,
-        handle: {selectedPage: "trending-tvs"}
+        handle: { selectedPage: "trending-tvs" },
       },
       {
         path: "/followings",
         element: <FollowingsFeed />,
-        handle: {selectedPage: "followings-feed"}
+        handle: { selectedPage: "followings-feed" },
       },
       {
         path: "/create",
@@ -81,7 +86,7 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { staleTime: 5 * 10 * 1000, refetchOnReconnect: "always"},
+    queries: { staleTime: 5 * 10 * 1000, refetchOnReconnect: "always" },
     mutations: {
       onError: () => {
         toast.add({

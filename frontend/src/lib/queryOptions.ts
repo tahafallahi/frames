@@ -47,6 +47,7 @@ export const postsQueryOpts = (
         })
       ).data;
     },
+    staleTime: 0
   });
 
 export const commentsQueryOpts = (userId?: string, postId?: string) =>
