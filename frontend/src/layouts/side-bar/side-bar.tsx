@@ -78,7 +78,7 @@ export default function SideBar({ selectedPage }: Props) {
               <div className="flex flex-col gap-3">
                 {Array(7)
                   .fill(null)
-                  .map((x, i) => (
+                  .map((_x, i) => (
                     <Skeleton variant="line" key={i} />
                   ))}
               </div>
@@ -116,7 +116,7 @@ export default function SideBar({ selectedPage }: Props) {
               <div className="flex flex-col gap-3">
                 {Array(7)
                   .fill(null)
-                  .map((x, i) => (
+                  .map((_x, i) => (
                     <Skeleton variant="line" key={i} />
                   ))}
               </div>

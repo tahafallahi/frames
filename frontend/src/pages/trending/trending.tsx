@@ -14,11 +14,11 @@ export default function Trending({
 }) {
   const loadMoreRef = useRef(null);
 
-  const showQuery = useInfiniteQuery<Show[], Error>({
+  const showQuery = useInfiniteQuery({
     queryKey: ["show", mediaType],
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam) => lastPageParam + 1,
-    queryFn: async ({ pageParam }): Promise<Show[]> =>
+    getNextPageParam: (lastPage, _allPages, lastPageParam) => lastPage.length ? lastPageParam + 1 : undefined,
+    queryFn: async({ pageParam }: { pageParam: number }) =>
       (
         await api.get<Show[]>(
           `/trending/${mediaType === "MOVIE" ? "movie" : "tv"}`,
@@ -53,7 +53,7 @@ export default function Trending({
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2 mt-2">
             {Array(4)
               .fill(null)
-              .map((x, i) => (
+              .map((_x, i) => (
                 <Skeleton key={i} className="h-auto w-full aspect-2/3" />
               ))}
           </div>

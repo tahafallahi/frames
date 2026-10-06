@@ -1,4 +1,3 @@
-import { Button } from "../ui/button";
 import { MediaType, type Show } from "@/types/show";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";

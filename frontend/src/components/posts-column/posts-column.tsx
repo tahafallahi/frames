@@ -58,7 +58,7 @@ export default function PostsColumn({
     );
 
     observer.observe(loadMoreRef.current!);
-  }, []);
+  }, [query]);
 
   return (
     <div className="flex flex-col gap-4w">
@@ -115,7 +115,7 @@ export default function PostsColumn({
           <div className="flex flex-col gap-6">
             {Array(5)
               .fill(null)
-              .map((e, i) => (
+              .map((_, i) => (
                 <Skeleton key={i} className="h-50" />
               ))}
           </div>
@@ -133,7 +133,7 @@ export default function PostsColumn({
         <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2 mt-2">
           {Array(4)
             .fill(null)
-            .map((x, i) => (
+            .map((_, i) => (
               <Skeleton key={i} className="h-auto w-full aspect-2/3" />
             ))}
         </div>

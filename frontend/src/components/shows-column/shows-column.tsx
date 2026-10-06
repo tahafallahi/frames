@@ -70,7 +70,7 @@ export default function ShowsColumn({
           <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2">
             {Array(12)
               .fill(null)
-              .map((x, i) => (
+              .map((_x, i) => (
                 <Skeleton key={i} className="h-100 w-full aspect-2/3" />
               ))}
           </div>

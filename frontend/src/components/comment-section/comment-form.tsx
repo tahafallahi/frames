@@ -56,7 +56,7 @@ export default function CommentForm({
       setNewComments([data, ...newComments]);
       closeAndResetComments();
     },
-    onSettled: (data, error, variables, onMutateResult, context) => context.client.invalidateQueries({queryKey: ["post", post.id]})
+    onSettled: (_data, _error, _variables, _onMutateResult, context) => context.client.invalidateQueries({queryKey: ["post", post.id]})
   });
 
 

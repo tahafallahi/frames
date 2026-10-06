@@ -33,7 +33,7 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
   const editProfileMut = useMutation({
     mutationFn: async (data: { bio: string }) =>
       (await api.post<User>("/user", data)).data,
-    onSuccess: (data, _variables, _onMutateResult, context) =>
+    onSuccess: (_data, _variables, _onMutateResult, context) =>
       context.client.invalidateQueries({queryKey: ["user"]})
   });
 

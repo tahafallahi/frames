@@ -52,7 +52,7 @@ export default function CommentSection({
               <div className="flex flex-col gap-4">
                 {Array(10)
                   .fill(null)
-                  .map((s, i) => (
+                  .map((_, i) => (
                     <Skeleton key={i} />
                   ))}
               </div>
