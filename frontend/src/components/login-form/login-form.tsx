@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { isAxiosError, type AxiosResponse } from "axios";
 import { Spinner } from "../ui/spinner";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Field, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import BarButton from "../bar-button/bar-button";
@@ -130,12 +130,13 @@ export default function LoginForm() {
               <span>Or Sign Up With Google</span>
             </BarLink>
           </div>
-          <a
-            href="/signup"
+          <Link
+            to="/signup"
+            replace
             className="text-sm text-center underline underline-offset-4"
           >
             If you don’t have an account, click here to sign up.
-          </a>
+          </Link>
         </div>
       </FieldGroup>
     </form>
