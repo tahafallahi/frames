@@ -1,6 +1,6 @@
-import { getTrendingShows, getTrendingShowsTitle } from "controllers/trending.js";
+import { getTrendingShows, getTrendingShowsTitle } from "../controllers/trending.js";
 import { Router } from "express";
-import { MediaType } from "generated/prisma/enums.js";
+import { MediaType } from "../generated/prisma/enums.js";
 
 const router = Router();
 

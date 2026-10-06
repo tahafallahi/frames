@@ -1,4 +1,4 @@
-import type { MediaType } from "generated/prisma/enums.js";
+import type { MediaType } from "../generated/prisma/enums.js";
 
 export interface ShowIdentifier {
   tmdbId: number;

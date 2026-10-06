@@ -1,5 +1,5 @@
-import db from "database/db.js";
-import { NotFoundError, ValidationError } from "error/AppErrors.js";
+import db from "../database/db.js";
+import { NotFoundError, ValidationError } from "../error/AppErrors.js";
 import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
 

@@ -1,6 +1,6 @@
-import { prisma } from "lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 
-import type { Post } from "generated/prisma/client.js";
+import type { Post } from "../generated/prisma/client.js";
 
 export async function searchUser(query: string, limit: number) {
   const users = await prisma.$queryRaw`

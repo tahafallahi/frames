@@ -1,6 +1,6 @@
-import { MediaType } from "generated/prisma/enums.js";
-import type { Show } from "types/show.js";
-import type { TmdbMovieDetails, TmdbTvShowDetails } from "types/tmdb.js";
+import { MediaType } from "../generated/prisma/enums.js";
+import type { Show } from "../types/show.js";
+import type { TmdbMovieDetails, TmdbTvShowDetails } from "../types/tmdb.js";
 
 export function mapTmdbShowToDb(
   tmdbShow: TmdbMovieDetails | TmdbTvShowDetails,

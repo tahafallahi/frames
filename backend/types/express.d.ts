@@ -1,4 +1,4 @@
-import type { User as schemaUser } from "generated/prisma/client.js";
+import type { User as schemaUser } from "../generated/prisma/client.js";
 
 declare global {
   namespace Express {

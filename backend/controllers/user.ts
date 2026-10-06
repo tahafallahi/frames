@@ -1,9 +1,9 @@
 import type { Request, Response } from "express";
 import { body, matchedData, validationResult } from "express-validator";
-import { MediaType } from "generated/prisma/enums.js";
-import { prisma } from "lib/prisma.js";
-import { ValidationError } from "error/AppErrors.js";
-import db from "database/db.js";
+import { MediaType } from "../generated/prisma/enums.js";
+import { prisma } from "../lib/prisma.js";
+import { ValidationError } from "../error/AppErrors.js";
+import db from "../database/db.js";
 
 export function getLoggedInUser(req: Request, res: Response) {
   return res.json(req.user);

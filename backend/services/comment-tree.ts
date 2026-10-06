@@ -1,4 +1,4 @@
-import type { CommentWtihReplies, OutputComment } from "types/comment.js";
+import type { CommentWtihReplies, OutputComment } from "../types/comment.js";
 
 export function buildCommentTree(inComments: OutputComment[]) {
   const comments: CommentWtihReplies[] = inComments.map((c) => ({

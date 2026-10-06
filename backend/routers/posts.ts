@@ -6,8 +6,8 @@ import {
   createPost,
   updateReaction,
   getComment,
-} from "controllers/posts.js";
-import { requireLogin } from "middlewares/require-login.js";
+} from "../controllers/posts.js";
+import { requireLogin } from "../middlewares/require-login.js";
 
 const router = Router();
 

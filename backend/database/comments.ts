@@ -1,8 +1,8 @@
-import { NotFoundError } from "error/AppErrors.js";
-import { LikeType } from "generated/prisma/enums.js";
-import { prisma } from "lib/prisma.js";
-import { buildCommentTree } from "services/comment-tree.js";
-import { ReactionType } from "types/reaction.js";
+import { NotFoundError } from "../error/AppErrors.js";
+import { LikeType } from "../generated/prisma/enums.js";
+import { prisma } from "../lib/prisma.js";
+import { buildCommentTree } from "../services/comment-tree.js";
+import { ReactionType } from "../types/reaction.js";
 
 export async function getComment(
   userId: string | undefined,

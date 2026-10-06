@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { prisma } from "lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 
 export async function getTags(req: Request, res:Response) {
   const tags = await prisma.tag.findMany()

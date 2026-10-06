@@ -1,13 +1,13 @@
 import { body, matchedData, validationResult } from "express-validator";
 
-import db from "database/db.js";
-import { ReactionAction, ReactionType, type Reaction } from "types/reaction.js";
-import { ValidationError } from "error/AppErrors.js";
+import db from "../database/db.js";
+import { ReactionAction, ReactionType, type Reaction } from "../types/reaction.js";
+import { ValidationError } from "../error/AppErrors.js";
 
 import type { Request, Response } from "express";
-import type { Tag } from "types/post.js";
-import type { ShowIdentifier } from "types/show.js";
-import type { PostOrderByWithRelationInput } from "generated/prisma/models.js";
+import type { Tag } from "../types/post.js";
+import type { ShowIdentifier } from "../types/show.js";
+import type { PostOrderByWithRelationInput } from "../generated/prisma/models.js";
 
 export async function getPosts(req: Request, res: Response) {
   const { sort, page, mediaFilter, userFilter, showFilter, tagFilter } =

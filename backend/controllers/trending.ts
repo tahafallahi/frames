@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-import { MediaType } from "generated/prisma/enums.js";
-import { getTrendingMoviesTmdb, getTrendingTvTmdb } from "services/tmdb-services.js";
+import { MediaType } from "../generated/prisma/enums.js";
+import { getTrendingMoviesTmdb, getTrendingTvTmdb } from "../services/tmdb-services.js";
 
 export function getTrendingShows(mediaType: MediaType) {
   return async function (req: Request, res: Response, next: NextFunction) {

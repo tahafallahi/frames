@@ -1,5 +1,5 @@
-import { NotFoundError, ResourceAlreadyExistsError } from "error/AppErrors.js";
-import { prisma } from "lib/prisma.js";
+import { NotFoundError, ResourceAlreadyExistsError } from "../error/AppErrors.js";
+import { prisma } from "../lib/prisma.js";
 
 export async function followUser(userId: string, followeeUserId: string) {
   const existingFRelation = await prisma.follows.findUnique({

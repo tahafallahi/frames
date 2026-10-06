@@ -1,6 +1,6 @@
-import { NotFoundError } from "error/AppErrors.js";
-import { LikeType } from "generated/prisma/enums.js";
-import { prisma } from "lib/prisma.js";
+import { NotFoundError } from "../error/AppErrors.js";
+import { LikeType } from "../generated/prisma/enums.js";
+import { prisma } from "../lib/prisma.js";
 
 export async function getUser(userId: string) {
   const result = await prisma.user.findUnique({

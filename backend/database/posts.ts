@@ -1,10 +1,10 @@
-import { prisma } from "lib/prisma.js";
-import configs from "configs.js";
-import { NotFoundError } from "error/AppErrors.js";
+import { prisma } from "../lib/prisma.js";
+import configs from "../configs.js";
+import { NotFoundError } from "../error/AppErrors.js";
 
-import type { PostOrderByWithRelationInput } from "generated/prisma/models.js";
-import type { MediaType } from "generated/prisma/enums.js";
-import { ReactionType } from "types/reaction.js";
+import type { PostOrderByWithRelationInput } from "../generated/prisma/models.js";
+import type { MediaType } from "../generated/prisma/enums.js";
+import { ReactionType } from "../types/reaction.js";
 
 export async function getPost(userId: string | undefined, postId: string) {
   const [result, likesCount, dislikesCount] = await prisma.$transaction([

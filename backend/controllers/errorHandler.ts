@@ -1,4 +1,4 @@
-import { ValidationError } from "error/AppErrors.js";
+import { ValidationError } from "../error/AppErrors.js";
 import type { ErrorRequestHandler } from "express";
 
 export const errorHandler: ErrorRequestHandler = (

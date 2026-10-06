@@ -1,6 +1,6 @@
-import { signupUser } from "controllers/auth.js";
+import { signupUser } from "../controllers/auth.js";
 import { Router, type Request, type Response } from "express";
-import { requireLogin } from "middlewares/require-login.js";
+import { requireLogin } from "../middlewares/require-login.js";
 import passport from "passport";
 
 const router = Router();
