@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy, type VerifyFunction } from "passport-local";
 import { prisma } from "./prisma.js";
-import db from "database/db";
+import db from "../database/db.js";
 
 const verify: VerifyFunction = async (username, password, done) => {
   if (!process.env.DUMMY_HASH_12) {

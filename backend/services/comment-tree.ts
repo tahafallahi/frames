@@ -26,7 +26,7 @@ function recursiveCommentTree(
     }
   });
 
-  comment.replies.forEach((c: Comment) => {
+  comment.replies.forEach((c) => {
     recursiveCommentTree(c, comments);
   });
 
