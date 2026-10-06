@@ -132,7 +132,7 @@ export const createPost = [
       showIdentifier.mediaType,
     );
 
-    const post = await db.createPost(title, content, show.id, req.user!.id, undefined, tags);
+    const post = await db.createPost(title, content, show.id!, req.user!.id, undefined, tags);
 
     return res.json(post);
   },
