@@ -21,8 +21,8 @@
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
 import { prisma } from "../lib/prisma.js";
-import { MediaType, LikeType } from "generated/prisma/enums";
-import db from "database/db";
+import { MediaType, LikeType } from "generated/prisma/enums.js";
+import db from "database/db.js";
 
 // Deterministic-ish output so re-running gives similar "flavor" of data
 faker.seed(20260911);

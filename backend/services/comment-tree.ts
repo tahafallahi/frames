@@ -1,4 +1,4 @@
-import type { CommentWtihReplies, OutputComment } from "types/comment";
+import type { CommentWtihReplies, OutputComment } from "types/comment.js";
 
 export function buildCommentTree(inComments: OutputComment[]) {
   const comments: CommentWtihReplies[] = inComments.map((c) => ({
@@ -26,7 +26,7 @@ function recursiveCommentTree(
     }
   });
 
-  comment.replies.forEach((c) => {
+  comment.replies.forEach((c: Comment) => {
     recursiveCommentTree(c, comments);
   });
 

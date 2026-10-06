@@ -1,11 +1,9 @@
-import { MediaType } from "generated/prisma/enums";
-import { prisma } from "lib/prisma";
-import type { Show } from "types/show";
-import { getMovieFromTmdb, getTvFromTmdb } from "../services/tmdb-services";
+import { MediaType } from "generated/prisma/enums.js";
+import { prisma } from "lib/prisma.js";
+import type { Show } from "types/show.js";
+import { getMovieFromTmdb, getTvFromTmdb } from "../services/tmdb-services.js";
 import { isAxiosError } from "axios";
-import { NotFoundError } from "error/AppErrors";
-import configs from "configs";
-import type { PostOrderByWithRelationInput } from "generated/prisma/models";
+import { NotFoundError } from "error/AppErrors.js";
 
 export async function getOrCreateShow(
   tmdbId: number,

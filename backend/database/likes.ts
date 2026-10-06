@@ -1,7 +1,6 @@
-import { NotFoundError, ResourceAlreadyExistsError } from "error/AppErrors";
-import { LikeType } from "generated/prisma/enums";
-import { prisma } from "lib/prisma";
-import { ReactionAction, ReactionType, type Reaction } from "types/reaction";
+import { NotFoundError, ResourceAlreadyExistsError } from "error/AppErrors.js";
+import { prisma } from "lib/prisma.js";
+import { ReactionAction, type Reaction } from "types/reaction.js";
 
 export async function updatePostReaction(
   userId: string,

@@ -1,10 +1,10 @@
 import * as dbSearch from "./search.js";
-import * as dbGet from "./shows";
-import * as dbComments from "./comments";
-import * as dbPosts from "./posts";
-import * as dbUsers from "./users";
-import * as dbLikes from "./likes";
-import * as dbFollows from "./follows"
+import * as dbGet from "./shows.js";
+import * as dbComments from "./comments.js";
+import * as dbPosts from "./posts.js";
+import * as dbUsers from "./users.js";
+import * as dbLikes from "./likes.js";
+import * as dbFollows from "./follows.js"
 
 export default {
   ...dbGet,

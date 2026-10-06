@@ -9,9 +9,9 @@ import {
   dismissEveryFollow,
   getFollowings,
   editProfile
-} from "controllers/user";
+} from "controllers/user.js";
 import { Router } from "express";
-import { requireLogin } from "middlewares/require-login";
+import { requireLogin } from "middlewares/require-login.js";
 
 const router = Router();
 
