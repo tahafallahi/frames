@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { prisma } from "lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 import bcrypt from "bcrypt";
 import { body, matchedData, validationResult } from "express-validator";
 

@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
-import { searchPost, searchUser } from "database/search.js";
-import { searchMovie, searchTV } from "services/tmdb-services.js";
+import { searchPost, searchUser } from "../database/search.js";
+import { searchMovie, searchTV } from "../services/tmdb-services.js";
 
 export async function getSearchResult(req: Request, res: Response) {
   const { query, limit = 3 } = req.query;
