@@ -35,22 +35,25 @@ export const postsQueryOpts = (
       userFilter,
     ],
     initialPageParam: 1,
-    getNextPageParam: (lastPage, _allPages, lastPageParam) => lastPage.length ?  lastPageParam + 1: undefined,
-    queryFn: async ({pageParam}: {pageParam: number}) => {
-      return (
-        await api.get<Post[]>("/posts", {
-          params: {
-            sort: FeedSortDict[sort].value,
-            page: pageParam,
-            mediaFilter: selectedFilters?.Content.map((f) =>
-              f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
-            ),
-            tagFilter: selectedFilters?.Tags,
-            showFilter: showId,
-            userFilter: userFilter,
-          },
-        })
-      ).data;
+    getNextPageParam: (lastPage, _allPages, lastPageParam) =>
+      lastPage.length ? lastPageParam + 1 : undefined,
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
+      return userFilter && !userFilter.length
+        ? []
+        : (
+            await api.get<Post[]>("/posts", {
+              params: {
+                sort: FeedSortDict[sort].value,
+                page: pageParam,
+                mediaFilter: selectedFilters?.Content.map((f) =>
+                  f === "Movie" ? MediaType.MOVIE : MediaType.TV_SHOW,
+                ),
+                tagFilter: selectedFilters?.Tags,
+                showFilter: showId,
+                userFilter: userFilter,
+              },
+            })
+          ).data;
     },
   });
 

@@ -44,7 +44,7 @@ export default function Show() {
     <>
       <div>
         <PostsColumn
-          queryOptions={postsQueryOpts(user?.id, 1 ,sort, selectedFilters, showFilter)}
+          queryOptions={postsQueryOpts(user?.id, sort, selectedFilters, showFilter)}
           title={showQuery.data?.title ?? ""}
           sort={sort}
           setSort={setSort}

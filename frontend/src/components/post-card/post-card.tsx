@@ -15,7 +15,7 @@ export default function PostCard({
 }) {
   if (variant === "compact") {
     return (
-      <div className="w-175 px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
+      <div className=" px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
         <Link to={"/posts/" + post.id}>
           <div className="flex justify-between text-muted-foreground text-sm">
             <p>
@@ -39,7 +39,7 @@ export default function PostCard({
             </div>
           ) : null}
         </Link>
-        <div className="flex items-center justify-between text-muted-foreground">
+        <div className="flex items-center justify-between text-muted-foreground flex-wrap gap-y-4">
           <PostButtons post={post} />
           <div className="flex content-center gap-2">
             {post.tags.map((t, i) => (

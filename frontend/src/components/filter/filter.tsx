@@ -31,7 +31,7 @@ export default function Filter({
   }
 
   return (
-    <div className="w-75 flex flex-col gap-3">
+    <div className="max-w-75 md:flex flex-col gap-3 hidden ">
       <h5 className="text-2xl">Filter By</h5>
       <div className="flex flex-col gap-6 border-l py-3 px-5">
         <QueryWrapper

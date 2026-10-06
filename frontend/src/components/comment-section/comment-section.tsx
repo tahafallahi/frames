@@ -25,7 +25,7 @@ export default function CommentSection({
 
   return (
     <>
-      <div className="flex flex-col gap-3 w-175 ">
+      <div className="flex flex-col gap-3 ">
         <h5 className="text-xl font-bold">{commentsCount} Comments</h5>
         <CommentForm
           newComments={newComments}

@@ -7,17 +7,17 @@ export default function Header({ variant }: { variant?: "compact" }) {
   const [user, , userQuery] = useUser();
 
   return (
-    <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center  px-10 border-b border-border">
-      <h1 className="text-primary text-[36px] font-bold">
-        <Link to="/">Frames</Link>
-      </h1>
-      {variant === "compact" ? null : (
-        <div className="max-w-175 flex-1">
-          <SearchBar />
-        </div>
-      )}
+    <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center px-4 md:px-10 border-b border-border">
+        <h1 className="text-primary text-[36px] font-bold">
+          <Link to="/">Frames</Link>
+        </h1>
+        {variant === "compact" ? null : (
+          <div className="max-w-200 hidden lg:block md:ml-25  xl:ml-45 mr-25 min-[1570px]:mr-45 flex-1">
+            <SearchBar />
+          </div>
+        )}
 
-        <UserControls query={userQuery} user={user} />
+      <UserControls query={userQuery} user={user} />
     </header>
   );
 }

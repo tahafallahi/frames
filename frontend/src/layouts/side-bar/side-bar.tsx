@@ -37,7 +37,7 @@ export default function SideBar({ selectedPage }: Props) {
   ];
 
   return (
-    <div className="sticky top-18 h-[calc(100dvh-72px)] w-full  p-10 border-r text-2xl flex flex-col gap-10">
+    <div className="sticky top-18 h-[calc(100dvh-72px)] w-full p-10  border-r text-2xl flex-col gap-10 hidden xl:flex">
       <div className="flex flex-col gap-1">
         {tabs.map((tab, i) => {
           return tab.requireLogin && !user ? (
