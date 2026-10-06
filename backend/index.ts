@@ -22,9 +22,9 @@ import passport from "passport";
 
 // import "../lib/passport-google-oauth2";
 import "./lib/passport-local.js";
-import { errorHandler } from "controllers/errorHandler.js";
+import { errorHandler } from "./controllers/errorHandler.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { prisma } from "lib/prisma.js";
+import { prisma } from "./lib/prisma.js";
 
 if (!process.env.COOKIE_SECRET)
   throw new Error("COOKIE_SECRET is not provided in enviroment variables");
