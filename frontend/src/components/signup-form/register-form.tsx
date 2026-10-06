@@ -10,6 +10,8 @@ import { Input } from "../ui/input";
 import BarButton from "../bar-button/bar-button";
 import BarLink from "../bar-link/bar-link";
 import type { Post } from "@/types/post";
+import { useUser } from "@/contexts/user-context";
+import { useEffect } from "react";
 
 interface SignupFormValues {
   username: string;
@@ -20,6 +22,7 @@ interface SignupFormValues {
 
 export default function SignupForm() {
   const navigate = useNavigate();
+  const [user] = useUser()
 
   const {
     register,
@@ -45,6 +48,12 @@ export default function SignupForm() {
     },
   });
 
+  useEffect(() => {
+    if (user) void navigate("/")
+  })
+
+  if (user) return "Redirecting..."
+
   return (
     <form
       onSubmit={handleSubmit((values) => formMutation.mutate(values))}
@@ -65,8 +74,12 @@ export default function SignupForm() {
               </p>
             )}
             <Input
+              id="username"
               type="text"
+              autoCapitalize="none"
+              spellCheck={false}
               aria-invalid={!!errors.username}
+              autoComplete="username"
               className="pl-3 p-1 border-primary rounded-lg border"
               {...register("username", {
                 required: "Username is required.",
@@ -89,6 +102,8 @@ export default function SignupForm() {
             )}
             <Input
               type="email"
+              id="email"
+              autoComplete="email"
               aria-invalid={!!errors.email}
               className="pl-3 p-1 border-primary rounded-lg border"
               {...register("email", {
@@ -110,7 +125,9 @@ export default function SignupForm() {
             )}
             <Input
               type="password"
+              id="password"
               aria-invalid={!!errors.password}
+              autoComplete="new-password"
               className="pl-3 p-1 border-primary rounded-lg border"
               {...register("password", {
                 required: "Password is required.",
@@ -136,6 +153,8 @@ export default function SignupForm() {
             )}
             <Input
               type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}
               className="pl-3 p-1 border-primary rounded-lg border"
               {...register("confirmPassword", {

@@ -10,7 +10,7 @@ const verify: VerifyFunction = async (username, password, done) => {
   }
 
   try {
-    const user = await prisma.user.findUnique({ where: { username } });
+    const user = await prisma.user.findUnique({ where: { username: username } });
 
     if (user && user.hashedPassword) {
       const result = await bcrypt.compare(password, user.hashedPassword);

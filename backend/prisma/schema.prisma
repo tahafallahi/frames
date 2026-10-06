@@ -1,10 +1,12 @@
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
+  extensions = [citext]
 }
 
 enum MediaType {
@@ -33,8 +35,8 @@ model FederatedUser {
 
 model User {
   id String @id @default(uuid())
-  username String @unique @db.VarChar(32)
-  email String? @unique
+  username String @unique @db.Citext
+  email String? @unique @db.Citext
   hashedPassword String? @db.VarChar(60)
   profilePath String?
   bio String?

@@ -6,12 +6,14 @@ import { body, matchedData, validationResult } from "express-validator";
 const singupValidators = [
   body("username")
     .trim()
+    .isString()
     .isLength({ min: 3, max: 32 })
     .withMessage("username length must be between 3 and 32"),
-  body("email").trim().notEmpty().withMessage("email is required"),
+  body("email").trim().notEmpty().isString().withMessage("email is required"),
   body("password")
     .trim()
     .isLength({ min: 8, max: 100 })
+    .isString()
     .withMessage("password must be between 8 and 100 charachters"),
 ];
 
@@ -32,10 +34,13 @@ export const signupUser = [
     const userFromEmail = await prisma.user.findUnique({ where: { email } });
     if (userFromEmail)
       return res.status(409).json({ error: "email already exist" });
-
     const hash = await bcrypt.hash(password, 12);
     const newUser = await prisma.user.create({
-      data: { username, hashedPassword: hash, email },
+      data: {
+        username: username.toLowerCase(),
+        hashedPassword: hash,
+        email: email.toLowerCase(),
+      },
     });
 
     req.logIn({ id: newUser.id }, (error) => {

@@ -69,6 +69,7 @@ export default function LoginForm() {
               </p>
             )}
             <Input
+              id="username"
               type="text"
               aria-invalid={!!errors.username}
               autoComplete="username"
@@ -94,6 +95,7 @@ export default function LoginForm() {
               </p>
             )}
             <Input
+              id="password"
               type="password"
               aria-invalid={!!errors.password}
               autoComplete="current-password"
