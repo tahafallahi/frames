@@ -7,12 +7,14 @@
 
     "baseUrl": ".",
     
-    "module": "esnext",
+    // "module": "esnext",
     "target": "ES2023",
     "types": ["node"],
+    "module": "NodeNext",
+  "moduleResolution": "NodeNext",
 
 
-    "moduleResolution": "bundler",
+    // "moduleResolution": "bundler",
     "esModuleInterop": true,
     "ignoreDeprecations": "6.0",
 

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy, type VerifyFunction } from "passport-local";
-import { prisma } from "./prisma";
+import { prisma } from "./prisma.js";
 import db from "database/db";
 
 const verify: VerifyFunction = async (username, password, done) => {

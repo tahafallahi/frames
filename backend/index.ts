@@ -9,14 +9,14 @@ import { Router } from "express";
 import session from "express-session";
 import qs from "qs";
 
-import searchRouter from "./routers/search";
+import searchRouter from "./routers/search.js";
 import postsRouter from "./routers/posts";
-import commentsRouter from "./routers/comment"
+import commentsRouter from "./routers/comment.js"
 import tagsRouter from "./routers/tags";
-import authRouter from "./routers/auth";
-import userRouter from "./routers/user";
-import showRouter from "./routers/show";
-import trendingRouter from "./routers/trending";
+import authRouter from "./routers/auth.js";
+import userRouter from "./routers/user.js";
+import showRouter from "./routers/show.js";
+import trendingRouter from "./routers/trending.js";
 
 import passport from "passport";
 

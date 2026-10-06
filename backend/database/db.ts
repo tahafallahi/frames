@@ -1,4 +1,4 @@
-import * as dbSearch from "./search";
+import * as dbSearch from "./search.js";
 import * as dbGet from "./shows";
 import * as dbComments from "./comments";
 import * as dbPosts from "./posts";

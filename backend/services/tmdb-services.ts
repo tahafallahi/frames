@@ -2,7 +2,7 @@ import { MediaType } from "generated/prisma/enums";
 import { tmdbApi } from "lib/api";
 import { type ApiSearchShow, type Show } from "types/show";
 import { movieGenreIdToName, tvGenreIdToName } from "utils/tmdb";
-import { mapTmdbShowToDb } from "./tmdb-mapper";
+import { mapTmdbShowToDb } from "./tmdb-mapper.js";
 
 export async function searchMovie(
   query: string,

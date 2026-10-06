@@ -1,7 +1,7 @@
 import passport from "passport";
 import * as client from "openid-client";
 import { Strategy, type VerifyFunction } from "openid-client/passport";
-import { prisma } from "./prisma";
+import { prisma } from "./prisma.js";
 import { faker } from "@faker-js/faker";
 
 if (!process.env.GOOGLE_CLIENT_ID)

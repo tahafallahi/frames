@@ -20,7 +20,7 @@
 
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcrypt";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import { MediaType, LikeType } from "generated/prisma/enums";
 import db from "database/db";
 
