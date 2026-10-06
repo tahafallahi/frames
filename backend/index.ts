@@ -9,19 +9,19 @@ import { Router } from "express";
 import session from "express-session";
 import qs from "qs";
 
-import searchRouter from "../routers/search";
-import postsRouter from "../routers/posts";
-import commentsRouter from "../routers/comment"
-import tagsRouter from "../routers/tags";
-import authRouter from "../routers/auth";
-import userRouter from "../routers/user";
-import showRouter from "../routers/show";
-import trendingRouter from "../routers/trending";
+import searchRouter from "./routers/search";
+import postsRouter from "./routers/posts";
+import commentsRouter from "./routers/comment"
+import tagsRouter from "./routers/tags";
+import authRouter from "./routers/auth";
+import userRouter from "./routers/user";
+import showRouter from "./routers/show";
+import trendingRouter from "./routers/trending";
 
 import passport from "passport";
 
 // import "../lib/passport-google-oauth2";
-import "../lib/passport-local";
+import "./lib/passport-local";
 import { errorHandler } from "controllers/errorHandler";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "lib/prisma";
