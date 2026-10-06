@@ -7,7 +7,8 @@ import {
   removeFavorite,
   unfollowUser,
   dismissEveryFollow,
-  getFollowings
+  getFollowings,
+  editProfile
 } from "controllers/user";
 import { Router } from "express";
 import { requireLogin } from "middlewares/require-login";
@@ -24,5 +25,6 @@ router.post("/:followeeUserId/follow", requireLogin, followUser);
 router.delete("/:followeeUserId/follow", requireLogin, unfollowUser);
 router.post("/favorites", requireLogin, addFavorite);
 router.post("/favorites-remove", requireLogin, removeFavorite);
+router.post("/", requireLogin, editProfile)
 
 export default router;

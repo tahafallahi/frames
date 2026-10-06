@@ -29,7 +29,14 @@ export async function getUser(userId: string) {
 
   const { _count, ...rest } = result;
 
-  const likesCount = await prisma.like.count({where:{AND: {type: LikeType.LIKE, OR: [{post: {authorId: userId}}, {comment: {authorId: userId}}]}}})
+  const likesCount = await prisma.like.count({
+    where: {
+      AND: {
+        type: LikeType.LIKE,
+        OR: [{ post: { authorId: userId } }, { comment: { authorId: userId } }],
+      },
+    },
+  });
 
   const user: Express.User = {
     ...rest,
@@ -40,4 +47,14 @@ export async function getUser(userId: string) {
   };
 
   return user;
+}
+
+export async function editProfile(userId: string, bio: string) {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new NotFoundError("User");
+  const updatedUser = await prisma.user.update({
+    data: { bio },
+    where: { id: userId },
+  });
+  return updatedUser
 }

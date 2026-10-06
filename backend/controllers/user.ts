@@ -145,6 +145,21 @@ export async function getFollowings(req: Request, res: Response) {
 
   const users = await db.getFollowings(user!.id);
 
-
   return res.json(users);
 }
+
+export const editProfile = [
+  body("bio").trim().notEmpty().isLength({ max: 1000 }),
+  async (req: Request, res: Response) => {
+    const user = req.user
+    if (!validationResult(req).isEmpty())
+      throw new ValidationError(
+        "Profile edit validation failed",
+        validationResult(req).array(),
+      );
+    const { bio } = matchedData(req);
+    const updatedUser = await db.editProfile(user!.id, bio)
+
+    return res.json(updatedUser)
+  },
+];
