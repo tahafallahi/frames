@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "tsx watch --env-file=.env api/index.ts "
+    "dev": "tsx watch --env-file=.env index.ts ",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.1",
