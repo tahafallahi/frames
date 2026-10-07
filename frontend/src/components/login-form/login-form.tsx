@@ -44,7 +44,7 @@ export default function LoginForm() {
     },
     onSuccess: async (_data, _variables, _onMutateResult, context) => {
       await navigate(-1);
-      void context.client.invalidateQueries({ queryKey: ["user"] });
+      await  context.client.invalidateQueries({ queryKey: ["user"] });
     },
   });
 
