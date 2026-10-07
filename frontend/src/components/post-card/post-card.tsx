@@ -15,7 +15,7 @@ export default function PostCard({
 }) {
   if (variant === "compact") {
     return (
-      <div className=" px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
+      <div className="md:px-5 py-3 flex flex-col gap-3 border-t border-primary hover:bg-popover">
         <Link to={"/posts/" + post.id}>
           <div className="flex justify-between text-muted-foreground text-sm">
             <p>
@@ -53,7 +53,7 @@ export default function PostCard({
     );
   } else if (variant === "full") {
     return (
-      <div className="bg-popover px-5 py-3 flex flex-col gap-8 border-l border-primary">
+      <div className="bg-popover md:px-5 py-3 flex flex-col gap-8 border-l border-primary">
         <div className="flex flex-col gap-2">
           <div>
             <h4 className="text-2xl font-bold">{post.title}</h4>
