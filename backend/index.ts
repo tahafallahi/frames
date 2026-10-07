@@ -36,6 +36,7 @@ const router = Router();
 
 app.set("query parser", (str: string) => qs.parse(str));
 
+app.set("trust proxy", 1);
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
