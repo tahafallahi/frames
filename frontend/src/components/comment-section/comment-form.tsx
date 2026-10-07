@@ -7,7 +7,7 @@ import { FieldGroup, Field, FieldLabel } from "../ui/field";
 import type { Post } from "@/types/post";
 import type { Comment, CommentForm } from "@/types/comment";
 import { useUser } from "@/contexts/user-context";
-import { queryOptions, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "../ui/toast";
 import { useForm } from "react-hook-form";
 import { api } from "@/lib/api";

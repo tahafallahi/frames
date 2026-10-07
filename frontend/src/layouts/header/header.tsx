@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 
 interface Props {
   variant?: "compact";
-  setSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setSideBarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function Header({ variant, setSideBarOpen }: Props) {
@@ -17,9 +17,12 @@ export default function Header({ variant, setSideBarOpen }: Props) {
   return (
     <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center px-4 md:px-10 border-b border-border">
       <div className="flex gap-2 items-center">
+        {
+          setSideBarOpen &&
         <Button variant="ghost" className="p-0 xl:hidden" onClick={() => setSideBarOpen(state => !state)}>
           <Menu className="size-8" />
         </Button>
+        }
         <h1 className="text-primary text-[36px] font-bold">
           <Link to="/">Frames</Link>
         </h1>
