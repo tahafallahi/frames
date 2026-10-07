@@ -9,22 +9,22 @@ import { Router } from "express";
 import session from "express-session";
 import qs from "qs";
 
-import searchRouter from "./routers/search.js";
-import postsRouter from "./routers/posts.js";
-import commentsRouter from "./routers/comment.js"
-import tagsRouter from "./routers/tags.js";
-import authRouter from "./routers/auth.js";
-import userRouter from "./routers/user.js";
-import showRouter from "./routers/show.js";
-import trendingRouter from "./routers/trending.js";
+import searchRouter from "../routers/search.js";
+import postsRouter from "../routers/posts.js";
+import commentsRouter from "../routers/comment.js"
+import tagsRouter from "../routers/tags.js";
+import authRouter from "../routers/auth.js";
+import userRouter from "../routers/user.js";
+import showRouter from "../routers/show.js";
+import trendingRouter from "../routers/trending.js";
 
 import passport from "passport";
 
 // import "../lib/passport-google-oauth2";
-import "./lib/passport-local.js";
-import { errorHandler } from "./controllers/errorHandler.js";
+import "../lib/passport-local.js";
+import { errorHandler } from "../controllers/errorHandler.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import { prisma } from "./lib/prisma.js";
+import { prisma } from "../lib/prisma.js";
 
 if (!process.env.COOKIE_SECRET)
   throw new Error("COOKIE_SECRET is not provided in enviroment variables");
