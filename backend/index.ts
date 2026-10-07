@@ -20,7 +20,7 @@ import trendingRouter from "./routers/trending.js";
 
 import passport from "passport";
 
-// import "../lib/passport-google-oauth2";
+import "./lib/passport-google-oauth2.js";
 import "./lib/passport-local.js";
 import { errorHandler } from "./controllers/errorHandler.js";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
