@@ -1,6 +1,7 @@
 import BarButton from "@/components/bar-button/bar-button";
 import BarLink from "@/components/bar-link/bar-link";
 import ProfileCard from "@/components/profile-card/profile-card";
+import { Spinner } from "@/components/ui/spinner";
 import { api } from "@/lib/api";
 import type { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
@@ -22,7 +23,13 @@ export default function ProfileTray({ user }: Props) {
           Profile
         </BarLink>
         <BarButton variant="destructive" onClick={() => logoutMut.mutate()}>
-          Log out
+          {logoutMut.isPending ?
+          <>
+          <Spinner className="absolute size-5 -translate-x-14" />
+                Loging Out...
+          </> :
+          "Log out"
+          }
         </BarButton>
       </div>
     </>

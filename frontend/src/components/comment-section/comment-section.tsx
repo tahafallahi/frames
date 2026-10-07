@@ -31,7 +31,7 @@ export default function CommentSection({
           isEmpty={!!(comments && !Object.keys(comments).length)}
           loadingPlaceHolder={
             <div className="flex flex-col gap-4">
-              {Array(10)
+              {Array(6)
                 .fill(null)
                 .map((_, i) => (
                   <Skeleton key={i} />

@@ -7,10 +7,12 @@ import { FieldGroup, Field, FieldLabel } from "../ui/field";
 import type { Post } from "@/types/post";
 import type { Comment, CommentForm } from "@/types/comment";
 import { useUser } from "@/contexts/user-context";
-import { useMutation } from "@tanstack/react-query";
+import { queryOptions, useMutation } from "@tanstack/react-query";
 import { toast } from "../ui/toast";
 import { useForm } from "react-hook-form";
 import { api } from "@/lib/api";
+import { Spinner } from "../ui/spinner";
+import { postQueryOpts } from "@/lib/queryOptions";
 
 const MotionFieldLabel = motion.create(FieldLabel);
 
@@ -18,10 +20,12 @@ interface Props {
   post: Post;
   newComments: Comment[];
   setNewComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  isOpen: boolean,
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>> | ((open: boolean) => void),
-  parentComment?: Comment,
-  noAnimate?: boolean,
+  isOpen: boolean;
+  setIsOpen:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | ((open: boolean) => void);
+  parentComment?: Comment;
+  noAnimate?: boolean;
 }
 
 export default function CommentForm({
@@ -31,7 +35,7 @@ export default function CommentForm({
   isOpen,
   setIsOpen,
   parentComment,
-  noAnimate
+  noAnimate,
 }: Props) {
   const [user] = useUser();
 
@@ -49,21 +53,25 @@ export default function CommentForm({
     setIsOpen(false);
   }
 
-  const commentMutation = useMutation({
+  const commentMut = useMutation({
     mutationFn: async (data: CommentForm) =>
       (await api.post<Comment>("/comments", data)).data,
     onSuccess: (data) => {
       setNewComments([data, ...newComments]);
       closeAndResetComments();
     },
-    onSettled: (_data, _error, _variables, _onMutateResult, context) => context.client.invalidateQueries({queryKey: ["post", post.id]})
+    onSettled: (_data, _error, _variables, _onMutateResult, context) =>
+      void context.client.invalidateQueries({ queryKey: postQueryOpts(user?.id, post.id).queryKey }),
   });
-
 
   function handleCommentSubmit(data: { content: string }) {
     if (user) {
-      const output = { ...data, postId: post.id, ...(parentComment && {parentId: parentComment.id}) };
-      commentMutation.mutate(output);
+      const output = {
+        ...data,
+        postId: post.id,
+        ...(parentComment && { parentId: parentComment.id }),
+      };
+      commentMut.mutate(output);
     } else {
       toast.add({ type: "error", description: "Log in first." });
     }
@@ -93,12 +101,13 @@ export default function CommentForm({
                   message: "Comment must 5000 characters or less",
                 },
               })}
+              aria-invalid={!!errors.content}
               className="py-4 "
               onFocus={() => setIsOpen(true)}
             />
           </Field>
         </FieldGroup>
-        <AnimatePresence mode="popLayout" >
+        <AnimatePresence mode="popLayout">
           {isOpen && (
             <motion.div
               initial={noAnimate ? false : { opacity: 0, y: -50 }}
@@ -111,7 +120,16 @@ export default function CommentForm({
                 <Button variant="destructive" onClick={closeAndResetComments}>
                   Cancel
                 </Button>
-                <Button type="submit">Comment</Button>
+                <Button type="submit" className="">
+                  {commentMut.isPending ? (
+                    <>
+                      Comment
+                      <Spinner className="size-5"/>
+                    </>
+                  ) : (
+                    "Comment"
+                  )}
+                </Button>
               </div>
             </motion.div>
           )}
