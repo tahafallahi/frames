@@ -31,18 +31,22 @@ export default function Trending({
       ).data,
   });
 
+  const fetchNextPage = showQuery.fetchNextPage
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) void showQuery.fetchNextPage();
+          if (entry.isIntersecting) void fetchNextPage();
         });
       },
       { rootMargin: "0px 0px 1500px 0px " },
     );
 
     observer.observe(loadMoreRef.current!);
-  }, []);
+
+    return () => observer.disconnect()
+  }, [fetchNextPage]);
 
   return (
     <>

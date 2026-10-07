@@ -15,8 +15,8 @@ export default function CommentSection({
   post,
 }: {
   query: UseQueryResult<CommentType[]>;
-  commentsCount: number;
-  post: Post;
+  commentsCount?: number;
+  post?: Post;
 }) {
   const [newComments, setNewComments] = useState<CommentType[]>([]);
   const [formIsOpen, setFormIsOpen] = useState(false);
@@ -26,43 +26,49 @@ export default function CommentSection({
   return (
     <>
       <div className="flex flex-col gap-3 ">
-        <h5 className="text-xl font-bold">{commentsCount} Comments</h5>
-        <CommentForm
-          newComments={newComments}
-          setNewComments={setNewComments}
-          isOpen={formIsOpen}
-          setIsOpen={setFormIsOpen}
-          post={post}
-        />
-        <div className="flex flex-col gap-3">
-          {newComments.map((c, i) => (
-            <Comment
-              highlight
-              comment={c}
-              key={i}
-              post={post}
-              openReplyForm={openReplyForm}
-              setOpenReplyForm={setOpenReplyForm}
-            ></Comment>
-          ))}
-          <QueryWrapper
-            query={query}
-            isEmpty={!!(comments && !Object.keys(comments).length)}
-            loadingPlaceHolder={
-              <div className="flex flex-col gap-4">
-                {Array(10)
-                  .fill(null)
-                  .map((_, i) => (
-                    <Skeleton key={i} />
-                  ))}
+        <QueryWrapper
+          query={query}
+          isEmpty={!!(comments && !Object.keys(comments).length)}
+          loadingPlaceHolder={
+            <div className="flex flex-col gap-4">
+              {Array(10)
+                .fill(null)
+                .map((_, i) => (
+                  <Skeleton key={i} />
+                ))}
+            </div>
+          }
+        >
+          {post && (
+            <>
+              <h5 className="text-xl font-bold">
+                {commentsCount ?? 0} Comments
+              </h5>
+              <CommentForm
+                newComments={newComments}
+                setNewComments={setNewComments}
+                isOpen={formIsOpen}
+                setIsOpen={setFormIsOpen}
+                post={post}
+              />
+              <div className="flex flex-col gap-3">
+                {newComments.map((c, i) => (
+                  <Comment
+                    highlight
+                    comment={c}
+                    key={i}
+                    post={post}
+                    openReplyForm={openReplyForm}
+                    setOpenReplyForm={setOpenReplyForm}
+                  ></Comment>
+                ))}
+                {comments?.map((c) =>
+                  recursiveReplies(c, post, openReplyForm, setOpenReplyForm),
+                )}
               </div>
-            }
-          >
-            {comments?.map((c) =>
-              recursiveReplies(c, post, openReplyForm, setOpenReplyForm),
-            )}
-          </QueryWrapper>
-        </div>
+            </>
+          )}
+        </QueryWrapper>
       </div>
     </>
   );

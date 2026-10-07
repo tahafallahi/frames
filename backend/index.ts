@@ -31,8 +31,10 @@ if (!process.env.COOKIE_SECRET)
 
 const app = express();
 const router = Router();
-
+const isProd = process.env.NODE_ENV === "production"
 //TODO: There's a lot about session save database and cors to be done here.
+
+
 
 app.set("query parser", (str: string) => qs.parse(str));
 
@@ -51,8 +53,8 @@ app.use(
       dbRecordIdFunction: undefined,
     }),
     cookie: {
-      secure: true,
-      sameSite: "none",
+      secure: isProd,
+      sameSite: isProd ?"none": "lax",
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     },
@@ -72,7 +74,7 @@ router.use("/trending", trendingRouter);
 app.use("/api", router);
 app.use(errorHandler);
 
-if (process.env.NODE_ENV === "development") {
+if (!isProd) {
   app.listen(3333, (err) => {
     if (err) throw err;
     console.log("Listening on port 3333");

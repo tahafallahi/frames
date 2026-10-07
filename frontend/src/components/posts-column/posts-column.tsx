@@ -46,19 +46,22 @@ export default function PostsColumn({
 }) {
   const query = useInfiniteQuery(queryOptions);
   const loadMoreRef = useRef(null);
+  const fetchNextPage = query.fetchNextPage
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) void query.fetchNextPage();
+          if (entry.isIntersecting) void fetchNextPage();
         });
       },
       { rootMargin: "0px 0px 1500px 0px " },
     );
 
     observer.observe(loadMoreRef.current!);
-  }, [query]);
+
+    return () => observer.disconnect()
+  }, [fetchNextPage]);
 
   return (
     <div className="flex flex-col gap-4w">
@@ -130,11 +133,11 @@ export default function PostsColumn({
       </QueryWrapper>
       <div ref={loadMoreRef}></div>
       {query.isFetchingNextPage && (
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2 mt-2">
-          {Array(4)
+        <div className="flex flex-col gap-6 mt-6">
+          {Array(3)
             .fill(null)
             .map((_, i) => (
-              <Skeleton key={i} className="h-auto w-full aspect-2/3" />
+              <Skeleton key={i} className="h-50" />
             ))}
         </div>
       )}

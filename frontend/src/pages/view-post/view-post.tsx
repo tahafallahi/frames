@@ -31,7 +31,7 @@ export default function ViewPost() {
     enabled: query.isSuccess,
   });
 
-  const commentsQuery = useQuery(commentsQueryOpts(user?.id, postId));
+  const commentsQuery = useQuery(commentsQueryOpts(user?.id, post?.id));
 
   return (
     <>
@@ -44,13 +44,11 @@ export default function ViewPost() {
           {post && <PostCard variant={"full"} post={post}></PostCard>}
         </QueryWrapper>
 
-        {post && (
-          <CommentSection
-            query={commentsQuery}
-            commentsCount={post.commentsCount}
-            post={post}
-          />
-        )}
+        <CommentSection
+          query={commentsQuery}
+          commentsCount={post?.commentsCount}
+          post={post}
+        />
       </div>
       <div>
         <QueryWrapper

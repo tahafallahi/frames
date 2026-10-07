@@ -17,7 +17,7 @@ export default function QueryWrapper({
 }: props) {
   if (query.isError)
     return <p>{`Something went wrong, please try again later.`}</p>;
-  if (query.isLoading) return loadingPlaceHolder;
+  if (query.isPending) return loadingPlaceHolder;
   if (isEmpty)
     return (
       emptyStateMessage ?? (
