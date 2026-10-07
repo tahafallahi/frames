@@ -20,7 +20,7 @@ export default function ProfileColumn({ userId }: { userId: string }) {
     <>
       <div className="flex flex-col gap-4">
         <h3 className="text-2xl">Profile</h3>
-        <div className=" w-75 px-5 py-3 flex flex-col gap-5 border-l">
+        <div className="px-5 py-3 flex flex-col gap-5 md:border-l">
           <QueryWrapper
             query={pageUserQuery}
             isEmpty={!!(pageUserQuery.data && !Object.keys(pageUserQuery.data))}

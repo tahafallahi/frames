@@ -19,7 +19,7 @@ export default function FollowingColumn({
   console.log(followersQuery.data)
 
   return (
-    <div className="w-75 flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {followings ? (
         <>
           <h4 className="text-2xl">{followings.length} Following</h4>

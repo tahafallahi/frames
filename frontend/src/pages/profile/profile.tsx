@@ -10,18 +10,15 @@ export default function Profile() {
   const { userId } = useParams();
   const [sort, setSort] = useFeedSort(); 
 
+
   return (
     <>
-      <div>
         <PostsColumn
           queryOptions={postsQueryOpts(userId, sort, undefined, [], [userId!])}
           sort={sort}
           setSort={setSort}
-        />
-      </div>
-      <div>
+          />
         <ProfileColumn userId={userId!} />
-      </div>
     </>
   );
 }

@@ -1,11 +1,13 @@
 import type { Show } from "@/types/show";
+import { Link } from "react-router";
 
 export default function FavoriteShows({ shows }: { shows: Show[] }) {
   return (
     <div>
       <p>Favorites:</p>
+      <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
       {shows.map((show, i) => (
-        <div key={i}>
+        <Link to={`/show/${show.mediaType}/${show.id}/`} key={i} className="hover:ring ring-primary">
           <img
             src={
               show.posterPath
@@ -15,8 +17,9 @@ export default function FavoriteShows({ shows }: { shows: Show[] }) {
             alt={"Poster of " + show.title}
             className="w-full h-auto aspect-2/3"
           />
-        </div>
+        </Link>
       ))}
+      </div>
     </div>
   );
 }

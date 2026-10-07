@@ -16,7 +16,7 @@ export default function ProfileCard({
     }) {
   if (variant === "detailed") {
     return (
-      <div className="flex flex-col gap-2 w-75">
+      <div className="flex flex-col gap-2">
         <div className="flex gap-3 items-center">
           <div className="shrink-0">
             <img

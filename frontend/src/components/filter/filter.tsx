@@ -31,9 +31,9 @@ export default function Filter({
   }
 
   return (
-    <div className="max-w-75 md:flex flex-col gap-3 hidden ">
+    <div className="flex flex-col gap-3 ">
       <h5 className="text-2xl">Filter By</h5>
-      <div className="flex flex-col gap-6 border-l py-3 px-5">
+      <div className="flex md:flex-col gap-6 md:border-l py-3 px-5">
         <QueryWrapper
           query={query}
           isEmpty={!filters.length}
@@ -51,13 +51,14 @@ export default function Filter({
           }
         >
           {filters.map((f, i) => (
-            <div key={i} className="flex flex-col gap-2">
+            <div key={i} className="w flex md:flex-col gap-2">
               <h6 className="text-base ">{f.title}:</h6>
               <div className="flex flex-wrap gap-2">
                 {f.items.map((tag, i) => (
                   <Button
                     variant={"ghost"}
                     onClick={() => handleClick(f.title, tag)}
+                    className="p-0"
                     key={i}
                   >
                     <Badge

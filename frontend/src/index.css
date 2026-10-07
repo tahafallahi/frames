@@ -44,6 +44,12 @@
   scrollbar-gutter: stable;
 }
 
+@media (width < 40rem) {
+  :root {
+    scrollbar-width: none;
+  }
+}
+
 .dark {
   --background: oklch(22.087% 0.00773 182.387);
   --foreground: oklch(92.494% 0.00011 271.152);

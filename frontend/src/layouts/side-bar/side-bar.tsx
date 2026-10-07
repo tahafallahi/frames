@@ -9,9 +9,10 @@ import { Link } from "react-router";
 
 interface Props {
   selectedPage: string;
+  sideBarOpen: boolean;
 }
 
-export default function SideBar({ selectedPage }: Props) {
+export default function SideBar({ selectedPage, sideBarOpen }: Props) {
   const [user] = useUser();
 
   const trendingQuery = useQuery({
@@ -37,7 +38,12 @@ export default function SideBar({ selectedPage }: Props) {
   ];
 
   return (
-    <div className="sticky top-18 h-[calc(100dvh-72px)] w-full p-10  border-r text-2xl flex-col gap-10 hidden xl:flex">
+    <div
+      className={cn(
+        "fixed xl:sticky top-18 z-100 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-10 xl:flex",
+        sideBarOpen ? "flex" : "hidden",
+      )}
+    >
       <div className="flex flex-col gap-1">
         {tabs.map((tab, i) => {
           return tab.requireLogin && !user ? (

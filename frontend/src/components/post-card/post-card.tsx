@@ -28,10 +28,10 @@ export default function PostCard({
           </div>
           <div className="flex flex-col gap-2">
             <div>
-              <h4 className="text-2xl font-bold line-clamp-2">{post.title}</h4>
-              <p className="text-sm">@{post.author.username}</p>
+              <h4 className="text-lg md:text-2xl font-bold line-clamp-2">{post.title}</h4>
+              <p className="text-xs md:text-sm">@{post.author.username}</p>
             </div>
-            <p className="text-muted-foreground line-clamp-3">{post.content}</p>
+            <p className="text-muted-foreground line-clamp-6 md:line-clamp-4">{post.content}</p>
           </div>
           {post.picturePath ? (
             <div className="overflow-hidden max-h-100">

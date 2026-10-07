@@ -20,6 +20,7 @@ export default function FollowingsFeed() {
   });
   const [sort, setSort] = useFeedSort();
   const userFilter = user?.followings.map((r) => r.followeeId) ?? [];
+  
 
   const tagQuery = useQuery({
     queryKey: ["tags"],

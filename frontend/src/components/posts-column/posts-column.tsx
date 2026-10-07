@@ -64,7 +64,7 @@ export default function PostsColumn({
   }, [fetchNextPage]);
 
   return (
-    <div className="flex flex-col gap-4w">
+    <div className="flex flex-col gap-2">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
           <p>{FeedSortDict[sort].label}</p>
