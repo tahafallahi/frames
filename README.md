@@ -15,12 +15,14 @@ I wanted to build this all from ground up by myself. So I made a user flow chart
 
 # Challenges and Lessons
 **Searching from third party and the database**. I was really interested in making a search bar that could get any TV show or movie, I was worried there might not even be a way to do it, but thanks to TMDB's API it wasn't that hard. Now the site fetches the users, posts, TV shows and movies matching the search query at the same time. I did so, by making every call to the third party API from my own server, instead of the client.
+
 **Optimistic likes and dislikes.**Another thing that was really hard to figure out, was making like and dislikes on posts and comments optimistic. It took a lot of trial and error, but at the end I think the result is pretty good.
+
 **Responsive design.** The biggest mistake I made was not worrying about responsive design at start, I thought I could just tack on some tailwind classes and it would be perfect on phone, but I came to realize how much of a mistake it was to postpone making it suitable for smaller screens.
 
 This was a really fun project to work on, I really liked making a polished full fledged website that is beautiful and fun to use.
 
-#Getting Started
+# Getting Started
 ```bash
 # clone the repo
 git clone git@github.com:tahafallahi/frames.git
