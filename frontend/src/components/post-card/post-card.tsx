@@ -53,12 +53,12 @@ export default function PostCard({
     );
   } else if (variant === "full") {
     return (
-      <div className="bg-popover md:px-5 py-3 flex flex-col gap-8 border-l border-primary">
+      <div className="bg-popover px-3 md:px-5 py-3 flex flex-col gap-8 border-l border-primary">
         <div className="flex flex-col gap-2">
           <div>
-            <h4 className="text-2xl font-bold">{post.title}</h4>
+            <h4 className="text-base md:text-2xl font-bold">{post.title}</h4>
             <Link to={`/profile/${post.author.id}`}>
-              <p className="text-sm hover:text-primary w-fit">
+              <p className="text-xs md:text-sm hover:text-primary w-fit">
                 @{post.author.username}
               </p>
             </Link>
@@ -66,7 +66,7 @@ export default function PostCard({
           <p className="text-muted-foreground">{post.content}</p>
         </div>
         {post.picturePath ? <img src={post.picturePath} alt="" /> : null}
-        <div className="flex items-center justify-between text-muted-foreground">
+        <div className="flex items-center justify-between text-muted-foreground flex-wrap gap-y-4">
           <PostButtons post={post} />
           <div className="flex content-center gap-2">
             {post.tags.map((t, i) => (

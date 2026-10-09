@@ -81,7 +81,7 @@ export default function SearchBar() {
 
       <Popover open={open}>
         <PopoverContent
-          className="w-275 p-5 ring-1"
+          className="w-100 md:w-190 xl:w-275 p-5 ring-1"
           align="center"
           sideOffset={36}
           initialFocus={false}

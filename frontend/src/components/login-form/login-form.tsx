@@ -53,7 +53,7 @@ export default function LoginForm() {
       onSubmit={handleSubmit((values: LoginFormValues) =>
         formMutation.mutate(values),
       )}
-      className="w-125 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10"
+      className="md:mx-30 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10"
     >
       <FieldGroup>
         <div className="flex flex-col gap-4">

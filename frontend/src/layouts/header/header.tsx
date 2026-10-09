@@ -15,20 +15,20 @@ export default function Header({ variant, setSideBarOpen }: Props) {
   const [user, , userQuery] = useUser();
 
   return (
-    <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center px-4 md:px-10 border-b border-border">
+    <header className="sticky z-100 top-0 bg-background w-full h-18 flex justify-between items-center px-4 md:px-10 border-b border-border text-sm md:text-base">
       <div className="flex gap-2 items-center">
         {
           setSideBarOpen &&
         <Button variant="ghost" className="p-0 xl:hidden" onClick={() => setSideBarOpen(state => !state)}>
-          <Menu className="size-8" />
+          <Menu className="size-6 md:size-8" />
         </Button>
         }
-        <h1 className="text-primary text-[36px] font-bold">
+        <h1 className="text-primary text-2xl md:text-[36px] font-bold">
           <Link to="/">Frames</Link>
         </h1>
       </div>
       {variant === "compact" ? null : (
-        <div className="max-w-200 hidden lg:block md:ml-25  xl:ml-45 mr-25  flex-1">
+        <div className="max-w-200 hidden md:block md:ml-25  xl:ml-45 mr-25  flex-1">
           <SearchBar />
         </div>
       )}

@@ -164,7 +164,6 @@ export default function CommentButtons({
         <p>{thousandToK(comment.repliesCount)}</p>
       </div>
       <div className="flex gap-2 items-center">
-        <Reply className="w-5" />
         <Button
           variant="ghost"
           className={cn(
@@ -175,7 +174,8 @@ export default function CommentButtons({
             setOpenReplyForm(isOpen ? null : comment);
           }}
         >
-          reply
+            <Reply className="w-5" />
+          <p className="hidden md:block">reply</p>
         </Button>
       </div>
     </div>

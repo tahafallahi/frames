@@ -92,8 +92,8 @@ export default function CreatePost() {
             loadingPlaceHolder={
               <div>
                 <Skeleton className="h-7 mb-4" />
-                <Skeleton className="ml-4 h-100" />
-                <div className="ml-4 mt-4 flex flex-col gap-2">
+                <Skeleton className="ml-4 h-100 hidden md:block" />
+                <div className="ml-4 mt-4 md:flex flex-col gap-2 hidden">
                   <Skeleton variant="line" />
                   <Skeleton variant="line" />
                   <Skeleton variant="line" />

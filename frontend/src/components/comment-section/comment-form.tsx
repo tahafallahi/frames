@@ -80,7 +80,7 @@ export default function CommentForm({
   if (user) {
     return (
       <form
-        className="flex flex-col gap-2"
+        className="flex flex-col gap-2 -z-0"
         onSubmit={handleSubmit(handleCommentSubmit)}
       >
         <FieldGroup className="my-2 relative z-10">

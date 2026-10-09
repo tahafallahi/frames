@@ -4,6 +4,9 @@ import { Button } from "../ui/button";
 import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import Skeleton from "../skeleton/skeleton";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function Filter({
   query,
@@ -16,6 +19,8 @@ export default function Filter({
   selectedFilters: SelectedFilters;
   setSelectedFilters: React.Dispatch<React.SetStateAction<SelectedFilters>>;
 }) {
+  const [isShown, setIsShown] = useState(false);
+
   function handleClick(filter: string, tag: string) {
     if (selectedFilters[filter].includes(tag)) {
       setSelectedFilters({
@@ -31,9 +36,27 @@ export default function Filter({
   }
 
   return (
-    <div className="flex flex-col gap-3 ">
-      <h5 className="text-2xl">Filter By</h5>
-      <div className="flex md:flex-col gap-6 md:border-l py-3 px-5">
+    <div className="flex flex-col gap-3 bg-popover p-2 mb-4 md:p-0  md:bg-background">
+      <div className="flex items-center gap-2">
+        <Button className="md:hidden" onClick={() => setIsShown(!isShown)}>
+          {isShown ? (
+            <>
+              <ChevronUp className="size-4" /> Close
+            </>
+          ) : (
+            <>
+              <ChevronDown className="size-4" /> Filter
+            </>
+          )}
+        </Button>
+        <h5 className="text-xl md:text-2xl hidden md:block">Filter</h5>
+      </div>
+      <div
+        className={cn(
+          "flex md:flex-col gap-6 md:border-l py-3 px-5 md:block",
+          !isShown && "hidden",
+        )}
+      >
         <QueryWrapper
           query={query}
           isEmpty={!filters.length}
@@ -51,14 +74,14 @@ export default function Filter({
           }
         >
           {filters.map((f, i) => (
-            <div key={i} className="w flex md:flex-col gap-2">
-              <h6 className="text-base ">{f.title}:</h6>
+            <div key={i} className="flex flex-col gap-2 mb-4">
+              <h6 className="text-base">{f.title}:</h6>
               <div className="flex flex-wrap gap-2">
                 {f.items.map((tag, i) => (
                   <Button
                     variant={"ghost"}
                     onClick={() => handleClick(f.title, tag)}
-                    className="p-0"
+                    className="p-0 "
                     key={i}
                   >
                     <Badge
@@ -67,7 +90,7 @@ export default function Filter({
                           ? "default"
                           : "outline"
                       }
-                      className="p-4 text-base rounded-full"
+                      className="p-4 text-sm md:text-base rounded-full"
                     >
                       {tag}
                     </Badge>

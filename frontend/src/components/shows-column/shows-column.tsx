@@ -19,7 +19,7 @@ export default function ShowsColumn({
   mediaType: "MOVIE" | "TV_SHOW";
 }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 ">
       <div className="flex justify-between text-2xl">
         <div className="flex items-center gap-2">
           <p>
@@ -67,7 +67,7 @@ export default function ShowsColumn({
         query={query}
         isEmpty={!query.data?.pages.flat().length}
         loadingPlaceHolder={
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2 justify-center">
             {Array(12)
               .fill(null)
               .map((_x, i) => (
@@ -76,7 +76,7 @@ export default function ShowsColumn({
           </div>
         }
       >
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(100px,240px))] gap-2">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-2 justify-center">
           {query.data?.pages.flat().map((s, i) => (
             <Link
               to={`/show/${mediaType === "MOVIE" ? "movie" : "tv"}/${s.tmdbId}`}

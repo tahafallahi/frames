@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Bell, Moon, Sun } from "lucide-react";
+import { Bell, Moon, Plus, Sun } from "lucide-react";
 
 import {
   Popover,
@@ -30,8 +30,8 @@ export default function UserControls({
     <QueryWrapper
       query={query}
       emptyStateMessage={
-        <div className=" mx-5 flex gap-8 shrink-0 justify-between items-center">
-            <Button
+        <div className="mx-3 md:mx-5 flex gap-3 shrink-0 justify-between items-center">
+          <Button
             onClick={() => {
               if (document.documentElement.classList.contains("dark")) {
                 document.documentElement.classList.remove("dark");
@@ -70,12 +70,12 @@ export default function UserControls({
         </div>
       }
     >
-      
       {user && (
-        <div className="flex gap-6 shrink-0 justify-between items-center">
-          <h2>
-            <Link to="/create">Create</Link>
-          </h2>
+        <div className="flex gap-4 md:gap-6 shrink-0 justify-between items-center">
+          <Link to="/create">
+            <Plus className="size-full md:hidden" />
+            <h2 className="hidden md:block">Create</h2>
+          </Link>
 
           <Button
             onClick={() => {
@@ -126,7 +126,7 @@ export default function UserControls({
                   aria-label="Profile button"
                 >
                   <img
-                    className="rounded-full w-8"
+                    className="rounded-full w-7 md:w-8"
                     src={
                       user.profilePath ??
                       "https://placehold.co/50x50/lightblue/black/?text=profile"

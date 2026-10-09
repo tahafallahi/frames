@@ -50,12 +50,12 @@ export default function Show() {
           setSort={setSort}
         />
       </div>
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col md:gap-12 bg-popover md:bg-background">
         <QueryWrapper
           query={showQuery}
           isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
           loadingPlaceHolder={
-            <div className="flex flex-col gap-2">
+            <div className="flex-col gap-2">
               <Skeleton className="h-100" />
               <Skeleton variant="line" />
               <Skeleton variant="line" />

@@ -52,10 +52,9 @@ export default function FollowingsFeed() {
           queryOptions={{...postsQueryOpts(user?.id, sort, selectedFilters, [],userFilter), enabled: !!userFilter.length}}
           sort={sort}
           setSort={setSort}
-          title="Your Followings' posts"
         />
       </div>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
         {user && <FollowingColumn followings={user?.followings} />}
         <Filter
           query={tagQuery}

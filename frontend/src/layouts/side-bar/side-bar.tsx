@@ -40,7 +40,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
   return (
     <div
       className={cn(
-        "fixed xl:sticky top-18 z-100 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-10 xl:flex",
+        "fixed xl:sticky top-18 z-2 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-6 xl:flex",
         sideBarOpen ? "flex" : "hidden",
       )}
     >
@@ -82,7 +82,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
             isEmpty={!trendingQuery.data?.movies.length}
             loadingPlaceHolder={
               <div className="flex flex-col gap-3">
-                {Array(7)
+                {Array(6)
                   .fill(null)
                   .map((_x, i) => (
                     <Skeleton variant="line" key={i} />
@@ -90,7 +90,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
               </div>
             }
           >
-            {trendingQuery.data?.movies.slice(0, 6).map((s, i) => (
+            {trendingQuery.data?.movies.slice(0, 5).map((s, i) => (
               <Link to={`/show/movie/${s.tmdbId}`} key={i}>
                 <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis ">
                   {s.title}
@@ -120,7 +120,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
             isEmpty={!trendingQuery.data?.movies.length}
             loadingPlaceHolder={
               <div className="flex flex-col gap-3">
-                {Array(7)
+                {Array(6)
                   .fill(null)
                   .map((_x, i) => (
                     <Skeleton variant="line" key={i} />
@@ -128,7 +128,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
               </div>
             }
           >
-            {trendingQuery.data?.tvs.slice(0, 6).map((s, i) => (
+            {trendingQuery.data?.tvs.slice(0, 5).map((s, i) => (
               <Link to={`/show/tv/${s.tmdbId}`} key={i}>
                 <p className="text-muted-foreground whitespace-nowrap overflow-clip text-ellipsis ">
                   {s.title}

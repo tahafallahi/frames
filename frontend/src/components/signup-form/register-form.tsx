@@ -58,7 +58,7 @@ export default function SignupForm() {
     <form
       onSubmit={handleSubmit((values) => formMutation.mutate(values))}
       noValidate
-      className="w-125 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10"
+      className="md:mx-10 px-15 py-8 text-muted-foreground flex flex-col bg-popover border-t-4 border-primary gap-10"
     >
       <FieldGroup>
         <div className="flex flex-col gap-4">

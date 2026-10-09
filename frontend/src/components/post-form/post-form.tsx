@@ -216,6 +216,7 @@ export default function PostForm({
                   aria-invalid={!!errors.tags}
                   onValueChange={field.onChange}
                   multiple
+                  className="flex flex-wrap"
                 >
                   {tags.data?.map((t) => (
                     <ToggleGroupItem
