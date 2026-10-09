@@ -55,7 +55,7 @@ export default function Show() {
           query={showQuery}
           isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
           loadingPlaceHolder={
-            <div className="flex-col gap-2">
+            <div className="flex-col gap-2 hidden md:flex">
               <Skeleton className="h-100" />
               <Skeleton variant="line" />
               <Skeleton variant="line" />

@@ -55,13 +55,18 @@ export default function ViewPost() {
           query={showQuery}
           isEmpty={!!(showQuery.data && !Object.keys(showQuery.data).length)}
           loadingPlaceHolder={
-            <div className="flex flex-col gap-2">
-              <Skeleton className="h-6 w-50" />
-              <Skeleton className="h-100" />
-              <Skeleton variant="line" />
-              <Skeleton variant="line" />
-              <Skeleton variant="line" />
-              <Skeleton variant="line" />
+            <div className="mb-6">
+              <div className="flex-col gap-2 hidden md:flex">
+                <Skeleton className="h-6 w-50" />
+                <Skeleton className="h-100" />
+                <Skeleton variant="line" />
+                <Skeleton variant="line" />
+                <Skeleton variant="line" />
+                <Skeleton variant="line" />
+              </div>
+              <div className="md:hidden">
+                <Skeleton className="h-12" />
+              </div>
             </div>
           }
         >

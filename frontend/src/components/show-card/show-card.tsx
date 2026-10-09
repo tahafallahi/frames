@@ -25,7 +25,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
 
   return (
     <div className="flex flex-col gap-3 bg-popover md:bg-background mb-4 p-2 md:p-0">
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 md:hidden">
         <Button className="md:hidden" onClick={() => setIsShown(!isShown)}>
           {isShown ? (
             <>
@@ -33,7 +33,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
             </>
           ) : (
             <>
-              <ChevronDown className="size-4" /> Show
+              <ChevronDown className="size-4" /> {title && show.title}
             </>
           )}
         </Button>

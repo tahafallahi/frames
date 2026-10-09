@@ -5,14 +5,16 @@ import { api } from "@/lib/api";
 import { cn } from "@/lib/utils";
 import type { TrendingTitles } from "@/types/show";
 import { useQuery } from "@tanstack/react-query";
+import type React from "react";
 import { Link } from "react-router";
 
 interface Props {
   selectedPage: string;
   sideBarOpen: boolean;
+  setSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function SideBar({ selectedPage, sideBarOpen }: Props) {
+export default function SideBar({ selectedPage, sideBarOpen, setSideBarOpen }: Props) {
   const [user] = useUser();
 
   const trendingQuery = useQuery({
@@ -43,6 +45,7 @@ export default function SideBar({ selectedPage, sideBarOpen }: Props) {
         "fixed xl:sticky top-18 z-2 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-6 xl:flex",
         sideBarOpen ? "flex" : "hidden",
       )}
+      onClick={() => setSideBarOpen(false)}
     >
       <div className="flex flex-col gap-1">
         {tabs.map((tab, i) => {
