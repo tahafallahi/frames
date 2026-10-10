@@ -22,6 +22,8 @@ import { toast, Toaster } from "./components/ui/toast";
 import FeedSortProvider from "./providers/feed-sort-provider";
 import ErrorPage from "./pages/error-page/error";
 
+const STALE_TIME = 5 * 10 * 1000
+
 const router = createBrowserRouter([
   { 
     path: "/",
@@ -86,7 +88,7 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: { refetchOnReconnect: "always", retry: 2 },
+    queries: { refetchOnReconnect: "always", retry: 2, staleTime: STALE_TIME},
     mutations: {
       onError: () => {
         toast.add({
