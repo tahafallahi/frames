@@ -44,10 +44,12 @@ const verify: VerifyFunction = async (tokens, done) => {
         if (i === 9) username = crypto.randomUUID();
       }
 
-      const newUser = await prisma.user.create({
+      const exisitingUserWithSameEmail = await prisma.user.findUnique({where: {email: email?.toString()}})
+
+      const newUser = exisitingUserWithSameEmail ?? await prisma.user.create({
         data: {
-          username: username,
-          email: email ? email.toString() : null,
+          username: username.toLowerCase(),
+          email: email ? email.toString().toLowerCase() : null,
           profilePath: picture ? picture.toString() : null,
         },
       });
