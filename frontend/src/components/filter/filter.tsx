@@ -61,7 +61,7 @@ export default function Filter({
           query={query}
           isEmpty={!filters.length}
           loadingPlaceHolder={
-            <>
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-4">
                 <Skeleton variant="line" className="w-[7ch]" />
                 <Skeleton className="h-8" />
@@ -70,7 +70,7 @@ export default function Filter({
                 <Skeleton variant="line" className="w-[7ch]" />
                 <Skeleton className="h-50" />
               </div>
-            </>
+            </div>
           }
         >
           {filters.map((f, i) => (

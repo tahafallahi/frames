@@ -33,7 +33,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
             </>
           ) : (
             <>
-              <ChevronDown className="size-4" /> {title && show.title}
+              <ChevronDown className="size-4" /> {show.title}
             </>
           )}
         </Button>
