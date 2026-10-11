@@ -127,9 +127,9 @@ export const createPost = [
     }: { title: string; content: string; showIdentifier: ShowIdentifier, tags: Tag[] } =
       matchedData(req);
 
+
     const show = await db.getOrCreateShow(
-      showIdentifier.tmdbId,
-      showIdentifier.mediaType,
+      showIdentifier.tmdbId, showIdentifier.mediaType
     );
 
     const post = await db.createPost(title, content, show.id!, req.user!.id, undefined, tags);

@@ -137,7 +137,7 @@ export default function PostForm({
                     if (show) setShow(show);
                     field.onChange(
                       show
-                        ? { tmdbId: show.tmdbId, MediaType: show.mediaType }
+                        ? { tmdbId: show.tmdbId, mediaType: show.mediaType }
                         : null,
                     );
                   }}

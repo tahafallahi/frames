@@ -29,6 +29,7 @@ export async function getOrCreateShow(
     where: { AND: { tmdbId: tmdbId, mediaType: mediaType } },
   });
 
+
   if (result) {
     const { _count, ...rest } = result;
     const show = {
