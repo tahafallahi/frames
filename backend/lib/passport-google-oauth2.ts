@@ -15,13 +15,19 @@ if (!process.env.GOOGLE_REDIRECT_URL)
     "GOOGLE_REDIRECT_URL is not provided in enviroment variables",
   );
 
+if (!process.env.API_URL)
+  throw new Error(
+    "API_URL is not provided in enviroment variables",
+  );
+
+
 const config: client.Configuration = await client.discovery(
   new URL("https://accounts.google.com"),
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
 );
 const scope = "openid email profile";
-const callbackURL = process.env.GOOGLE_REDIRECT_URL;
+const callbackURL = process.env.API_URL + process.env.GOOGLE_REDIRECT_URL;
 
 const verify: VerifyFunction = async (tokens, done) => {
   try {
