@@ -7,7 +7,7 @@ export default function FavoriteShows({ shows }: { shows: Show[] }) {
       <p>Favorites:</p>
       <div className="grid grid-cols-3 md:grid-cols-2 gap-2">
       {shows.map((show, i) => (
-        <Link to={`/show/${show.mediaType === MediaType.MOVIE ? "movie": "tv"}/${show.tmdbId}/`} key={i} className="hover:ring ring-primary">
+        <Link to={`/show/${show.mediaType === MediaType.MOVIE ? "movie": "tv"}/${show.tmdbId}`} key={i} className="hover:ring ring-primary">
           <img
             src={
               show.posterPath

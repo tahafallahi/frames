@@ -89,7 +89,7 @@ export const tagsQueryOpts = () =>
     staleTime: STALE_TIME,
   });
 
-export const showQueryOpts = (showId: number, mediaType: MediaType) =>
+export const showQueryOpts = (showId?: number, mediaType?: MediaType) =>
   queryOptions({
     queryKey: ["show", showId, mediaType],
     queryFn: async () =>
