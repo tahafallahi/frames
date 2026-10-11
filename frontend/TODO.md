@@ -6,3 +6,4 @@
 
 # UI
 - [ ] Change the color of the skeleton to something lively
+- [ ] UI rehaul

@@ -134,6 +134,7 @@ export default function PostForm({
                     handleInput(input);
                   }}
                   onValueChange={(show) => {
+                    if (show) setShow(show);
                     field.onChange(
                       show
                         ? { tmdbId: show.tmdbId, MediaType: show.mediaType }
@@ -141,9 +142,7 @@ export default function PostForm({
                     );
                   }}
                   itemToStringLabel={(show: ApiSearchShow) => `${show.title}`}
-                  onItemHighlighted={(show) => {
-                    if (show) setShow(show);
-                  }}
+              
                 >
                   <ComboboxInput
                     placeholder="Name of the movie or tv show you want to write about."
