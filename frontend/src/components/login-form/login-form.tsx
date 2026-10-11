@@ -126,7 +126,7 @@ export default function LoginForm() {
               <BarButton type="submit">Log In</BarButton>
             )}
             <BarLink
-              to={import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
+              to={import.meta.env.VITE_API_URL + import.meta.env.VITE_GOOGLE_OAUTH2_LINK}
               variant="secondary"
             >
               <span>Or Sign Up With Google</span>
