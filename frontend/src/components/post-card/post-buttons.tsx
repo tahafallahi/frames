@@ -19,7 +19,7 @@ import {
   ReactionType,
   type ReactionPayload,
 } from "@/types/reaction";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import { toast } from "../ui/toast";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Link, useNavigate } from "react-router";

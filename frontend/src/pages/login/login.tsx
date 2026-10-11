@@ -1,6 +1,18 @@
 import LoginForm from "@/components/login-form/login-form";
+import { useUser } from "@/contexts/user-context";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+  const [user] = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) void navigate("/");
+  });
+
+  if (user) return "Redirecting...";
+  
   return (
     <>
       <div className="flex flex-col gap-18 pt-12 ">

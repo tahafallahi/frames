@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useUser } from "@/contexts/user-context";
 import AddFavoriteButton from "./add-favorite-button";
 import BarLink from "../bar-link/bar-link";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 
 type ButtonKey = "favorite" | "writePost";
 

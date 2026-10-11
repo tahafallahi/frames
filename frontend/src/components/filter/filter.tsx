@@ -5,7 +5,7 @@ import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "../query-wrapper/query-wrapper";
 import Skeleton from "../skeleton/skeleton";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function Filter({

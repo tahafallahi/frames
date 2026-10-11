@@ -1,7 +1,18 @@
 import SignupForm from "@/components/signup-form/register-form";
-
+import { useUser } from "@/contexts/user-context";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export default function Signup() {
+  const [user] = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) void navigate("/");
+  });
+
+  if (user) return "Redirecting...";
+
   return (
     <>
       <div className="flex flex-col gap-18  pt-12">

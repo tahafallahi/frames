@@ -1,23 +1,19 @@
 import { MessageCircle, Reply, ThumbsDown, ThumbsUp } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import { Button } from "../ui/button";
 import { thousandToK } from "@/utils/general";
-import type { Comment } from "@/types/comment";
 import { useMutation } from "@tanstack/react-query";
 import {
   ReactionAction,
   ReactionType,
-  type ReactionPayload,
 } from "@/types/reaction";
-import { api } from "@/lib/api";
-import type { Post } from "@/types/post";
-import { toast } from "../ui/toast";
-import { commentsQueryOpts } from "@/lib/queryOptions";
 import { useUser } from "@/contexts/user-context";
-import { isAxiosError } from "axios";
 import { useNavigate } from "react-router";
-import { replaceCommentBranch } from "@/utils/replace-comment-branch";
+
+import type { Comment } from "@/types/comment";
+import type { Post } from "@/types/post";
+import { commentReactionMutOpt } from "@/lib/mutationOptions";
 
 interface Props {
   post: Post;
@@ -36,77 +32,7 @@ export default function CommentButtons({
   const reaction = comment.reaction;
   const navigate = useNavigate();
 
-  const reactionMutation = useMutation({
-    mutationFn: async (data: ReactionPayload) =>
-      await api.post(`posts/${post.id}/comments/${comment.id}/reaction`, data),
-
-    onMutate: async (variables, context) => {
-      await context.client.cancelQueries({
-        queryKey: commentsQueryOpts(user?.id, post.id).queryKey,
-      });
-
-      const prevComments = context.client.getQueryData<Comment[]>(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-      );
-
-      const prevState = reaction?.type;
-      const action = variables.type === prevState ? null : variables.type;
-
-      const score = (t?: ReactionType | null) =>
-        t === ReactionType.LIKE ? 1 : t === ReactionType.DISLIKE ? -1 : 0;
-
-      context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-        (prev) => {
-          if (!prev) return prev;
-          return prev.map((c) => {
-            if (c.id === comment.id) {
-              return {
-                ...c,
-                likesCount: c.likesCount + score(action) - score(prevState),
-                reaction: { type: action },
-              };
-            } else {
-              return c;
-            }
-          });
-        },
-      );
-
-      return { prevComments: prevComments ?? [] };
-    },
-
-    onError: async (error, _variables, onMutateResult, context) => {
-      context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-        onMutateResult?.prevComments,
-      );
-
-      if (isAxiosError(error) && error.status === 401) {
-        await navigate("/login");
-        toast.add({
-          type: "error",
-          description: "Log in first.",
-        });
-        return;
-      }
-
-      toast.add({
-        type: "error",
-        description: "Something went wrong, please try again later.",
-      });
-    },
-
-    onSuccess: async (_data, _variables, onMutateResult, context) => {
-      const updatedComment = (
-        await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)
-      ).data;
-      context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-        replaceCommentBranch(onMutateResult?.prevComments, updatedComment),
-      );
-    },
-  });
+  const reactionMutation = useMutation(commentReactionMutOpt(post, comment, reaction, navigate, user ?? undefined));
 
   return (
     <div className="flex  gap-8">

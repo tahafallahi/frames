@@ -2,7 +2,7 @@ import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Skeleton from "@/components/skeleton/skeleton";
 import { useUser } from "@/contexts/user-context";
 import { api } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import type { TrendingTitles } from "@/types/show";
 import { useQuery } from "@tanstack/react-query";
 import type React from "react";

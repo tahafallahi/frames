@@ -10,8 +10,6 @@ import { Input } from "../ui/input";
 import BarButton from "../bar-button/bar-button";
 import BarLink from "../bar-link/bar-link";
 import type { Post } from "@/types/post";
-import { useUser } from "@/contexts/user-context";
-import { useEffect } from "react";
 
 interface SignupFormValues {
   username: string;
@@ -22,7 +20,6 @@ interface SignupFormValues {
 
 export default function SignupForm() {
   const navigate = useNavigate();
-  const [user] = useUser()
 
   const {
     register,
@@ -47,12 +44,6 @@ export default function SignupForm() {
       await navigate(-1);
     },
   });
-
-  useEffect(() => {
-    if (user) void navigate("/")
-  })
-
-  if (user) return "Redirecting..."
 
   return (
     <form

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/cn";
 import CommentForm from "./comment-form";
 
 import type { Comment } from "@/types/comment";
