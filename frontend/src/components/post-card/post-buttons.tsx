@@ -107,7 +107,20 @@ export default function PostButtons({ post }: Props) {
           });
         } else if (error.status === 409) {
           return;
-        }
+        } else {
+        context.client.setQueryData(
+          postQueryOpts(user?.id, post.id).queryKey,
+          onMutateResult?.prevPost,
+        );
+
+        onMutateResult?.prevPostsQueries.forEach(([key, value]) =>
+          context.client.setQueryData(key, value),
+        );
+        toast.add({
+          type: "error",
+          description: "Something went wrong, please try again later.",
+        });
+      }
       } else {
         context.client.setQueryData(
           postQueryOpts(user?.id, post.id).queryKey,

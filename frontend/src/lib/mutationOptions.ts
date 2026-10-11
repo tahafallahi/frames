@@ -69,7 +69,16 @@ export const commentReactionMutOpt = (
           return;
         } else if (error.status === 409) {
           return;
-        }
+        } else {
+        context.client.setQueryData(
+          commentsQueryOpts(user?.id, post.id).queryKey,
+          onMutateResult?.prevComments,
+        );
+        toast.add({
+          type: "error",
+          description: "Something went wrong, please try again later.",
+        });
+      }
       } else {
         context.client.setQueryData(
           commentsQueryOpts(user?.id, post.id).queryKey,
