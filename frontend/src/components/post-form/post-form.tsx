@@ -208,7 +208,7 @@ export default function PostForm({
             <Controller
               name="tags"
               control={control}
-              rules={{validate: (v) => !!v.length || "Pick at least one tag." }}
+              rules={{validate: (v) => !!v?.length || "Pick at least one tag." }}
               render={({ field }) => (
                 <ToggleGroup
                   value={field.value}
