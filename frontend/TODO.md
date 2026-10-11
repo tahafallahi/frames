@@ -5,10 +5,10 @@
 - [x] oauth to redirect
 - [x] Comment form doesn't render on posts with no comment
 - [x] New replies and comments
-- [ ] Create post-s list doesn't show fully on phoen
 - [ ] Skeletion dones't streach on phone (trending page)
 - [ ] Picture resolution doesn't look goo on phone
 - [ ] DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+- [ ] Create post-s list doesn't show fully on phoen
 (Use `node --trace-deprecation ...` to show where the warning was created)
 
 # UI
