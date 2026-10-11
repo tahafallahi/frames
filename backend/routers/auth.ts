@@ -10,7 +10,10 @@ router.get(
   "/oauth2/redirect",
   passport.authenticate("openid"),
   function (req, res) {
-    res.redirect("http://localhost:5173/");
+    if (!process.env.CLIENT_URL)
+      throw new Error("CLIENT_URL is not provided in enviroment variables");
+
+    res.redirect(process.env.CLIENT_URL);
   },
 );
 router.post("/logout", requireLogin, (req: Request, res: Response) => {
