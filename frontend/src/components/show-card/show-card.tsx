@@ -54,7 +54,7 @@ export default function ShowCard({ show, buttons, overview, title }: Props) {
             <img
               src={
                 show.posterPath
-                  ? `${import.meta.env.VITE_IMG_TMDB_URL}/w300/${show.posterPath}`
+                  ? `${import.meta.env.VITE_IMG_TMDB_URL}/w342/${show.posterPath}`
                   : import.meta.env.VITE_MOVIE_PLACEHOLDER
               }
               alt={"Poster of " + show.title}
