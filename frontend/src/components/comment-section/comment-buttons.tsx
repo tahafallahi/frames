@@ -13,7 +13,7 @@ import { useNavigate } from "react-router";
 
 import type { Comment } from "@/types/comment";
 import type { Post } from "@/types/post";
-import { commentReactionMutOpt } from "@/lib/mutationOptions";
+import { commentReactionMutOpts } from "@/lib/mutationOptions";
 
 interface Props {
   post: Post;
@@ -32,7 +32,7 @@ export default function CommentButtons({
   const reaction = comment.reaction;
   const navigate = useNavigate();
 
-  const reactionMutation = useMutation(commentReactionMutOpt(post, comment, reaction, navigate, user ?? undefined));
+  const reactionMutation = useMutation(commentReactionMutOpts(post, comment, reaction, navigate, user ?? undefined));
 
   return (
     <div className="flex  gap-8">
