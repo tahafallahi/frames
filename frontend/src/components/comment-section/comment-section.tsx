@@ -26,6 +26,18 @@ export default function CommentSection({
   return (
     <>
       <div className="flex flex-col gap-3 ">
+        {post && (
+          <>
+            <h5 className="text-xl font-bold">{commentsCount ?? 0} Comments</h5>
+            <CommentForm
+              newComments={newComments}
+              setNewComments={setNewComments}
+              isOpen={formIsOpen}
+              setIsOpen={setFormIsOpen}
+              post={post}
+            />{" "}
+          </>
+        )}
         <QueryWrapper
           query={query}
           isEmpty={!!(comments && !Object.keys(comments).length)}
@@ -41,16 +53,6 @@ export default function CommentSection({
         >
           {post && (
             <>
-              <h5 className="text-xl font-bold">
-                {commentsCount ?? 0} Comments
-              </h5>
-              <CommentForm
-                newComments={newComments}
-                setNewComments={setNewComments}
-                isOpen={formIsOpen}
-                setIsOpen={setFormIsOpen}
-                post={post}
-              />
               <div className="flex flex-col gap-3">
                 {newComments.map((c, i) => (
                   <Comment
