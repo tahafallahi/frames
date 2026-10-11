@@ -24,6 +24,7 @@ export const commentReactionMutOpt = (
   user?: User,
 ) =>
   mutationOptions({
+    mutationKey: ["comments-reaction"],
     mutationFn: async (data: ReactionPayload) =>
       await api.post(`posts/${post.id}/comments/${comment.id}/reaction`, data),
 
@@ -82,9 +83,17 @@ export const commentReactionMutOpt = (
       const updatedComment = (
         await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)
       ).data;
-      context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-        replaceCommentBranch(onMutateResult?.prevComments, updatedComment),
-      );
+      //Checking ConcurantMutationsCount makes sure it doesn't update the whole comment tree
+      //if another mutations is in process
+      //This approach causes some reactions to not be in sync with server, which I think is okey in here
+      const concurantMutationsCount = context.client.isMutating({
+        mutationKey: ["comments-reaction"],
+      });
+      if (concurantMutationsCount <= 1) {
+        context.client.setQueryData(
+          commentsQueryOpts(user?.id, post.id).queryKey,
+          replaceCommentBranch(onMutateResult?.prevComments, updatedComment),
+        );
+      }
     },
   });
