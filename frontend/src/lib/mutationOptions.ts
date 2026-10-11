@@ -59,31 +59,35 @@ export const commentReactionMutOpt = (
     },
 
     onError: async (error, _variables, onMutateResult, context) => {
-      context.client.setQueryData(
-        commentsQueryOpts(user?.id, post.id).queryKey,
-        onMutateResult?.prevComments,
-      );
-
-      if (isAxiosError(error) && error.status === 401) {
-        await navigate("/login");
+      if (isAxiosError(error)) {
+        if (error.status === 401) {
+          await navigate("/login");
+          toast.add({
+            type: "error",
+            description: "Log in first.",
+          });
+          return;
+        } else if (error.status === 409) {
+          return;
+        }
+      } else {
+        context.client.setQueryData(
+          commentsQueryOpts(user?.id, post.id).queryKey,
+          onMutateResult?.prevComments,
+        );
         toast.add({
           type: "error",
-          description: "Log in first.",
+          description: "Something went wrong, please try again later.",
         });
-        return;
       }
 
-      toast.add({
-        type: "error",
-        description: "Something went wrong, please try again later.",
-      });
     },
 
     onSuccess: async (_data, _variables, onMutateResult, context) => {
       const updatedComment = (
         await api.get<Comment>(`/posts/${post.id}/comments/${comment.id}`)
       ).data;
-      //Checking ConcurantMutationsCount makes sure it doesn't update the whole comment tree
+      //Checking ConcurantMutationsCount makes sure it doesn't update the whole comment tree to a previous state
       //if another mutations is in process
       //This approach causes some reactions to not be in sync with server, which I think is okey in here
       const concurantMutationsCount = context.client.isMutating({
