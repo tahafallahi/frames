@@ -3,8 +3,8 @@
 - [x] Comment likes
 - [x] Create post on phone's hover being problem
 - [x] oauth to redirect
-- [ ] New replies and comments
-- [ ] Comenitng on posts with no comment
+- [x] Comment form doesn't render on posts with no comment
+- [x] New replies and comments
 - [ ] Create post-s list doesn't show fully on phoen
 - [ ] Skeletion dones't streach on phone (trending page)
 - [ ] Picture resolution doesn't look goo on phone

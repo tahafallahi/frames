@@ -54,18 +54,15 @@ export default function CommentSection({
           {post && (
             <>
               <div className="flex flex-col gap-3">
-                {newComments.map((c, i) => (
-                  <Comment
-                    highlight
-                    comment={c}
-                    key={i}
-                    post={post}
-                    openReplyForm={openReplyForm}
-                    setOpenReplyForm={setOpenReplyForm}
-                  ></Comment>
-                ))}
                 {comments?.map((c) =>
-                  recursiveReplies(c, post, openReplyForm, setOpenReplyForm),
+                  recursiveReplies(
+                    c,
+                    post,
+                    openReplyForm,
+                    setOpenReplyForm,
+                    newComments,
+                    setNewComments,
+                  ),
                 )}
               </div>
             </>
@@ -81,29 +78,44 @@ function recursiveReplies(
   post: Post,
   openReplyFrom: CommentType | null,
   setOpenReplyForm: React.Dispatch<React.SetStateAction<CommentType | null>>,
+  newComments: CommentType[],
+  setNewComments: React.Dispatch<React.SetStateAction<CommentType[]>>,
 ): ReactElement {
   if (comment.repliesCount < 1)
     return (
       <Comment
+        highlight={newComments?.some((nc) => nc.id === comment.id)}
         key={comment.id}
         comment={comment}
         post={post}
         openReplyForm={openReplyFrom}
         setOpenReplyForm={setOpenReplyForm}
+        newComments={newComments}
+        setNewComments={setNewComments}
       />
     );
 
   return (
     <div key={comment.id} className="flex flex-col gap-3">
       <Comment
+        highlight={newComments?.some((nc) => nc.id === comment.id)}
         comment={comment}
         post={post}
         openReplyForm={openReplyFrom}
         setOpenReplyForm={setOpenReplyForm}
+        newComments={newComments}
+        setNewComments={setNewComments}
       />
       <div className="pl-10 flex flex-col gap-3">
         {comment.replies.map((r) =>
-          recursiveReplies(r, post, openReplyFrom, setOpenReplyForm),
+          recursiveReplies(
+            r,
+            post,
+            openReplyFrom,
+            setOpenReplyForm,
+            newComments,
+            setNewComments
+          ),
         )}
       </div>
     </div>

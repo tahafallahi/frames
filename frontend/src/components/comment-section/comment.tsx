@@ -4,7 +4,6 @@ import { cn } from "@/utils/cn";
 import CommentForm from "./comment-form";
 
 import type { Comment } from "@/types/comment";
-import { useState } from "react";
 import type { Post } from "@/types/post";
 import CommentButtons from "./comment-buttons";
 
@@ -14,6 +13,8 @@ interface Props {
   highlight?: boolean;
   openReplyForm: Comment | null;
   setOpenReplyForm: React.Dispatch<React.SetStateAction<Comment | null>>;
+  newComments: Comment[];
+  setNewComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 
 export default function Comment({
@@ -22,9 +23,9 @@ export default function Comment({
   highlight,
   openReplyForm,
   setOpenReplyForm,
+  newComments,
+  setNewComments,
 }: Props) {
-  const [newReplies, setNewReplies] = useState<Comment[]>([]);
-
   const isOpen = openReplyForm?.id === comment.id;
 
   function setIsOpen(open: boolean) {
@@ -59,34 +60,24 @@ export default function Comment({
             </Link>
             <p>{comment.content}</p>
           </div>
-          <CommentButtons post={post} comment={comment} setOpenReplyForm={setOpenReplyForm} isOpen={isOpen} />
+          <CommentButtons
+            post={post}
+            comment={comment}
+            setOpenReplyForm={setOpenReplyForm}
+            isOpen={isOpen}
+          />
         </div>
       </div>
       {isOpen && (
         <CommentForm
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          newComments={newReplies}
-          setNewComments={setNewReplies}
+          newComments={newComments}
+          setNewComments={setNewComments}
           post={post}
           parentComment={comment}
           noAnimate
         />
-      )}
-
-      {!!newReplies.length && (
-        <div className="pl-10">
-          {newReplies.map((c, i) => (
-            <Comment
-              highlight
-              comment={c}
-              key={i}
-              post={post}
-              openReplyForm={openReplyForm}
-              setOpenReplyForm={setOpenReplyForm}
-            ></Comment>
-          ))}
-        </div>
       )}
     </>
   );
