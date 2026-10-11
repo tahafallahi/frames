@@ -7,9 +7,8 @@
 - [x] New replies and comments
 - [x] Skeletion dones't streach on phone (trending page)
 - [x] Picture resolution doesn't look good on phone
-- [ ] DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
-- [ ] Create post-s list doesn't show fully on phoen
-(Use `node --trace-deprecation ...` to show where the warning was created)
+- [x] DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
+- [ ] Create post-s list doesn't show fully on phoenw
 
 # UI
 - [ ] Change the color of the skeleton to something lively
