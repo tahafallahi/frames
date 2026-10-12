@@ -25,7 +25,7 @@ export default function ProfileTray({ user }: Props) {
         <BarButton variant="destructive" onClick={() => logoutMut.mutate()}>
           {logoutMut.isPending ?
           <>
-          <Spinner className="absolute size-5 -translate-x-14" />
+          <Spinner className="absolute size-5 -translate-x-15" />
                 Loging Out...
           </> :
           "Log out"

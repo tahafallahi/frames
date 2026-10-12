@@ -34,7 +34,7 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
     mutationFn: async (data: { bio: string }) =>
       (await api.post<User>("/user", data)).data,
     onSuccess: (_data, _variables, _onMutateResult, context) =>
-      context.client.invalidateQueries({queryKey: ["user"]})
+      context.client.invalidateQueries({ queryKey: ["user"] }),
   });
 
   function editProfile(data: { bio: string }) {
@@ -59,7 +59,14 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
               </Field>
             </FieldGroup>
             <BarButton type="submit" className="w-full">
-              Save
+              {editProfileMut.isPending ? (
+                <>
+                  <Spinner />
+                  Saving...
+                </>
+              ) : (
+                "Save"
+              )}
             </BarButton>
           </form>
           <BarButton
