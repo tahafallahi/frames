@@ -78,7 +78,7 @@ export default function SearchBar() {
       <Button
         onClick={() => setPhoneOpen(!phoneOpen)}
         variant="ghost"
-        className="min-w-0 mx-2 px-3 md:hidden border-primary rounded-full shrink overflow-hidden flex gap-1"
+        className="min-w-9 mx-2 pr-3.5 md:hidden border-primary rounded-full shrink overflow-hidden flex gap-1"
       >
         <span className="truncate text-muted-foreground">Search</span>
         <SearchIcon />

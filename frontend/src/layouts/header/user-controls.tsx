@@ -74,7 +74,7 @@ export default function UserControls() {
       }
     >
       {user && (
-        <div className="flex gap-4 md:gap-6 shrink-0 justify-between items-center">
+        <div className="flex gap-3 md:gap-6 shrink-0 justify-between items-center">
           <Link to="/create">
             <PlusIcon className=" size-6 *:size-full! hover:text-primary md:hidden" />
             <h2 className="hidden md:block">Create</h2>
