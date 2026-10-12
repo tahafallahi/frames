@@ -19,8 +19,8 @@ export default function Header({ variant, setSideBarOpen }: Props) {
       <div className="flex gap-2 items-center">
         {
           setSideBarOpen &&
-        <Button variant="ghost" className="p-0 xl:hidden" onClick={() => setSideBarOpen(state => !state)}>
-          <Menu className="size-6 md:size-8" />
+        <Button variant="ghost" className="p-0 xl:hidden hover:text-primary " onClick={() => setSideBarOpen(state => !state)}>
+          <Menu className="size-6 md:size-8"/>
         </Button>
         }
         <h1 className="text-primary text-2xl md:text-[36px] font-bold">

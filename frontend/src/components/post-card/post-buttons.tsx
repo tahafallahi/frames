@@ -86,10 +86,8 @@ export default function PostButtons({ post }: Props) {
           <ThumbsDown className="rotate-y-180 translate-y-1 size-full" />
         </Button>
       </div>
-      <div className="flex gap-2 ml-2">
-        <Button variant="ghost" size="icon-xs" className="hover:text-primary">
-          <MessageCircle className="size-full" />
-        </Button>
+      <div className="flex gap-2 ml-2 items-center">
+          <MessageCircle className="size-5.5" />
         <p>{thousandToK(post.commentsCount)}</p>
       </div>
       <div className="flex gap-2 ">

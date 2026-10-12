@@ -86,7 +86,7 @@ export default function SearchBar() {
       <div className="md:hidden">
         <div
           className={cn(
-            "hidden fixed top-18 bottom-0 p-10 left-0 right-0 z-10 dark:bg-black/40 bg-white/40 backdrop-blur-md overflow-y-auto overflow-x-clip ooverscroll-contain",
+            "hidden fixed top-18 bottom-0 p-10 left-0 right-0 z-10 dark:bg-black/40 bg-white/70 backdrop-blur-md overflow-y-auto overflow-x-clip ooverscroll-contain",
             phoneOpen && "flex flex-col gap-5",
           )}
         >

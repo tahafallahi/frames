@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-import { Bell, Moon, Plus, Sun } from "lucide-react";
 
 import {
   Popover,
@@ -15,6 +14,10 @@ import Skeleton from "@/components/skeleton/skeleton";
 import { useState } from "react";
 import NotificationsTray from "./trays/notifications-tray";
 import ProfileTray from "./trays/profile-tray";
+import { BellIcon } from "@/components/ui/bell";
+import { SunIcon } from "@/components/ui/sun";
+import { MoonIcon } from "@/components/ui/moon";
+import { PlusIcon } from "@/components/ui/plus";
 
 export default function UserControls({
   user,
@@ -48,9 +51,15 @@ export default function UserControls({
             aria-label="Toggle color mode"
           >
             {isDarkMode ? (
-              <Sun className="size-full" />
+              <SunIcon
+                className=" size-6 *:size-full! hover:text-primary"
+                size={24}
+              />
             ) : (
-              <Moon className="size-full" />
+              <MoonIcon
+                className=" size-6 *:size-full! hover:text-primary"
+                size={24}
+              />
             )}
           </Button>
           <h2>
@@ -73,7 +82,7 @@ export default function UserControls({
       {user && (
         <div className="flex gap-4 md:gap-6 shrink-0 justify-between items-center">
           <Link to="/create">
-            <Plus className="size-full md:hidden" />
+            <PlusIcon className=" size-6 *:size-full! hover:text-primary md:hidden" />
             <h2 className="hidden md:block">Create</h2>
           </Link>
 
@@ -94,9 +103,15 @@ export default function UserControls({
             aria-label="Toggle color mode"
           >
             {isDarkMode ? (
-              <Sun className="size-full" />
+              <SunIcon
+                className=" size-6 *:size-full! hover:text-primary"
+                size={24}
+              />
             ) : (
-              <Moon className="size-full" />
+              <MoonIcon
+                className=" size-6 *:size-full! hover:text-primary"
+                size={24}
+              />
             )}
           </Button>
 
@@ -105,10 +120,13 @@ export default function UserControls({
               render={
                 <Button
                   variant={"ghost"}
-                  size={"icon-xs"}
                   aria-label="Notifications button"
+                  className="p-0"
                 >
-                  <Bell className="size-full" />
+                  <BellIcon
+                    className=" size-6 *:size-full! hover:text-primary"
+                    size={24}
+                  />
                 </Button>
               }
             ></PopoverTrigger>

@@ -41,7 +41,7 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
     editProfileMut.mutate(data);
   }
 
-  const { register, handleSubmit } = useForm<{ bio: string }>();
+  const { register, handleSubmit, formState: {errors} } = useForm<{ bio: string }>();
 
   return (
     <>
@@ -55,7 +55,19 @@ export default function ProfileColumnButtons({ pageUser, user }: Props) {
             <FieldGroup>
               <Field>
                 <FieldLabel htmlFor="bio">Bio</FieldLabel>
-                <Input id="bio" {...register("bio")} />
+                <p className="text-destructive text-sm">{errors.bio?.message}</p>
+
+                <Input
+                  id="bio"
+                  {...register("bio", {
+                    required: "Bio can't be empty",
+                    minLength: {
+                      value: 3,
+                      message: "Bio can't be less than 3 charachters.",
+                    }
+
+                  })}
+                />
               </Field>
             </FieldGroup>
             <BarButton type="submit" className="w-full">
