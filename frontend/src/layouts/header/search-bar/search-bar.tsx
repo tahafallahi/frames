@@ -141,7 +141,7 @@ export default function SearchBar() {
         </div>
       </div>
 
-      <InputGroup className="hidden md:flex h-11 px-4 border-primary rounded-full max-w-200 md:ml-25  xl:ml-45 mr-25  flex-1">
+      <InputGroup className="hidden md:flex h-11 px-4 border-primary rounded-full max-w-200 md:ml-25  xl:ml-35 mr-25  flex-1">
         <InputGroupInput
           ref={inputRef}
           autoComplete="off"

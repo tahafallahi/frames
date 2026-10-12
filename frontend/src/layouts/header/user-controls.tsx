@@ -7,8 +7,6 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 
-import type { User } from "@/types/user";
-import type { UseQueryResult } from "@tanstack/react-query";
 import QueryWrapper from "@/components/query-wrapper/query-wrapper";
 import Skeleton from "@/components/skeleton/skeleton";
 import { useState } from "react";
@@ -18,14 +16,10 @@ import { BellIcon } from "@/components/ui/bell";
 import { SunIcon } from "@/components/ui/sun";
 import { MoonIcon } from "@/components/ui/moon";
 import { PlusIcon } from "@/components/ui/plus";
+import { useUser } from "@/contexts/user-context";
 
-export default function UserControls({
-  user,
-  query,
-}: {
-  user: User | null;
-  query: UseQueryResult;
-}) {
+export default function UserControls() {
+  const [user, , query] = useUser();
   const [isDarkMode, setIsDarkMode] = useState(
     document.documentElement.classList.contains("dark"),
   );
