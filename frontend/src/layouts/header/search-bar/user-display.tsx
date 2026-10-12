@@ -12,13 +12,15 @@ interface Props {
 export default function UserDisplay({ users, setOpen }: Props) {
   return (
     <div className="flex flex-col gap-2">
-      {users?.map((u, i) => (
+      {
+        users?.length ?
+      users?.map((u, i) => (
         <Link to={`/profile/${u.id}`} key={i} onClick={() => setOpen(false)}>
           <SlimCard className="hover:ring-1 ring-primary">
             <ProfileCard user={u} variant={"compact"} />
           </SlimCard>
         </Link>
-      ))}
+      )): <span className="text-muted-foreground">empty</span>}
     </div>
   );
 }

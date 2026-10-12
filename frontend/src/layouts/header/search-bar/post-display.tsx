@@ -13,7 +13,9 @@ interface Props {
 export default function PostDisplay({ posts, setOpen }: Props) {
   return (
     <div className="flex flex-col gap-2">
-      {posts?.map((p, i) => (
+      {
+        posts?.length ?
+      posts?.map((p, i) => (
         <Link to={`/posts/${p.id}`} key={i} onClick={() => setOpen(false)}>
 
         <SlimCard className="flex hover:ring-1 ring-primary">
@@ -32,7 +34,7 @@ export default function PostDisplay({ posts, setOpen }: Props) {
           </div>
         </SlimCard>
         </ Link> 
-      ))}
+      )): <span className="text-muted-foreground">empty</span>}
     </div>
   );
 }

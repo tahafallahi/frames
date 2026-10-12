@@ -9,7 +9,9 @@ interface Props {
 export default function ShowDisplay({ shows, setOpen }: Props) {
   return (
     <div className="grid grid-cols-3 gap-2 py-3">
-      {shows?.map((show, i) => (
+      {
+        shows?.length?
+      shows?.map((show, i) => (
         <Link
           to={`/show/${show.mediaType === MediaType.MOVIE ? "movie": "tv"}/${show.tmdbId}`}
           onClick={() => setOpen(false)}
@@ -34,7 +36,7 @@ export default function ShowDisplay({ shows, setOpen }: Props) {
             </div>
           </div>
         </Link>
-      ))}
+      )): <span className="text-muted-foreground">empty</span>}
     </div>
   );
 }

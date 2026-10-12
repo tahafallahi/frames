@@ -28,9 +28,8 @@ export default function Header({ variant, setSideBarOpen }: Props) {
         </h1>
       </div>
       {variant === "compact" ? null : (
-        <div className="max-w-200 hidden md:block md:ml-25  xl:ml-45 mr-25  flex-1">
           <SearchBar />
-        </div>
+        
       )}
 
       <UserControls query={userQuery} user={user} />

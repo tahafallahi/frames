@@ -9,6 +9,9 @@
 - [x] Picture resolution doesn't look good on phone
 - [x] DeprecationWarning: Calling client.query() when the client is already executing a query is deprecated and will be removed in pg@9.0. Use async/await or an external async flow control mechanism instead.
 
+# Fix phone version
+- [ ] Implement search bard for phone
+
 # UI
 - [ ] Search bar placeholder isn't visible sometimes
 - [ ] Change the color of the skeleton to something lively

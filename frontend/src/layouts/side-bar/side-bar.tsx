@@ -42,7 +42,7 @@ export default function SideBar({ selectedPage, sideBarOpen, setSideBarOpen }: P
   return (
     <div
       className={cn(
-        "fixed xl:sticky top-18 z-2 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-6 xl:flex",
+        "fixed xl:sticky top-18 z-2 dark:bg-black/50 bg-white/30 xl:dark:bg-background xl:bg-background backdrop-blur-sm overflow-y-auto overscroll-contain xl:backdrop-blur-none h-[calc(100dvh-72px)] w-full p-10  xl:border-r text-2xl flex-col gap-6 xl:flex",
         sideBarOpen ? "flex" : "hidden",
       )}
       onClick={() => setSideBarOpen(false)}
