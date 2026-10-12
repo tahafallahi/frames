@@ -22,7 +22,7 @@ export default function ShowDisplay({ shows, setOpen }: Props) {
               className="w-full h-auto aspect-2/3"
               src={
                 show.posterPath
-                  ? "https://image.tmdb.org/t/p/w154/" + show.posterPath
+                  ? import.meta.env.VITE_IMG_TMDB_URL +"/w154/" + show.posterPath
                   : show.mediaType === MediaType.MOVIE
                     ? import.meta.env.VITE_MOVIE_PLACEHOLDER
                     : import.meta.env.VITE_TV_SHOW_PLACEHOLDER
