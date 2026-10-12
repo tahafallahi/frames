@@ -59,7 +59,7 @@ export default function UserControls() {
           <h2>
             <Link to="/login">Log In</Link>
           </h2>
-          <h2>
+          <h2 className="hidden sm:block">
             <Link to="/signup">Sign Up</Link>
           </h2>
         </div>
@@ -68,7 +68,7 @@ export default function UserControls() {
       loadingPlaceHolder={
         <div className="flex gap-6 shrink-0 justify-between items-center">
           <Skeleton className="h-5 w-11" />
-          <Skeleton className="h-10 w-10 rounded-full" />
+          <Skeleton className="h-10 w-10 rounded-full hidden md:block" />
           <Skeleton className="h-10 w-10 rounded-full" />
         </div>
       }

@@ -54,8 +54,8 @@ export default function Header({ variant, setSideBarOpen }: Props) {
               trigger="mount"
               fillMode="wipe"
               fontSize={24}
-              fontWeight={700}
-              letterSpacing={2}
+              fontWeight={600}
+              letterSpacing={1}
               reverse={false}
             />
           </Link>

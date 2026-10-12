@@ -226,7 +226,7 @@ const StrokeText = ({
   return (
     <span
       ref={rootRef}
-      className={`block w-full leading-[0] ${trigger === 'hover' ? 'cursor-pointer' : ''} ${className}`.trim()}
+      className={`block w-max shirnk-0 leading-[0] ${trigger === 'hover' ? 'cursor-pointer' : ''} ${className}`.trim()}
       style={style}
       role="img"
       aria-label={String(text ?? '')}
