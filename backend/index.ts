@@ -17,6 +17,7 @@ import authRouter from "./routers/auth.js";
 import userRouter from "./routers/user.js";
 import showRouter from "./routers/show.js";
 import trendingRouter from "./routers/trending.js";
+import supabaseRouter from "./routers/supabase.js";
 
 import passport from "passport";
 
@@ -70,6 +71,7 @@ router.use("/auth", authRouter);
 router.use("/user", userRouter);
 router.use("/shows", showRouter);
 router.use("/trending", trendingRouter);
+router.use("/supabase", supabaseRouter);
 
 app.use("/api", router);
 app.use(errorHandler);

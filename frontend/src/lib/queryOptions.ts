@@ -102,4 +102,5 @@ export const showQueryOpts = (showId?: number, mediaType?: MediaType) =>
         )
       ).data,
     staleTime: STALE_TIME,
+    enabled: !!showId
   });

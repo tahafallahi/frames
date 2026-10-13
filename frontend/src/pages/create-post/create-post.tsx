@@ -16,6 +16,9 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router";
 import LoginProtection from "../login-protection/login-protection";
+import { supabase } from "@/lib/supabase";
+import type { FileUploadResponse, SignedUrlResponse } from "@/types/supabase";
+import type { StorageError } from "@supabase/storage-js";
 
 const DEBOUNCE_DELAY = 300;
 
@@ -56,15 +59,49 @@ export default function CreatePost() {
         )
       ).data,
     enabled: !!show,
-    staleTime: 5 * 10 * 1000
+    staleTime: 5 * 10 * 1000,
   });
 
   const sendPostMutation = useMutation({
-    mutationFn: async (form: PostFormType) =>
-      (await api.post<Post>("/posts", form)).data,
+    mutationFn: async (form: PostFormType) => {
+      if (!form.image) {
+        return (await api.post<Post>("/posts", form)).data;
+      } else {
+        const { image, ...rest } = form;
+        const uuid = crypto.randomUUID();
+        const signedUrlResponse = (
+          await api.get<SignedUrlResponse>(
+            "supabase?path=" + encodeURIComponent(`${uuid}/${image.name}`),
+          )
+        ).data;
+
+        const {
+          data,
+          error,
+        }: { data: FileUploadResponse | null; error: StorageError | null } =
+          await supabase.storage
+            .from("post")
+            .uploadToSignedUrl(
+              signedUrlResponse.path,
+              signedUrlResponse.token,
+              image,
+            );
+
+        if (error) {
+          throw new Error(error.message);
+        } else {
+          return (
+            await api.post<Post>("/posts", {
+              ...rest,
+              imagePath: data!.fullPath,
+            })
+          ).data;
+        }
+      }
+    },
     onSuccess: async (data) => {
       toast.add({ type: "success", description: "Post created." });
-      await navigate("/posts/" + data.id);
+      await navigate("/posts/" + data?.id);
     },
   });
 

@@ -8,6 +8,7 @@
     "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "@quixo3/prisma-session-store": "^3.1.21",
+    "@supabase/supabase-js": "^2.117.3",
     "@types/node": "^26.6.4",
     "@types/passport-local": "^1.0.38",
     "axios": "^1.19.0",

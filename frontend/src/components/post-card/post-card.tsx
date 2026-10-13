@@ -26,7 +26,7 @@ export default function PostCard({
               <p>{post.show.releaseYear}</p>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mb-5">
             <div>
               <h4 className="text-lg md:text-2xl font-bold line-clamp-2">{post.title}</h4>
               <p className="text-xs md:text-sm">@{post.author.username}</p>
@@ -34,8 +34,8 @@ export default function PostCard({
             <p className="text-muted-foreground line-clamp-6 md:line-clamp-4">{post.content}</p>
           </div>
           {post.picturePath ? (
-            <div className="overflow-hidden max-h-100">
-              <img src={post.picturePath} alt="" className="w-fill" />
+            <div className="overflow-hidden max-h-100 justify-center ">
+              <img src={post.picturePath} className="w-fit justify-self-center" />
             </div>
           ) : null}
         </Link>

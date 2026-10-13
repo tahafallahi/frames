@@ -27,6 +27,7 @@ import type { Post, PostForm, PostForm as PostFormType } from "@/types/post";
 import { Spinner } from "../ui/spinner";
 import { tagsQueryOpts } from "@/lib/queryOptions";
 import { useNavigate } from "react-router";
+import ImageField from "./image-field";
 
 const DEBOUNCE_DELAY = 500;
 const STALE_TIME = 1000 * 60;
@@ -142,7 +143,6 @@ export default function PostForm({
                     );
                   }}
                   itemToStringLabel={(show: ApiSearchShow) => `${show.title}`}
-              
                 >
                   <ComboboxInput
                     placeholder="Name of the movie or tv show you want to write about."
@@ -202,13 +202,23 @@ export default function PostForm({
               placeholder="Body of your post (optional)."
             />
           </Field>
+          <Controller
+            name="image"
+            control={control}
+            render={({field}) => (
+              <ImageField field={field} />
+            )}
+          />
+
           <Field>
             <FieldLabel>Tags</FieldLabel>
             <p className="text-destructive">{errors.tags?.message}</p>
             <Controller
               name="tags"
               control={control}
-              rules={{validate: (v) => !!v?.length || "Pick at least one tag." }}
+              rules={{
+                validate: (v) => !!v?.length || "Pick at least one tag.",
+              }}
               render={({ field }) => (
                 <ToggleGroup
                   value={field.value}
@@ -231,7 +241,11 @@ export default function PostForm({
             />
           </Field>
           <div className="flex justify-between gap-4">
-            <Button className="px-10 h-13 font-bold" variant={"destructive"} onClick={() => navigate(-1)}>
+            <Button
+              className="px-10 h-13 font-bold"
+              variant={"destructive"}
+              onClick={() => navigate(-1)}
+            >
               Discard
             </Button>
             <Button type="submit" className="px-10 h-13 font-bold">

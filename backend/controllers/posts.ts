@@ -110,6 +110,7 @@ export const createPost = [
   body("title").trim().notEmpty().isString().isLength({ max: 300 }),
   body("content").trim().isString().isLength({ max: 10000 }),
   body("showIdentifier").notEmpty(),
+  body("imagePath").isString(),
   body("tags").isArray(),
 
   async (req: Request, res: Response) => {
@@ -124,7 +125,8 @@ export const createPost = [
       content,
       showIdentifier,
       tags,
-    }: { title: string; content: string; showIdentifier: ShowIdentifier, tags: Tag[] } =
+      imagePath
+    }: { title: string; content: string; showIdentifier: ShowIdentifier, tags: Tag[], imagePath:string } =
       matchedData(req);
 
 
@@ -132,7 +134,9 @@ export const createPost = [
       showIdentifier.tmdbId, showIdentifier.mediaType
     );
 
-    const post = await db.createPost(title, content, show.id!, req.user!.id, undefined, tags);
+    const fullImagePath = imagePath && `${process.env.SUPABASE_PROJECT_URL}/storage/v1/object/public/${imagePath}`
+
+    const post = await db.createPost(title, content, show.id!, req.user!.id, fullImagePath, tags);
 
     return res.json(post);
   },

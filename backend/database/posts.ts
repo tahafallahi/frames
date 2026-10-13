@@ -152,8 +152,7 @@ export async function createPost(
   picturePath?: string,
   tags?: string[],
 ) {
-
-  const dbTags = await prisma.tag.findMany({where: {name: {in: tags}}})
+  const dbTags = await prisma.tag.findMany({ where: { name: { in: tags } } });
 
   const post = await prisma.post.create({
     data: {
