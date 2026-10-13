@@ -106,7 +106,7 @@ createRoot(document.getElementById("root")!).render(
       <UserProvider>
         <FeedSortProvider>
           <RouterProvider router={router}></RouterProvider>
-          <Toaster timeout={import.meta.env.VITE_TOASTER_TIMEOUT} />
+          <Toaster timeout={Number(import.meta.env.VITE_TOASTER_TIMEOUT)} />
         </FeedSortProvider>
       </UserProvider>
     </QueryClientProvider>
