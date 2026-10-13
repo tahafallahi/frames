@@ -72,7 +72,7 @@ export default function ImageField({ field }: Props) {
         )}
         {preview && !isDragGlobal && <p className="text-muted-foreground">{preview.name}</p>}
         {preview && (
-          <aside className="flex flex-wrap h-full p-10">
+          <aside className="flex flex-wrap h-full p-1 pt-6">
             <img
               src={preview.URL}
               className="w-full"
