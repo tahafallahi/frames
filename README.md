@@ -1,10 +1,7 @@
 # Frames
 A forum site to talk, review and discuss movies and TV shows. It is my full-stack pet project that I always wanted to build, because I was curious about how Reddit worked behind the scenes, so I wanted to give it shot and see if I could make the core functionalities.
-<img src="images/feed.png" alt="feed" width="500">
-<img src="images/feed-dark.png" alt="feed dark" width="500">
-<img src="images/search.png" alt="search" width="500">
-<img src="images/followings-dark.png" alt="follwings feed dark" width="500">
-<img src="images/search-mobile.png" alt="search mobile" width="245">
+<img src="images/feed.png" alt="feed" width="">
+<img src="images/search.png" alt="search" width="">
 <img src="images/profile-mobile.png" alt="profile mobile" width="245">
 <img src="images/trending-mobile.png" alt="trending mobile" width="245">
 <img src="images/feed-mobile-dark.png" alt="feed mobile" width="245">
