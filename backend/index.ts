@@ -13,7 +13,6 @@ import userRouter from "./routers/user.js";
 import showRouter from "./routers/show.js";
 import trendingRouter from "./routers/trending.js";
 import supabaseRouter from "./routers/supabase.js";
-import helmet from "helmet";
 
 import passport from "passport";
 
@@ -35,7 +34,6 @@ if (!process.env.CLIENT_URL) throw new Error("CLIENT_URL env variable doens't ex
 app.set("query parser", (str: string) => qs.parse(str));
 
 app.set("trust proxy", 1);
-app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
