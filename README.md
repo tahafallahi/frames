@@ -4,6 +4,7 @@ A forum site to talk, review and discuss movies and TV shows. It is my full-stac
 <img src="images/feed-dark.png" alt="feed-dark" width="">
 <img src="images/search.png" alt="search" width="">
 <p align="center">
+<img src="images/search-mobile.png" alt="serach mobile" width="200">
 <img src="images/profile-mobile.png" alt="profile mobile" width="200">
 <img src="images/trending-mobile.png" alt="trending mobile" width="200">
 <img src="images/feed-mobile-dark.png" alt="feed mobile" width="200">
