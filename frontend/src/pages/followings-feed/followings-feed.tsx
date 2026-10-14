@@ -32,7 +32,7 @@ export default function FollowingsFeed() {
     ? [
         {
           title: "Content",
-          items: ["movie", "tv show"],
+          items: ["Movie", "TV Show"],
         },
         {
           title: "Tags",
