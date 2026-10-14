@@ -1,5 +1,7 @@
 # Frames
 A forum site to talk, review and discuss movies and TV shows. It is my full-stack pet project that I always wanted to build, because I was curious about how Reddit worked behind the scenes, so I wanted to give it shot and see if I could make the core functionalities.
+![Feed](images/feed.png)
+![Feed Dark](images/feed-dark.png)
 
 # Features
 - Posts and comments, likes and dislikes with optimistic updates, so the UI is intuitive and fast.
